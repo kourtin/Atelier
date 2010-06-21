@@ -9,5 +9,10 @@ namespace Atelier {
                          public virtual ObjectInterface {
     public:
         virtual ~InteractItem();
+
+        void set_detect_selection(bool);
+
+    protected:
+        bool detect_selection_;
     };
 }

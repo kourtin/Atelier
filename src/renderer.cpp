@@ -7,6 +7,7 @@
 #include "staticGraphicItem.h"
 #include "client.h"
 #include "cameraNode.h"
+#include "basicApp.h"
 
 namespace Atelier {
     Renderer::Renderer() {

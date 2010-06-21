@@ -1,5 +1,7 @@
 #pragma once
-#include "cinder/CinderResources.h"
+
+/*
+#include <cinder/CinderResources.h>
 
 #define RES_EARTH_FRAG		CINDER_RESOURCE( ../resources/, earth_frag.glsl, 128, GLSL )
 #define RES_EARTHDIFFUSE	CINDER_RESOURCE( ../resources/, earthDiffuse.png, 129, PNG )
@@ -9,3 +11,4 @@
 #define RES_QUAKE_FRAG		CINDER_RESOURCE( ../resources/, quake_frag.glsl, 133, GLSL )
 #define RES_QUAKE_VERT		CINDER_RESOURCE( ../resources/, quake_vert.glsl, 134, GLSL )
 #define RES_STARS_PNG		CINDER_RESOURCE( ../resources/, stars.png, 135, PNG )
+*/

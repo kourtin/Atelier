@@ -14,14 +14,14 @@ CinderApp::CinderApp() : client_(this) {
 }
 
 void CinderApp::prepareSettings( Settings *settings ) {
-	settings->setWindowSize( 1024, 768 );
+	settings->setWindowSize( 1000, 700 );
 	settings->setFrameRate( 60.0f );
 	settings->setResizable( true );
 	settings->setFullScreen( false );
 }
 
 void CinderApp::setup() {
-    client_.setup();
+    client_.init();
 }
 
 void CinderApp::update() {

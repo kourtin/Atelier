@@ -12,6 +12,8 @@
 #include "renderer.h"
 #include "cameraNode.h"
 #include "client.h"
+#include "identity.h"
+#include "aaBox.h"
 
 namespace Atelier {
     GenericNode::GenericNode(ID new_id) : Node(new_id) {
@@ -21,12 +23,15 @@ namespace Atelier {
         text_size_ = 48.0f;
         text_string_ = "?";
         billboard_ = false;
+        detect_selection_ = true;
     }
 
     GenericNode::~GenericNode() {
     }
 
     void GenericNode::init() {
+        set_detect_selection(true);
+
         layout_.setFont(ci::Font("HelveticaNeue", text_size_));
         layout_.setColor(ci::Color(1, 1, 1));
         
@@ -45,6 +50,10 @@ namespace Atelier {
         return CinderGraphicItem::bounding_rect();
     }
 
+    AABox GenericNode::bounding_aabox() {
+        return CinderGraphicItem::bounding_aabox();
+    }
+
     void GenericNode::set_billboard(bool bill) {
         billboard_ = bill;
     }
@@ -57,6 +66,7 @@ namespace Atelier {
         draw_box();
         draw_text();
         restore_matrix();
+        draw_aabox();
     }
 
     void GenericNode::init_matrix() {
@@ -67,6 +77,12 @@ namespace Atelier {
 
     void GenericNode::restore_matrix() {
         ci::gl::popModelView();
+    }
+
+    void GenericNode::draw_aabox() {
+        glColor4f( 1.f, 0.4f, 0.4f, 1.0f );
+        glLineWidth(1.0f);
+        bounding_aabox().glDraw();
     }
 
     void GenericNode::draw_box() {
@@ -146,7 +162,25 @@ namespace Atelier {
         glVertex3f(-1.0f, -1.0f, 0.0f);
         glEnd();
         glDisable( GL_TEXTURE_2D );
-
-
     }
+
+    void GenericNode::activate(const Identity& ident) {
+        billboard_ = !billboard_;
+    }
+
+    void GenericNode::create_object(const Vec3D&) {
+        Value val;
+
+        
+    }
+
+    void GenericNode::create_object(const Value&) {
+    }
+
+    void GenericNode::update_object(const Value&) {
+    }
+
+    void GenericNode::update_object_matrix(const Value&) {
+    }
+
 }

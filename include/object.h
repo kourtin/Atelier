@@ -2,6 +2,7 @@
 #pragma once
 
 #include "objectInterface.h"
+#include "identity.h"
 
 namespace Atelier {
 
@@ -12,6 +13,7 @@ namespace Atelier {
 
         const ID& id();
         const ID& owner();
+        Identity identity();
 
         virtual Vec3D position();
         virtual Vec3D rotation();

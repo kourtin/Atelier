@@ -41,4 +41,8 @@ namespace Atelier {
     void Object::set_scale(Vec3D vec) {
         scale_ = vec;
     }
+
+    Identity Object::identity() {
+        return Identity(id_, this);
+    }
 }

@@ -6,13 +6,22 @@
 namespace Atelier {
     CinderInteractItem::CinderInteractItem() {
         Client::app().addListener(this);
+
+        detect_selection_ = false;
     }
 
     CinderInteractItem::~CinderInteractItem() {
         Client::app().removeListener(this);
     }
 
-    bool CinderInteractItem::mouseDown(ci::app::MouseEvent) {
+    bool CinderInteractItem::resize(int, int) {
+        return false;
+    }
+
+    bool CinderInteractItem::mouseDown(ci::app::MouseEvent mouse_event) {
+        if(detect_selection_)
+            detect_click_selection(mouse_event);
+
         return false;
     }
 

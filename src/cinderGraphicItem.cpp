@@ -14,6 +14,10 @@ namespace Atelier {
         return Prism();
     }
 
+    AABox CinderGraphicItem::bounding_aabox() {
+        return AABox(position() + scale(), position() - scale());
+    }
+
     void CinderGraphicItem::render(RenderDimension dim, RenderPass pass) {
     }
 }

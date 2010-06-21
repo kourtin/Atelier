@@ -9,8 +9,8 @@
 class CinderApp;
 
 namespace Atelier {
-    class Node : public Object, public CinderGraphicItem,
-        public Cinder3DInteractItem, public NetworkItem {
+    class Node : public Object, public Cinder3DInteractItem, 
+        public CinderGraphicItem, public NetworkItem {
     public:
         Node(ID);
         virtual ~Node();

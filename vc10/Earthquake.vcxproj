@@ -47,22 +47,23 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\dev\cinder_0.8.1_msw\boost;C:\dev\cinder_0.8.1_msw\include;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalIncludeDirectories>C:\dev\jsoncpp\jsoncpp-src-0.5.0\include;C:\dev\cinder_0.8.1_msw\boost;C:\dev\cinder_0.8.1_msw\include;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;_WIN32_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>C:\dev\cinder_0.8.1_msw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\dev\cinder_0.8.1_msw\lib\msw;C:\dev\cinder_0.8.1_msw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cinder_d.lib;jsoncpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\Atelier\lib;C:\dev\cinder_0.8.1_msw\lib\msw;C:\dev\cinder_0.8.1_msw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -70,24 +71,27 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\include;..\..\..\include;..\..\..\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\dev\jsoncpp\jsoncpp-src-0.5.0\include;C:\dev\cinder_0.8.1_msw\boost;C:\dev\cinder_0.8.1_msw\include;C:\dev\Atelier\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;_WIN32_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\lib;..\..\..\lib\msw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cinder.lib;jsoncpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\Atelier\lib;C:\dev\cinder_0.8.1_msw\lib\msw;C:\dev\cinder_0.8.1_msw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -102,6 +106,7 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\aaBox.h" />
     <ClInclude Include="..\include\basicApp.h" />
     <ClInclude Include="..\include\cameraNode.h" />
     <ClInclude Include="..\include\cinder2DInteractItem.h" />
@@ -113,19 +118,27 @@
     <ClInclude Include="..\include\genericNode.h" />
     <ClInclude Include="..\include\graphicItem.h" />
     <ClInclude Include="..\include\graphicItemInterface.h" />
+    <ClInclude Include="..\include\gridsNetworkItem.h" />
+    <ClInclude Include="..\include\grids\define.h" />
+    <ClInclude Include="..\include\grids\interface.h" />
+    <ClInclude Include="..\include\grids\protocol.h" />
+    <ClInclude Include="..\include\identity.h" />
     <ClInclude Include="..\include\interactItem.h" />
     <ClInclude Include="..\include\interactItemInterface.h" />
     <ClInclude Include="..\include\networkItem.h" />
     <ClInclude Include="..\include\networkItemInterface.h" />
     <ClInclude Include="..\include\node.h" />
     <ClInclude Include="..\include\object.h" />
+    <ClInclude Include="..\include\objectController.h" />
     <ClInclude Include="..\include\objectInterface.h" />
     <ClInclude Include="..\include\prism.h" />
     <ClInclude Include="..\include\renderer.h" />
     <ClInclude Include="..\include\spaceGraphics.h" />
     <ClInclude Include="..\include\staticGraphicItem.h" />
+    <ClInclude Include="..\include\tete.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\aaBox.cpp" />
     <ClCompile Include="..\src\basicApp.cpp" />
     <ClCompile Include="..\src\cameraNode.cpp" />
     <ClCompile Include="..\src\cinder2DInteractItem.cpp" />
@@ -135,13 +148,21 @@
     <ClCompile Include="..\src\client.cpp" />
     <ClCompile Include="..\src\genericNode.cpp" />
     <ClCompile Include="..\src\graphicItem.cpp" />
+    <ClCompile Include="..\src\grids\interface.cpp" />
+    <ClCompile Include="..\src\grids\protocol.cpp" />
+    <ClCompile Include="..\src\identity.cpp" />
     <ClCompile Include="..\src\interactItem.cpp" />
     <ClCompile Include="..\src\networkItem.cpp" />
     <ClCompile Include="..\src\node.cpp" />
     <ClCompile Include="..\src\object.cpp" />
+    <ClCompile Include="..\src\objectController.cpp" />
     <ClCompile Include="..\src\prism.cpp" />
     <ClCompile Include="..\src\renderer.cpp" />
     <ClCompile Include="..\src\spaceGraphics.cpp" />
+    <ClCompile Include="..\src\tete.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

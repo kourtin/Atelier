@@ -101,4 +101,17 @@ namespace Atelier {
         return true;
     }
 
+    void Identity::set_name(const std::string& new_name) {
+        name_ = new_name;
+    }
+
+    std::string& Identity::name() {
+        return name_;
+    }
+
+    const std::string& Identity::name() const {
+        return name_;
+    }
+
+
 }
