@@ -3,14 +3,14 @@
 
 #include "object.h"
 #include "cinderGraphicItem.h"
-#include "networkItem.h"
+#include <gridsNetworkItem.h>
 #include "cinder3DInteractItem.h"
 
 class CinderApp;
 
 namespace Atelier {
     class Node : public Object, public Cinder3DInteractItem, 
-        public CinderGraphicItem, public NetworkItem {
+        public CinderGraphicItem, public GridsNetworkItem {
     public:
         Node(ID);
         virtual ~Node();

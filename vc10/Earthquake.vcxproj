@@ -148,6 +148,7 @@
     <ClCompile Include="..\src\client.cpp" />
     <ClCompile Include="..\src\genericNode.cpp" />
     <ClCompile Include="..\src\graphicItem.cpp" />
+    <ClCompile Include="..\src\gridsNetworkItem.cpp" />
     <ClCompile Include="..\src\grids\interface.cpp" />
     <ClCompile Include="..\src\grids\protocol.cpp" />
     <ClCompile Include="..\src\identity.cpp" />

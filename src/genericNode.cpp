@@ -14,6 +14,7 @@
 #include "client.h"
 #include "identity.h"
 #include "aaBox.h"
+#include <gridsNetworkItem.h>
 
 namespace Atelier {
     GenericNode::GenericNode(ID new_id) : Node(new_id) {
@@ -166,12 +167,11 @@ namespace Atelier {
 
     void GenericNode::activate(const Identity& ident) {
         billboard_ = !billboard_;
+        GridsNetworkItem::activate(ident);
     }
 
     void GenericNode::create_object(const Vec3D&) {
         Value val;
-
-        
     }
 
     void GenericNode::create_object(const Value&) {

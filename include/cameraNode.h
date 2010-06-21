@@ -8,7 +8,7 @@ namespace cinder {
 #include "define.h"
 #include "object.h"
 #include "cinder3DInteractItem.h"
-#include "networkItem.h"
+#include <gridsNetworkItem.h>
 #include "cinderGraphicItem.h"
 #include "prism.h"
 #include "aaBox.h"
@@ -18,7 +18,7 @@ namespace Atelier {
     class Identity;
 
     class CameraNode : public Object, public Cinder3DInteractItem,
-        public CinderGraphicItem, public NetworkItem {
+        public CinderGraphicItem, public GridsNetworkItem {
     public:
         CameraNode(ID);
 

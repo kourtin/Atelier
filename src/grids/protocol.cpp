@@ -1,10 +1,12 @@
 
 #include <sstream>
 #include <exception>
+#include <string>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <json/reader.h>
+#include <json/writer.h>
 
 #include <cinder/app/App.h>
 
@@ -77,40 +79,9 @@ namespace Grids {
 
     void Protocol::send_protocol_initialization_string() {
         std::string init_string = "++Grids/1.0/JSON/name=\"";
-        init_string += Atelier::Client::user_identity().name();
+        init_string += Atelier::Client::user_identity().id();
         init_string += "\"";
         protocol_write(init_string);
-    }
-
-    size_t Protocol::protocol_write(const std::string& str) {
-        size_t len = str.size();
-
-        return protocol_write(str.c_str(), len); 
-    }
-
-    // Note this cannot be threaded without updating send_request(const Value&,...)
-    size_t Protocol::protocol_write(const char* str, size_t len) {
-        if (!socket_connected())
-            return 0;
-
-        size_t ret, net_len;
-        size_t outstr_len = len + 4;
-        char* outstr = (char*)malloc(outstr_len);
-
-        memcpy(outstr, &net_len, 4);
-        memcpy((outstr + 4), str, len);
-
-        ret = boost::asio::write(*socket_, boost::asio::buffer(outstr, outstr_len));
-        free(outstr);
-
-        if (ret != outstr_len)
-            ci::app::console() << "Error sending message" << std::endl;
-
-        return ret;
-    }
-
-    std::string Protocol::stringify_value(const Value& val) {
-        return writer_->write(val);
     }
 
     void Protocol::send_request(const std::string& event_type, 
@@ -124,6 +95,38 @@ namespace Grids {
         protocol_write(stringify_value(args));
     }
 
+    std::string Protocol::stringify_value(const Value& val) {
+        return writer_->write(val);
+    }
+
+    size_t Protocol::protocol_write(const std::string& str) {
+        size_t len = str.size();
+
+        return protocol_write(str.c_str(), len); 
+    }
+
+    // Note this cannot be threaded without updating send_request(const Value&,...)
+    size_t Protocol::protocol_write(const char* str, size_t len) {
+        if (!socket_connected())
+            return 0;
+        
+        size_t ret;
+        __int32 net_len = len;
+
+        size_t outstr_len = len + 4;
+        char* outstr = (char*)malloc(outstr_len);
+
+        memcpy(outstr, &net_len, 4);
+        //memcpy((outstr + 4), str, len);
+        memcpy(&outstr[4], str, len);
+
+        //ci::app::console() << std::string(&outstr[4]) << std::endl;
+
+        ret = boost::asio::write(*socket_, boost::asio::buffer(outstr, outstr_len));
+        free(outstr);
+
+        return ret;
+    }
 
     Value Protocol::parse_json(const std::string& msg) {
         Grids::Value root;

@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include "networkItem.h"
 
 namespace Atelier {
@@ -6,5 +8,6 @@ namespace Atelier {
     public:
         virtual ~GridsNetworkItem();
 
+        virtual void activate(const Identity&);
     };
 }

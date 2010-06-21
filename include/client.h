@@ -31,7 +31,6 @@ namespace Atelier {
 
         static Grids::Interface& grids_interface();
 
-
     private:
         static CinderApp* app_;
         static Renderer renderer_;

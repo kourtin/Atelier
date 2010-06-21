@@ -14,8 +14,9 @@ namespace Atelier {
     GenericNode* Client::node;
 
     void Client::init() {
-        Identity* ident = new Identity("mrpatricktierney");
-        set_user_identity(*ident);
+        Identity ident("mrpatricktierney");
+        ident.set_name("Patrick Tierney");
+        set_user_identity(ident);
 
         grids_interface_.init();
         grids_interface_.connect_to_node();

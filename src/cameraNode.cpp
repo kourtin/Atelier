@@ -10,6 +10,7 @@
 #include "client.h"
 #include "basicApp.h"
 #include "tete.h"
+#include <gridsNetworkItem.h>
 
 namespace Atelier {
     CameraNode::CameraNode(ID new_id) : Object(new_id) {

@@ -8,15 +8,22 @@ namespace Grids {
 
     class Interface {
     public:
-
         void init();
         void connect_to_node();
 
         bool connected();
-        Interface& instance();
+        static Interface& instance();
+
+        static Protocol& protocol();
+
+        static const std::string GRIDS_CREATE_ROOM;
+        static const std::string GRIDS_CREATE_OBJECT;
+        static const std::string GRIDS_UPDATE_OBJECT;
+        static const std::string GRIDS_LIST_ROOMS;
+        static const std::string GRIDS_NULL_EVENT;
 
     private:
-        Protocol* protocol_;
+        static Protocol* protocol_;
         bool connected_;
         static Interface* instance_;
 
