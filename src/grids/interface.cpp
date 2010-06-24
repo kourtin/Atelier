@@ -11,6 +11,10 @@ namespace Grids {
     const std::string Interface::GRIDS_LIST_ROOMS = "Room.List";
     const std::string Interface::GRIDS_NULL_EVENT = "NULL_EVENT";
 
+    Interface::Interface() {
+        instance_ = this;
+    }
+
     void Interface::init() {
         protocol_ = new Protocol();
         protocol_->init();

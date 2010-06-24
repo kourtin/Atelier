@@ -183,4 +183,10 @@ namespace Atelier {
     void GenericNode::update_object_matrix(const Value&) {
     }
 
+    void GenericNode::request_create_object(const Value&) {
+    }
+
+    void GenericNode::request_update_object(const Value&) {
+    }
+
 }

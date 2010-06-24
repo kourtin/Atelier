@@ -17,6 +17,8 @@ namespace Atelier {
         void set_object(Object*);
         const ID& id() const;
         void set_id(const ID&);
+        const ID& current_room() const;
+        void set_current_room(const ID&);
 
         bool is_valid() const;
         bool is_local() const;
@@ -33,6 +35,7 @@ namespace Atelier {
     private:
         Object* object_;
         ID id_;
+        ID current_room_;
         std::string name_;
         bool is_valid_;
         bool is_local_;

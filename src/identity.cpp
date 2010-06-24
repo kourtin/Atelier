@@ -113,5 +113,12 @@ namespace Atelier {
         return name_;
     }
 
+    const ID& Identity::current_room() const {
+        return current_room_;
+    }
+
+    void Identity::set_current_room(const ID& rm) {
+        current_room_ = rm;
+    }
 
 }

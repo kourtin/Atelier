@@ -44,17 +44,13 @@ namespace Grids {
         try {
             query_ = new boost::asio::ip::tcp::resolver::query(
                 boost::asio::ip::tcp::v4(), address, port);
-        } catch (const std::exception& /*ec*/) {
-            ci::app::console() << "Could not bind address or port" << std::endl;
-            return false;
-        }
 
-        iterator_ = resolver_->resolve(*query_);
-        socket_ = new boost::asio::ip::tcp::socket(io_service_);
-        
-        try {
+            iterator_ = resolver_->resolve(*query_);
+            socket_ = new boost::asio::ip::tcp::socket(io_service_);
+
             socket_->connect(*iterator_);
-        } catch (const std::exception& /*ec*/) {
+        } catch (const std::exception& ec) {
+            ci::app::console() << "Exception: " << ec.what() << std::endl;
             ci::app::console() << "Could not connect to server" << std::endl;
             return false;
         }
@@ -67,7 +63,7 @@ namespace Grids {
                 break;
             ci::app::console() << "Waiting to connect" << std::endl;
             t.wait();
-            // maybe return false?
+            // maybe return false after a certain time?
         }
 
         // TODO: check that we are connected
@@ -82,6 +78,12 @@ namespace Grids {
         init_string += Atelier::Client::user_identity().id();
         init_string += "\"";
         protocol_write(init_string);
+    }
+
+    void Protocol::send_request(const std::string& event_type,
+        bool broadcast) {
+            Value val;
+        send_request(event_type, val, broadcast);
     }
 
     void Protocol::send_request(const std::string& event_type, 

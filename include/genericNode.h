@@ -35,6 +35,12 @@ namespace Atelier {
 
         virtual void create_object(const Vec3D& position);
 
+    protected:
+        virtual void request_create_object(const Value&);
+        virtual void request_update_object(const Value&);
+        virtual void update_object(const Value&);
+        virtual void update_object_matrix(const Value&);
+
     private:
         void draw_box();
         void draw_text();
@@ -44,8 +50,6 @@ namespace Atelier {
         void init_matrix();
         void restore_matrix();
         void create_object(const Value&);
-        virtual void update_object(const Value&);
-        virtual void update_object_matrix(const Value&);
 
         float text_size_;
         ci::gl::Texture text_;

@@ -38,13 +38,18 @@ namespace Atelier {
 
         ci::MayaCamUI* cam() const { return cam_; }
 
+        void create_camera();
+
+    protected:
+
+        virtual void request_create_object(const Value&);
+        virtual void request_update_object(const Value&);
+
         virtual void create_object(const Value&);
         virtual void update_object(const Value&);
         virtual void update_object_matrix(const Value&);
 
     private:
-        void create_camera();
-
         ci::MayaCamUI* cam_;
         float zoom_speed_;
         float far_clip_;

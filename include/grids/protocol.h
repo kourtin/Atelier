@@ -16,6 +16,8 @@ namespace Grids {
 
         bool connect_to_node(const std::string& address);
 
+        void send_request(const std::string& event_type,
+            bool broadcast = true);
         void send_request(const std::string& event_type, 
             Value&, bool broadcast = true);
 

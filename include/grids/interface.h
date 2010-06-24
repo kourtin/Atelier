@@ -8,6 +8,8 @@ namespace Grids {
 
     class Interface {
     public:
+        Interface();
+
         void init();
         void connect_to_node();
 

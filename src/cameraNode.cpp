@@ -92,4 +92,10 @@ namespace Atelier {
 
     void CameraNode::update_object_matrix(const Value&) {
     }
+
+    void CameraNode::request_create_object(const Value&) {
+    }
+
+    void CameraNode::request_update_object(const Value&) {
+    }
 }

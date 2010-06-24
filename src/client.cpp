@@ -1,9 +1,12 @@
 
+#include <boost/uuid/uuid_io.hpp>
+
 #include "client.h"
 #include "basicApp.h"
 #include "genericNode.h"
 #include "spaceGraphics.h"  
 #include "cameraNode.h"
+#include <utility.h>
 
 namespace Atelier {
     Client::Client(CinderApp* app) {
@@ -14,8 +17,11 @@ namespace Atelier {
     GenericNode* Client::node;
 
     void Client::init() {
+        ci::app::console() << Utility::create_uuid() << std::endl;
+
         Identity ident("mrpatricktierney");
         ident.set_name("Patrick Tierney");
+        ident.set_current_room("patricksroom");
         set_user_identity(ident);
 
         grids_interface_.init();
