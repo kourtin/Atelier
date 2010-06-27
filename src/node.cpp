@@ -3,7 +3,7 @@
 #include "basicApp.h"
 
 namespace Atelier {
-    Node::Node(ID new_id) : Object(new_id) {
+    Node::Node(const ID& new_id) : Object(new_id) {
     }
 
     Node::~Node() {

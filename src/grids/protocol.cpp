@@ -4,6 +4,7 @@
 #include <string>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/cstdint.hpp> // for uint32_t
 
 #include <json/reader.h>
 #include <json/writer.h>
@@ -12,17 +13,23 @@
 
 #include <grids/protocol.h>
 #include <client.h>
+#include <utility.h>
 
 namespace Grids {
-    const std::string Protocol::method_key_ = "_method";
-    const std::string Protocol::broadcast_key_ = "_broadcast";
+    const std::string Protocol::method_key = "_method";
+    const std::string Protocol::broadcast_key = "_broadcast";
 
     Protocol::Protocol() {
+        resolver_ = NULL;
+        query_ = NULL;
+        socket_ = NULL;
+        writer_ = NULL;
     }
 
     void Protocol::init() {
         resolver_ = new boost::asio::ip::tcp::resolver(io_service_);
         writer_ = new Json::FastWriter();
+		reader_ = new Json::Reader();
     }
 
     Protocol::~Protocol() {
@@ -33,6 +40,7 @@ namespace Grids {
         delete query_;
         delete socket_;
         delete writer_;
+		delete reader_;
     }
 
     bool Protocol::connect_to_node(const std::string& address) {
@@ -58,7 +66,7 @@ namespace Grids {
         boost::asio::io_service io;
         boost::asio::deadline_timer t(io, boost::posix_time::seconds(1));
 
-        for(;;) {
+        for (;;) {
             if(socket_->is_open())
                 break;
             ci::app::console() << "Waiting to connect" << std::endl;
@@ -66,10 +74,9 @@ namespace Grids {
             // maybe return false after a certain time?
         }
 
-        // TODO: check that we are connected
         // hooray we are connnected! initialize protocol
         send_protocol_initialization_string();
-
+        
         return true;
     }
 
@@ -82,7 +89,7 @@ namespace Grids {
 
     void Protocol::send_request(const std::string& event_type,
         bool broadcast) {
-            Value val;
+        Value val;
         send_request(event_type, val, broadcast);
     }
 
@@ -91,8 +98,8 @@ namespace Grids {
         if (event_type.empty())
             return;
 
-        args[method_key_] = event_type;
-        args[broadcast_key_] = broadcast;
+        args[method_key] = event_type;
+        args[broadcast_key] = broadcast;
 
         protocol_write(stringify_value(args));
     }
@@ -104,6 +111,11 @@ namespace Grids {
     size_t Protocol::protocol_write(const std::string& str) {
         size_t len = str.size();
 
+        if (debug_print_) {
+            ci::app::console() << "Sending:" << std::endl <<
+                str << std::endl;
+        }
+
         return protocol_write(str.c_str(), len); 
     }
 
@@ -112,8 +124,9 @@ namespace Grids {
         if (!socket_connected())
             return 0;
         
-        size_t ret;
-        __int32 net_len = len;
+        size_t ret = 0u;
+        boost::uint32_t net_len =len;
+        Atelier::Utility::host_to_network_uint32(net_len);
 
         size_t outstr_len = len + 4;
         char* outstr = (char*)malloc(outstr_len);
@@ -122,28 +135,136 @@ namespace Grids {
         //memcpy((outstr + 4), str, len);
         memcpy(&outstr[4], str, len);
 
-        //ci::app::console() << std::string(&outstr[4]) << std::endl;
+        try {
+            ret = boost::asio::write(*socket_, boost::asio::buffer(outstr, outstr_len));
+        } catch (std::exception ex) {
+            ci::app::console() << "Could not write to node" << std::endl <<
+                ex.what() << std::endl;
+        }
 
-        ret = boost::asio::write(*socket_, boost::asio::buffer(outstr, outstr_len));
         free(outstr);
 
         return ret;
     }
 
-    Value Protocol::parse_json(const std::string& msg) {
-        Grids::Value root;
-        Json::Reader reader;
+    void Protocol::check_network() {
+        if (socket_->available() > 0u)
+            grids_read();
+    }
 
-        if (reader.parse(msg, root))
-            return root;
+    void Protocol::grids_read() {
+        size_t bytes_read;
+        boost::uint32_t incoming_length;
+        char* buf;
+        char* buf_incoming;
 
-        ci::app::console() << "Could not parse JSON: " << 
-            msg << std::endl;
+        // Wait for more data if we don't have the length
+        if(socket_->available() < 4)
+            return;
 
-        return Value();
+        bytes_read = socket_->read_some(
+            boost::asio::buffer((char*)(&incoming_length), 4));
+
+        Atelier::Utility::network_to_host_uint32(incoming_length);
+
+        if (bytes_read <= 0 || bytes_read != 4) {
+            ci::app::console() << "Socket read error" << std::endl;
+            return;
+        }
+
+        if (incoming_length > 1024 * 1024 * 1024) {
+            // not going to read in more than a gig, f that
+            std::cerr << "Got incoming message size: " << 
+                incoming_length << ". Skipping\n";
+            return;
+        }
+
+        // allocate space for incoming message + null byte
+        buf = (char*)malloc(incoming_length + 1);
+        boost::uint32_t bytes_remaining = incoming_length;
+        buf_incoming = buf;
+
+        do {
+            bytes_read = socket_->read_some(
+                boost::asio::buffer(buf_incoming, bytes_remaining));
+
+            if (bytes_read > 0) {
+                bytes_remaining -= bytes_read;
+                buf_incoming += bytes_read;
+            }
+
+        } while ((bytes_read > 0) && bytes_remaining);
+        
+        buf[incoming_length] = '\0';
+
+        if (bytes_read == -1) {
+            // o snap read error
+            ci::app::console() << "Socket read error: " << bytes_read << "\n";
+            free(buf);
+            return;
+        }
+
+        if (bytes_read == 0) {
+            // not chill
+            ci::app::console() << "Didn't read any data when expecting message of " << incoming_length << " bytes\n";
+            free(buf);
+            return;
+        }
+
+        if (bytes_read != incoming_length) {
+            ci::app::console() << "Only read " << bytes_read << " bytes when expecting message of "
+                << incoming_length << " bytes\n";
+            free(buf);
+            return;
+        }
+
+         std::string msg = std::string(buf);
+
+        handle_message(msg);
+
+        free(buf);
+    }
+
+    void Protocol::handle_message(const std::string& msg) {
+        if (msg.size() < 2) return; // obv. bogus
+
+        if (msg.find("==", 0, 2) == 0) {
+            // protocol initiation message
+           ci::app::console() << "Grids session initiated" << 
+               std::endl;
+            protocol_initiated();
+        } else if (msg.find("--", 0, 2) == 0) {
+            // encrypted protocol message
+            protocol_initiated_encrypted();
+        } else {
+            // assume this is json for now
+            Value root;
+
+			if (reader_->parse(msg, root) == false) {
+				ci::app::console() << "Unable to parse message" << std::endl;
+				return;
+			}
+
+            if (debug_print_) {
+                ci::app::console() << "Received:" << std::endl <<
+                    root.toStyledString() << std::endl;
+            }
+
+            // This will copy the value passed to it into an Atelier::Tete,
+            // so it's OK if root is deleted as it goes out of scope.
+            Interface::instance().parse_network_event(root);
+        }
+    }
+
+    void Protocol::protocol_initiated() {
+        protocol_initiated_ = true;
+    }
+
+    void Protocol::protocol_initiated_encrypted() {
+        protocol_initiated_encrypted_ = true;
     }
 
     bool Protocol::socket_connected() {
-        return (socket != NULL) && socket_->is_open();
+        return (socket_ != NULL) && socket_->is_open();
     }
 }

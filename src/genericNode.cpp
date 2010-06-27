@@ -6,18 +6,21 @@
 #include "cinder/MayaCamUI.h"
 #include "cinder/Camera.h"
 
-#include "genericNode.h"
-#include "cinderGraphicItem.h"
-#include "basicApp.h"
-#include "renderer.h"
-#include "cameraNode.h"
-#include "client.h"
-#include "identity.h"
-#include "aaBox.h"
+#include <genericNode.h>
+#include <cinderGraphicItem.h>
+#include <basicApp.h>
+#include <renderer.h>
+#include <cameraNode.h>
+#include <client.h>
+#include <identity.h>
+#include <aaBox.h>
 #include <gridsNetworkItem.h>
+#include <tete.h>
+#include <grids/interface.h>
+#include <node.h>
 
 namespace Atelier {
-    GenericNode::GenericNode(ID new_id) : Node(new_id) {
+    GenericNode::GenericNode(const ID& new_id) : Node(new_id) {
         set_position(Vec3D(0.0, 0.0, 0.0));
         set_rotation(Vec3D(0.0, 0.0, 0.0));
         set_scale(Vec3D(10.0, 10.0, 10.0));
@@ -170,17 +173,18 @@ namespace Atelier {
         GridsNetworkItem::activate(ident);
     }
 
-    void GenericNode::create_object(const Vec3D&) {
-        Value val;
+    void GenericNode::create_object(const Tete& tete) {
+		if (tete.has_matrix()) {
+			set_position(tete.position());
+			set_rotation(tete.rotation());
+			set_scale(tete.scale());
+		}
     }
 
-    void GenericNode::create_object(const Value&) {
+    void GenericNode::update_object(const Tete&) {
     }
 
-    void GenericNode::update_object(const Value&) {
-    }
-
-    void GenericNode::update_object_matrix(const Value&) {
+    void GenericNode::update_object_matrix(const Tete&) {
     }
 
     void GenericNode::request_create_object(const Value&) {
@@ -189,4 +193,12 @@ namespace Atelier {
     void GenericNode::request_update_object(const Value&) {
     }
 
+	void GenericNode::request_create_object(Vec3D pos) {
+		Tete request;
+		request.set_position(pos);
+		request.links().push_back(&(Client::user_identity())); // Presumable the user created this
+
+		GridsNetworkItem::request_create_object(request);
+		// Maybe send the tete elsewhere
+	}
 }

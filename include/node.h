@@ -12,7 +12,7 @@ namespace Atelier {
     class Node : public Object, public Cinder3DInteractItem, 
         public CinderGraphicItem, public GridsNetworkItem {
     public:
-        Node(ID);
+        Node(const ID&);
         virtual ~Node();
 
         const ID& id();

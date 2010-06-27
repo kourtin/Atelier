@@ -3,4 +3,5 @@
 
 namespace Grids {
     typedef Json::Value Value;
+	typedef std::string ID;
 }

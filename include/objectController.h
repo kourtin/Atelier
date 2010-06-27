@@ -3,15 +3,16 @@
 
 #include <map>
 
-#include "define.h"
+#include <define.h>
 
 namespace Atelier {
     class Object;
+    class Identity;
 
     class ObjectController {
     public:
         ObjectController();
-        static ObjectController* instance();
+        static ObjectController& instance();
 
         Object* get_object_from_id(const ID&) const;
 

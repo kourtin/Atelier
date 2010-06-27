@@ -26,9 +26,9 @@ namespace Atelier {
         virtual void set_rotation(Vec3D) = 0;
         virtual void set_scale(Vec3D) = 0;
 
-        virtual void create_object(const Value&) = 0;
-        virtual void update_object(const Value&) = 0;
-        virtual void update_object_matrix(const Value&) = 0;
+        virtual void create_object(const Tete&) = 0;
+        virtual void update_object(const Tete&) = 0;
+        virtual void update_object_matrix(const Tete&) = 0;
 
         virtual void receive_tete(const Tete&) = 0;
 

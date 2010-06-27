@@ -1,5 +1,6 @@
 
-#include "objectController.h"
+#include <objectController.h>
+#include <identity.h>
 
 namespace Atelier {
     ObjectController::ObjectController() {
@@ -15,7 +16,7 @@ namespace Atelier {
 
     ObjectController* ObjectController::instance_;
 
-    ObjectController* ObjectController::instance() {
-        return instance_;
+    ObjectController& ObjectController::instance() {
+        return *instance_;
     }
 }

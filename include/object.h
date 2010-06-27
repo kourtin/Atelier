@@ -8,7 +8,7 @@ namespace Atelier {
 
     class Object : public virtual ObjectInterface {
     public:
-        Object(ID new_id);
+        Object(const ID& object_id);
         virtual ~Object();
 
         const ID& id();

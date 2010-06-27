@@ -10,6 +10,7 @@
 
 namespace Atelier {
     Client::Client(CinderApp* app) {
+        // WARNING: do not dereference app in the ctor!
         app_ = app;
         active_camera_ = NULL;
     }
@@ -17,15 +18,13 @@ namespace Atelier {
     GenericNode* Client::node;
 
     void Client::init() {
-        ci::app::console() << Utility::create_uuid() << std::endl;
-
-        Identity ident("mrpatricktierney");
-        ident.set_name("Patrick Tierney");
-        ident.set_current_room("patricksroom");
-        set_user_identity(ident);
+		set_user_identity(create_user_identity());
 
         grids_interface_.init();
         grids_interface_.connect_to_node();
+		grids_interface_.request_list_rooms();
+
+		enter_default_room();
 
         active_camera_ = new CameraNode("lol_dongs2");
         renderer_.set_camera(active_camera_);
@@ -42,6 +41,8 @@ namespace Atelier {
     }
 
     void Client::update() {
+        grids_interface_.update();
+
         renderer_.update();
         renderer_.call_camera_matrix();
     }
@@ -87,4 +88,15 @@ namespace Atelier {
     bool Client::has_camera() {
         return active_camera_ ? true : false;
     }
+
+	Identity Client::create_user_identity() {
+		// This should be loaded from a sqlite db or something
+        Identity ident(Utility::create_uuid());
+        ident.set_name("Patrick Tierney");
+        return ident;
+	}
+
+	void Client::enter_default_room() {
+
+	}
 }

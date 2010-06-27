@@ -32,6 +32,9 @@ namespace Atelier {
         static Grids::Interface& grids_interface();
 
     private:
+		Identity create_user_identity();
+		void enter_default_room();
+
         static CinderApp* app_;
         static Renderer renderer_;
         ObjectController object_controller_;

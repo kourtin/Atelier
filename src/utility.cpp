@@ -21,9 +21,20 @@ namespace Atelier {
         convert << uuid_;
         return convert.str();
     }
-}
 
-//std::string s((char*)(uuid_.data), uuid_.size());
-//std::string s(uuid_.size(), '\0');
-//std::copy(uuid_.begin(), uuid_.end(), s.begin());
-//std::string s(uuid_.begin(), uuid_.end());
+    void Utility::host_to_network_uint32(boost::uint32_t& x) {
+        // TODO: replace this with real code
+        endian_swap(x);
+    }
+    void Utility::network_to_host_uint32(boost::uint32_t& x) {
+        // TODO: replace this with real code
+        endian_swap(x);
+    }
+
+    void Utility::endian_swap(boost::uint32_t& x) {
+        x = (x>>24) |
+            ((x<<8) & 0x00FF0000) |
+            ((x>>8) & 0x0000FF00) |
+            (x<<24);
+    }
+}

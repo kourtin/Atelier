@@ -1,6 +1,10 @@
 
 #include <assert.h>
 
+#include <map>
+#include <iterator>
+#include <exception>
+
 #include "identity.h"
 #include "objectController.h"
 #include "object.h"
@@ -18,17 +22,16 @@ namespace Atelier {
 
     Identity::Identity(const ID& new_id) {
         id_ = new_id;
-        object_ = ObjectController::instance()->get_object_from_id(new_id);
-        object_ != NULL ? is_local_ = true : is_local_ = false;
+        object_ = ObjectController::instance().get_object_from_id(new_id);
+        is_local_ = object_ != NULL;
         is_valid_ = true;
     }
 
     Identity::Identity(const ID& new_id, Object* object) {
         id_ = new_id;
         object_ = object;
-        assert(object);
+        is_local_ = object_ != NULL;
         is_valid_ = true;
-        is_local_ = true;
     }
 
     Identity::~Identity() {
@@ -53,8 +56,8 @@ namespace Atelier {
     void Identity::set_id(const ID& new_id) {
         id_ = new_id;
 
-        Object* temp_object = ObjectController::instance()->get_object_from_id(new_id);
-        if(temp_object && object_) 
+        Object* temp_object = ObjectController::instance().get_object_from_id(new_id);
+        if(temp_object && object_)
             assert(temp_object == object_);
 
         temp_object ? is_local_ = true : is_local_ = false;
@@ -121,4 +124,69 @@ namespace Atelier {
         current_room_ = rm;
     }
 
+    ///////////////////////
+    // Static Utility stuff
+    //////////////////////
+
+    std::map<const ID, const Identity*> Identity::id_identity_ptr_map_;
+    std::map<const ID, const Identity*>::const_iterator
+        Identity::id_identity_ptr_map_iterator_;
+    
+    void Identity::register_identity(const Identity& ident) {
+        id_identity_ptr_map_iterator_ = id_identity_ptr_map_.find(
+            ident.id());
+
+        if (id_identity_ptr_map_iterator_ == id_identity_ptr_map_.end())
+            id_identity_ptr_map_[ident.id()] = &ident;
+        //else
+        //    assert((ident == id_identity_ptr_map_iterator_->second));
+    }
+
+    const Identity* Identity::get_identity_from_value(const Value& val) {
+        if (val["id"].empty())
+            return NULL;
+
+        return get_identity_from_id(val["id"].asString());
+    }
+
+    // Maybe instead this should throw an exception?
+    const Identity* Identity::get_identity_from_id(const ID& in_id) {
+        id_identity_ptr_map_iterator_ = id_identity_ptr_map_.find(
+            in_id);
+
+        if (id_identity_ptr_map_iterator_ == id_identity_ptr_map_.end())
+            return NULL;
+
+        return id_identity_ptr_map_iterator_->second;
+    }
+
+    Identity* Identity::create_identity(ID& in_id, Object* obj) {
+        if (in_id.empty())
+            return NULL;
+
+        Identity* ident = new Identity(in_id, obj);
+
+        register_identity(*ident);
+
+        return ident;
+    }
+
+    Identity* Identity::create_identity(const Value& val) {
+        if (val["id"].empty())
+            return NULL;
+        ID owner_id  = val["id"].asString();
+        // This is called when there's no local object, 
+        Identity* ident = new Identity(owner_id);
+
+        if (!val["name"].empty())
+            ident->set_name(val["name"].asString());
+
+        // What about other attributes such as color, font, hat size?
+        // This should be transmitted as the creation, etc, of a 
+        // separate object.
+
+        register_identity(*ident);
+
+        return ident;
+    }
 }

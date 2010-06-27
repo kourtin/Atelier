@@ -18,7 +18,7 @@ namespace Atelier {
 
     class GenericNode : public Node {
     public:
-        GenericNode(ID);
+        GenericNode(const ID&);
         virtual ~GenericNode();
         void init();
 
@@ -33,13 +33,15 @@ namespace Atelier {
 
         void set_billboard(bool);
 
-        virtual void create_object(const Vec3D& position);
+		void create_object(const Tete&);
+
+		static void request_create_object(Vec3D pos);
 
     protected:
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);
-        virtual void update_object(const Value&);
-        virtual void update_object_matrix(const Value&);
+        virtual void update_object(const Tete&);
+        virtual void update_object_matrix(const Tete&);
 
     private:
         void draw_box();
@@ -49,7 +51,6 @@ namespace Atelier {
         void draw_aabox();
         void init_matrix();
         void restore_matrix();
-        void create_object(const Value&);
 
         float text_size_;
         ci::gl::Texture text_;

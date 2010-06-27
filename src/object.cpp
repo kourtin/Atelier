@@ -3,7 +3,7 @@
 
 namespace Atelier {
 
-    Object::Object(ID new_id) {
+    Object::Object(const ID& new_id) {
         id_ = new_id;
     }
 

@@ -63,11 +63,11 @@ namespace Atelier {
     }
 
     void Renderer::draw_items(RenderDimension dim, GLenum pass) {
-        for(std::vector<GraphicItem*>::const_iterator it = items_.begin(); it != items_.end(); ++it) {
+        for (std::vector<GraphicItem*>::const_iterator it = items_.begin(); it != items_.end(); ++it) {
             (*it)->render(dim, pass);
         }
 
-        for(std::vector<StaticGraphicItem*>::const_iterator it = static_items_.begin(); it != static_items_.end(); ++it) {
+        for (std::vector<StaticGraphicItem*>::const_iterator it = static_items_.begin(); it != static_items_.end(); ++it) {
             (*it)->render(dim, pass);
         }
     }

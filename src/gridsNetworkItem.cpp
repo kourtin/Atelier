@@ -17,7 +17,7 @@ namespace Atelier {
         Value val;
 
         Client::grids_interface().protocol().send_request(
-            Grids::Interface::GRIDS_LIST_ROOMS, val);
+            Grids::Interface::GRIDS_LIST_ROOMS, val, false);
     }
 
     void GridsNetworkItem::request_create_room(const Value&) {
@@ -73,8 +73,7 @@ namespace Atelier {
         val["id"] = id(); // TODO: generate id
 
         Grids::Interface::instance().protocol().send_request(
-            Grids::Interface::GRIDS_UPDATE_OBJECT,
-            val);
+            Grids::Interface::GRIDS_UPDATE_OBJECT, val);
     }
 
     void GridsNetworkItem::request_update_position(const Vec3D& pos) {
@@ -125,4 +124,13 @@ namespace Atelier {
 
         request_update_object_internal(val);
     }
+
+	//////////////////////////////////
+	// Static
+	/////////////////////////////////
+
+	void GridsNetworkItem::request_create_object(Tete& tete) {
+		// Send stuff to the network
+		Grids::Interface::instance().send_tete(tete);
+	}
 }

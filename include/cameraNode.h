@@ -20,7 +20,7 @@ namespace Atelier {
     class CameraNode : public Object, public Cinder3DInteractItem,
         public CinderGraphicItem, public GridsNetworkItem {
     public:
-        CameraNode(ID);
+        CameraNode(const ID&);
 
         void call_matrix();
 
@@ -45,9 +45,9 @@ namespace Atelier {
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);
 
-        virtual void create_object(const Value&);
-        virtual void update_object(const Value&);
-        virtual void update_object_matrix(const Value&);
+        virtual void create_object(const Tete&);
+        virtual void update_object(const Tete&);
+        virtual void update_object_matrix(const Tete&);
 
     private:
         ci::MayaCamUI* cam_;

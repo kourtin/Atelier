@@ -58,14 +58,14 @@ namespace Atelier {
         float grid_step = grid_plane_size_ / grid_plane_intervals_;
         float x = -grid_plane_size_;
         int index = 0;
-        for(int c = -grid_plane_intervals_; c < grid_plane_intervals_; ++c) {
+        for (int c = -grid_plane_intervals_; c < grid_plane_intervals_; ++c) {
             line_verts[index] = x; line_verts[index+1] = 0.0f; line_verts[index+2] =  -grid_plane_size_;
             line_verts[index+3] = x; line_verts[index+4] = 0.0f; line_verts[index+5] = grid_plane_size_;
             index += 6;
             x += grid_step;
         }
         float y = -grid_plane_size_;
-        for(int c = -grid_plane_intervals_; c < grid_plane_intervals_; ++c) {
+        for (int c = -grid_plane_intervals_; c < grid_plane_intervals_; ++c) {
             line_verts[index] = -grid_plane_size_; line_verts[index+1] = 0.0f; line_verts[index+2] = y;
             line_verts[index+3] = grid_plane_size_; line_verts[index+4] = 0.0f; line_verts[index+5] = y;
             index += 6;

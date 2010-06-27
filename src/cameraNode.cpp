@@ -13,7 +13,7 @@
 #include <gridsNetworkItem.h>
 
 namespace Atelier {
-    CameraNode::CameraNode(ID new_id) : Object(new_id) {
+    CameraNode::CameraNode(const ID& new_id) : Object(new_id) {
         cam_ = new ci::MayaCamUI();
         zoom_speed_ = 30.0f;
         far_clip_ = 10000.0f;
@@ -84,13 +84,13 @@ namespace Atelier {
         cam_->setCurrentCam(new_cam);
     }
 
-    void CameraNode::create_object(const Value&) {
+    void CameraNode::create_object(const Tete&) {
     }
     
-    void CameraNode::update_object(const Value&) {
+    void CameraNode::update_object(const Tete&) {
     }
 
-    void CameraNode::update_object_matrix(const Value&) {
+    void CameraNode::update_object_matrix(const Tete&) {
     }
 
     void CameraNode::request_create_object(const Value&) {

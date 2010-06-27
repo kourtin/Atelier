@@ -130,12 +130,14 @@
     <ClInclude Include="..\include\node.h" />
     <ClInclude Include="..\include\object.h" />
     <ClInclude Include="..\include\objectController.h" />
+    <ClInclude Include="..\include\objectCreator.h" />
     <ClInclude Include="..\include\objectInterface.h" />
     <ClInclude Include="..\include\prism.h" />
     <ClInclude Include="..\include\renderer.h" />
     <ClInclude Include="..\include\spaceGraphics.h" />
     <ClInclude Include="..\include\staticGraphicItem.h" />
     <ClInclude Include="..\include\tete.h" />
+    <ClInclude Include="..\include\teteManager.h" />
     <ClInclude Include="..\include\utility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,10 +160,12 @@
     <ClCompile Include="..\src\node.cpp" />
     <ClCompile Include="..\src\object.cpp" />
     <ClCompile Include="..\src\objectController.cpp" />
+    <ClCompile Include="..\src\objectCreator.cpp" />
     <ClCompile Include="..\src\prism.cpp" />
     <ClCompile Include="..\src\renderer.cpp" />
     <ClCompile Include="..\src\spaceGraphics.cpp" />
     <ClCompile Include="..\src\tete.cpp" />
+    <ClCompile Include="..\src\teteManager.cpp" />
     <ClCompile Include="..\src\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
