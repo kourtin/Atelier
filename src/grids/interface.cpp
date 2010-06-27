@@ -9,13 +9,13 @@
 #include <identity.h>
 
 namespace Grids {
-    const std::string Interface::server_address_ = "mmmii.net";
+    const char* Interface::server_address_ = "mmmii.net";
 
-    const std::string Interface::GRIDS_CREATE_ROOM = "Room.Create";
-    const std::string Interface::GRIDS_CREATE_OBJECT = "Room.CreateObject";
-    const std::string Interface::GRIDS_UPDATE_OBJECT = "Room.UpdateObject";
-    const std::string Interface::GRIDS_LIST_ROOMS = "Room.List";
-    const std::string Interface::GRIDS_NULL_EVENT = "NULL_EVENT";
+    const char* Interface::GRIDS_CREATE_ROOM = "Room.Create"; 
+    const char* Interface::GRIDS_CREATE_OBJECT = "Room.CreateObject";
+    const char* Interface::GRIDS_UPDATE_OBJECT = "Room.UpdateObject";
+    const char* Interface::GRIDS_LIST_ROOMS = "Room.List";
+    const char* Interface::GRIDS_NULL_EVENT = "NULL_EVENT";
 
     Interface::Interface() {
         instance_ = this;
@@ -111,26 +111,27 @@ namespace Grids {
 		}
 	}
 
-	void Interface::send_tete(Atelier::Tete& tete) {
-		Value& out_val = tete.value();
-
+	void Interface::set_value_from_broadcast(Atelier::Tete& tete, bool broadcast) {
+		tete.value()[Grids::Protocol::broadcast_key] = broadcast;
 	}
 
+	void Interface::send_tete(Atelier::Tete& tete) {
+		set_value_links(tete.value(), tete);
+
+		protocol_->send_request(tete.value());
+	}
+
+	// Converts from Tete identities to links
 	void Interface::set_value_links(Value& val, Atelier::Tete& tete) {
 		std::vector<const Atelier::Identity*> links = tete.links();
-		unsigned int val_links;
-
-		if (val["attr"]["links"].empty())
-			val_links = 0u;
-		else
-			val_links = val["attr"]["links"]
 
 		for (std::vector<const Atelier::Identity*>::iterator it = links.begin();
 			it != links.end(); ++it) {
-			
+			Value link_value;
+			link_value["id"] = (*it)->id();
+			link_value["name"] = (*it)->name();
 
+			val["attr"]["links"].append(link_value);
 		}
 	}
-
-
 }

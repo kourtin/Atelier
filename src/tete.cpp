@@ -1,9 +1,10 @@
 
-#include "tete.h"
-#include "identity.h"
+#include <tete.h>
+#include <identity.h>
 #include <grids/interface.h>
 #include <grids/protocol.h>
 #include <utility.h>
+#include <teteManager.h>
 
 namespace Atelier {
     Tete::Tete() {
@@ -62,33 +63,7 @@ namespace Atelier {
             type_ = INVALID;
     }
 
-	////////////////////////
-	// Static
-	///////////////////////
-
-	std::queue<Tete*> Tete::tete_queue_;
-
-	Tete* Tete::create_tete(const std::vector<const Identity*>& idents, const Value& val) {
-		Tete* tete = new Tete(idents, val);
-
-		tete_queue_.push(tete);
-
-		return tete;
-	}
-
-	bool Tete::queued_tetes() {
-		return !tete_queue_.empty();
-	}
-
-	Tete* Tete::next_tete() {
-		if (tete_queue_.empty())
-			return NULL;
-
-		Tete* tete = tete_queue_.front();
-		tete_queue_.pop();
-		return tete;
-	}
-
+	
 	const ID& Tete::id() const {
 		return value_["id"].asString();
 	}
@@ -121,5 +96,47 @@ namespace Atelier {
 		return value_["attr"];
 	}
 
+	void Tete::set_position(Vec3D pos) {
+		value_["pos"][0u] = pos.x;
+		value_["pos"][1u] = pos.y;
+		value_["pos"][2u] = pos.z;
+	}
+
+	void Tete::set_rotation(Vec3D rot) {
+		value_["rot"][0u] = rot.x;
+		value_["rot"][1u] = rot.y;
+		value_["rot"][2u] = rot.z;
+	}
+
+	void Tete::set_scale(Vec3D scl) {
+		value_["scl"][0u] = scl.x;
+		value_["scl"][1u] = scl.y;
+		value_["scl"][2u] = scl.z;
+	}
+
+	////////////////////////
+	// Static
+	///////////////////////
+
+	Tete* Tete::create_tete(const std::vector<const Identity*>& idents, const Value& val) {
+		Tete* tete = new Tete(idents, val);
+
+		TeteManager::instance().tete_queue_.push(tete);
+
+		return tete;
+	}
+
+	bool Tete::queued_tetes() {
+		return !TeteManager::instance().tete_queue_.empty();
+	}
+
+	Tete* Tete::next_tete() {
+		if (TeteManager::instance().tete_queue_.empty())
+			return NULL;
+
+		Tete* tete = TeteManager::instance().tete_queue_.front();
+		TeteManager::instance().tete_queue_.pop();
+		return tete;
+	}
 
 }

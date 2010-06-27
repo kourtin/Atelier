@@ -16,8 +16,8 @@
 #include <utility.h>
 
 namespace Grids {
-    const std::string Protocol::method_key = "_method";
-    const std::string Protocol::broadcast_key = "_broadcast";
+    const char* Protocol::method_key = "_method";
+    const char* Protocol::broadcast_key = "_broadcast";
 
     Protocol::Protocol() {
         resolver_ = NULL;
@@ -100,6 +100,13 @@ namespace Grids {
 
         args[method_key] = event_type;
         args[broadcast_key] = broadcast;
+
+        protocol_write(stringify_value(args));
+    }
+
+	void Protocol::send_request(Value& args) {
+        if (args[method_key].empty())
+            return;
 
         protocol_write(stringify_value(args));
     }

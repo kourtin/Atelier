@@ -5,9 +5,10 @@
 #include <iterator>
 #include <exception>
 
-#include "identity.h"
-#include "objectController.h"
-#include "object.h"
+#include <identity.h>
+#include <objectController.h>
+#include <object.h>
+#include <identityManager.h>
 
 // Notes on asserts: It's very important that objcts with the same ids have the same pointers,
 // and vice versa. Any inconsistancies, say from the network, should be resolved there
@@ -126,20 +127,16 @@ namespace Atelier {
 
     ///////////////////////
     // Static Utility stuff
-    //////////////////////
-
-    std::map<const ID, const Identity*> Identity::id_identity_ptr_map_;
-    std::map<const ID, const Identity*>::const_iterator
-        Identity::id_identity_ptr_map_iterator_;
+    ///////////////////////
     
     void Identity::register_identity(const Identity& ident) {
-        id_identity_ptr_map_iterator_ = id_identity_ptr_map_.find(
-            ident.id());
+		IdentityManager::instance().id_identity_ptr_map_iterator_ = 
+			IdentityManager::instance().id_identity_ptr_map_.find(ident.id());
 
-        if (id_identity_ptr_map_iterator_ == id_identity_ptr_map_.end())
-            id_identity_ptr_map_[ident.id()] = &ident;
-        //else
-        //    assert((ident == id_identity_ptr_map_iterator_->second));
+        if (IdentityManager::instance().id_identity_ptr_map_iterator_ == 
+			IdentityManager::instance().id_identity_ptr_map_.end())
+            IdentityManager::instance().id_identity_ptr_map_[ident.id()] = &ident;
+
     }
 
     const Identity* Identity::get_identity_from_value(const Value& val) {
@@ -151,13 +148,14 @@ namespace Atelier {
 
     // Maybe instead this should throw an exception?
     const Identity* Identity::get_identity_from_id(const ID& in_id) {
-        id_identity_ptr_map_iterator_ = id_identity_ptr_map_.find(
-            in_id);
+        IdentityManager::instance().id_identity_ptr_map_iterator_ = 
+			IdentityManager::instance().id_identity_ptr_map_.find(in_id);
 
-        if (id_identity_ptr_map_iterator_ == id_identity_ptr_map_.end())
+        if (IdentityManager::instance().id_identity_ptr_map_iterator_ == 
+			IdentityManager::instance().id_identity_ptr_map_.end())
             return NULL;
 
-        return id_identity_ptr_map_iterator_->second;
+        return IdentityManager::instance().id_identity_ptr_map_iterator_->second;
     }
 
     Identity* Identity::create_identity(ID& in_id, Object* obj) {

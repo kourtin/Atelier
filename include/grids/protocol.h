@@ -16,17 +16,19 @@ namespace Grids {
 
         bool connect_to_node(const std::string& address);
 
+		void send_request(Value&); // Use this most often
         void send_request(const std::string& event_type,
-            bool broadcast = true);
+            bool broadcast = true); // Use this for simple requests like LIST_ROOMS
+
         void send_request(const std::string& event_type, 
-            Value&, bool broadcast = true);
+            Value&, bool broadcast = true); // Old, sholudn't be used
 
         bool socket_connected();
 
         void check_network();
 
-		static const std::string method_key;
-        static const std::string broadcast_key;
+		static const char* method_key;
+        static const char* broadcast_key;
 
     private:
         void handle_message(const std::string&);

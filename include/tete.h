@@ -56,8 +56,5 @@ namespace Atelier {
 			const Value&);
 		static Tete* next_tete();
 		static bool queued_tetes();
-
-	private:
-		static std::queue<Tete*> tete_queue_;
     };
 }

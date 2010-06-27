@@ -25,5 +25,5 @@ namespace Atelier {
         THREE_D
     };
 
-    static std::string INVALID_ID = "invalid";
+    static char* INVALID_ID = "invalid";
 }

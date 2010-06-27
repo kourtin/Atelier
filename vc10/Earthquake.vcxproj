@@ -123,6 +123,7 @@
     <ClInclude Include="..\include\grids\interface.h" />
     <ClInclude Include="..\include\grids\protocol.h" />
     <ClInclude Include="..\include\identity.h" />
+    <ClInclude Include="..\include\identityManager.h" />
     <ClInclude Include="..\include\interactItem.h" />
     <ClInclude Include="..\include\interactItemInterface.h" />
     <ClInclude Include="..\include\networkItem.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="..\src\grids\interface.cpp" />
     <ClCompile Include="..\src\grids\protocol.cpp" />
     <ClCompile Include="..\src\identity.cpp" />
+    <ClCompile Include="..\src\identityManager.cpp" />
     <ClCompile Include="..\src\interactItem.cpp" />
     <ClCompile Include="..\src\networkItem.cpp" />
     <ClCompile Include="..\src\node.cpp" />

@@ -78,11 +78,5 @@ namespace Atelier {
         // Use this if you receive a message but can't find the 
         // Identity of the creator.
         static Identity* create_identity(const Value&);
-         
-    private:
-		// TODO: remove these
-        static std::map<const ID, const Identity*> id_identity_ptr_map_;
-        static std::map<const ID, const Identity*>::const_iterator
-            id_identity_ptr_map_iterator_;
     };
 }
