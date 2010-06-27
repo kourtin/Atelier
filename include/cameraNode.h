@@ -40,6 +40,8 @@ namespace Atelier {
 
         void create_camera();
 
+		virtual std::string type() { return "CameraNode"; }
+
     protected:
 
         virtual void request_create_object(const Value&);

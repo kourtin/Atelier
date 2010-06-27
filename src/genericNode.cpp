@@ -197,6 +197,7 @@ namespace Atelier {
 		Tete request;
 		request.set_position(pos);
 		request.links().push_back(&(Client::user_identity())); // Presumable the user created this
+		request.attr()["type"] = "GenericNode";
 
 		GridsNetworkItem::request_create_object(request);
 		// Maybe send the tete elsewhere

@@ -18,6 +18,8 @@ namespace Atelier {
 
         virtual const ID& owner() = 0;
 
+		virtual std::string type() = 0;
+
         virtual Vec3D position() = 0;
         virtual Vec3D rotation() = 0;
         virtual Vec3D scale() = 0;

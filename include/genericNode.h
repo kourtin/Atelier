@@ -37,6 +37,8 @@ namespace Atelier {
 
 		static void request_create_object(Vec3D pos);
 
+		virtual std::string type() { return "GenericNode"; }
+
     protected:
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);

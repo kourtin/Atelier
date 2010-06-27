@@ -132,6 +132,7 @@ namespace Atelier {
 	void GridsNetworkItem::request_create_object(Tete& tete) {
 		Grids::Interface::instance().set_value_from_type(tete, Tete::CREATE);
 		Grids::Interface::instance().set_value_from_broadcast(tete, true);
+
 		// Send stuff to the network
 		Grids::Interface::instance().send_tete(tete);
 	}
