@@ -68,7 +68,9 @@ namespace Atelier {
         bool is_valid_;
         bool is_local_;
 
-    // Identity utility stuff
+	/////////////////////////
+    // Static utility methods
+	/////////////////////////
     public:
         static void register_identity(const Identity&);
         static const Identity* get_identity_from_value(const Value&);

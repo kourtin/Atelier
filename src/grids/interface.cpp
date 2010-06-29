@@ -7,6 +7,7 @@
 #include <grids/define.h>
 #include <tete.h>
 #include <identity.h>
+#include <link.h>
 
 namespace Grids {
     const char* Interface::server_address_ = "mmmii.net";
@@ -54,17 +55,15 @@ namespace Grids {
         Atelier::ID tete_id = val["id"].asString();
 
         int num_links = 0;
-        std::vector<const Atelier::Identity*> link_identities;
+        std::vector<const Atelier::Link*> link_vector;
 
         if (!val["attr"]["links"].empty()) {
             Value& links = val["attr"]["links"];
 
             for (Value::iterator it = links.begin(); it != links.end(); ++it) {
-                const Atelier::Identity* ident = Atelier::Identity::get_identity_from_value(*it);
-                if (ident == NULL)
-                    ident = Atelier::Identity::create_identity(*it);
+				const Atelier::Link* link = Atelier::Link::get_link_from_value(*it); 
 
-                link_identities.push_back(ident);
+                link_vector.push_back(link);
             }
         }
 
@@ -76,7 +75,7 @@ namespace Grids {
         // from the network.
 
         // This will copy the value, so it can be deleted
-        Atelier::Tete* tete = new Atelier::Tete(link_identities, val);
+        Atelier::Tete* tete = new Atelier::Tete(link_vector, val);
 
         return tete;
     }
@@ -123,13 +122,13 @@ namespace Grids {
 
 	// Converts from Tete identities to links
 	void Interface::set_value_links(Value& val, Atelier::Tete& tete) {
-		std::vector<const Atelier::Identity*> links = tete.links();
+		std::vector<const Atelier::Link*> links = tete.links();
 
-		for (std::vector<const Atelier::Identity*>::iterator it = links.begin();
+		for (std::vector<const Atelier::Link*>::iterator it = links.begin();
 			it != links.end(); ++it) {
 			Value link_value;
-			link_value["id"] = (*it)->id();
-			link_value["name"] = (*it)->name();
+			link_value["id"] = (*it)->actor().id();
+			link_value["name"] = (*it)->actor().name();
 
 			val["attr"]["links"].append(link_value);
 		}

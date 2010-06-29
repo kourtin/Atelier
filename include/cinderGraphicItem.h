@@ -11,9 +11,9 @@ namespace Atelier {
     public:
         virtual ~CinderGraphicItem();
 
-        virtual Prism bounding_prism();
-        virtual Rect bounding_rect();
-        virtual AABox bounding_aabox();
+        virtual Prism bounding_prism() const;
+        virtual Rect bounding_rect() const;
+        virtual AABox bounding_aabox() const;
         virtual void render(RenderDimension, RenderPass);
     };
 }

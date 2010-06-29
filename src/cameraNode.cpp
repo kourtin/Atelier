@@ -25,15 +25,15 @@ namespace Atelier {
         ci::gl::setMatrices(cam_->getCamera());
     }
 
-    Rect CameraNode::bounding_rect() {
+    Rect CameraNode::bounding_rect() const {
         return Rect();
     }
 
-    Prism CameraNode::bounding_prism() {
+    Prism CameraNode::bounding_prism() const {
         return Prism();
     }
 
-    AABox CameraNode::bounding_aabox() {
+    AABox CameraNode::bounding_aabox() const {
         return CinderGraphicItem::bounding_aabox();
     }
 

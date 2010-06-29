@@ -7,6 +7,8 @@
 #include "spaceGraphics.h"  
 #include "cameraNode.h"
 #include <utility.h>
+#include <teteManager.h>
+#include <clientNode.h>
 
 namespace Atelier {
     Client::Client(CinderApp* app) {
@@ -18,18 +20,27 @@ namespace Atelier {
     GenericNode* Client::node;
 
     void Client::init() {
-		set_user_identity(create_user_identity());
+		tete_manager_ = new TeteManager();
+		client_node_ = new ClientNode(Utility::create_uuid());
+
+		(*tete_manager_) += client_node_; // Register the node to receive Tetes
+
+		// Get room list
+		// Request create user
+		// Request create camera
 
         grids_interface_.init();
         grids_interface_.connect_to_node();
 		grids_interface_.request_list_rooms();
 
-		enter_default_room();
+		set_user_identity(create_user_identity()); // Should load from disk in future
 
-        active_camera_ = new CameraNode("lol_dongs2");
+		create_user_node();
+
+        active_camera_ = new CameraNode(Utility::create_uuid());
         renderer_.set_camera(active_camera_);
 
-        node = new GenericNode("lolhi");
+        node = new GenericNode(Utility::create_uuid());
 
         // NOTE: this method binds GL textures, and therefore MUST be in the setup() method.
         node->init();
@@ -96,7 +107,7 @@ namespace Atelier {
         return ident;
 	}
 
-	void Client::enter_default_room() {
+	void Client::create_user_node() {
 
 	}
 }

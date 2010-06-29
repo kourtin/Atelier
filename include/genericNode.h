@@ -22,9 +22,9 @@ namespace Atelier {
         virtual ~GenericNode();
         void init();
 
-        virtual Rect bounding_rect();
-        virtual Prism bounding_prism();
-        virtual AABox bounding_aabox();
+        virtual Rect bounding_rect() const;
+        virtual Prism bounding_prism() const;
+        virtual AABox bounding_aabox() const;
 
         virtual void receive_tete(const Tete&);
         virtual void activate(const Identity&);
@@ -39,7 +39,6 @@ namespace Atelier {
 
 		virtual std::string type() { return "GenericNode"; }
 
-    protected:
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);
         virtual void update_object(const Tete&);

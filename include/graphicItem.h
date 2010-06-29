@@ -11,7 +11,7 @@ namespace Atelier {
     public:
         virtual ~GraphicItem();
 
-        //virtual Rect bounding_rect();
+        //virtual Rect bounding_rect() const;
         //virtual void render(RenderDimension, RenderPass);
     };
 }

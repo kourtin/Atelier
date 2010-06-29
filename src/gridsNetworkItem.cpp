@@ -127,7 +127,7 @@ namespace Atelier {
 
 	//////////////////////////////////
 	// Static
-	/////////////////////////////////
+	//////////////////////////////////
 
 	void GridsNetworkItem::request_create_object(Tete& tete) {
 		Grids::Interface::instance().set_value_from_type(tete, Tete::CREATE);

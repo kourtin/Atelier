@@ -19,7 +19,7 @@ namespace Atelier {
 
 		static ObjectCreator& instance();
 
-		Object* create_object(const Tete&); // cannot be const Tete& for unknown MSVS error
+		Object* create_object(const Tete&);
 
 	private:
 		static ObjectCreator* instance_;

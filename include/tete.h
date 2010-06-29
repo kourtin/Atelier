@@ -5,13 +5,15 @@
 #include <queue>
 
 #include "define.h"
-#include "identity.h"
 
 namespace Atelier {
+	class Link;
+	class Identity;
+
     class Tete {
     public:
         Tete();
-        Tete(const std::vector<const Identity*>& links, const Value&);
+        Tete(const std::vector<const Link*>& links, const Value&);
 
         enum Type {
             INVALID,
@@ -24,8 +26,8 @@ namespace Atelier {
         };
 
         bool has_links() const;
-        const std::vector<const Identity*>& links() const;
-		std::vector<const Identity*> links();
+        const std::vector<const Link*>& links() const;
+		std::vector<const Link*> links();
         const Value& value() const;
 		Value& value();
         Type type() const;
@@ -45,14 +47,14 @@ namespace Atelier {
 
     private:
         Value value_;
-        std::vector<const Identity*> links_;
+        std::vector<const Link*> links_;
         Type type_;
 
 	/////////////////////////////
 	// Static Utility Stuff
 	////////////////////////////
 	public:
-		static Tete* create_tete(const std::vector<const Identity*>&, 
+		static Tete* create_tete(const std::vector<const Link*>&, 
 			const Value&);
 		static Tete* next_tete();
 		static bool queued_tetes();

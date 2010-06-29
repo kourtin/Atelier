@@ -114,8 +114,11 @@
     <ClInclude Include="..\include\cinderGraphicItem.h" />
     <ClInclude Include="..\include\cinderInteractItem.h" />
     <ClInclude Include="..\include\client.h" />
+    <ClInclude Include="..\include\clientNode.h" />
     <ClInclude Include="..\include\define.h" />
+    <ClInclude Include="..\include\generic2DNode.h" />
     <ClInclude Include="..\include\genericNode.h" />
+    <ClInclude Include="..\include\genericNode2D.h" />
     <ClInclude Include="..\include\graphicItem.h" />
     <ClInclude Include="..\include\graphicItemInterface.h" />
     <ClInclude Include="..\include\gridsNetworkItem.h" />
@@ -126,9 +129,11 @@
     <ClInclude Include="..\include\identityManager.h" />
     <ClInclude Include="..\include\interactItem.h" />
     <ClInclude Include="..\include\interactItemInterface.h" />
+    <ClInclude Include="..\include\link.h" />
     <ClInclude Include="..\include\networkItem.h" />
     <ClInclude Include="..\include\networkItemInterface.h" />
     <ClInclude Include="..\include\node.h" />
+    <ClInclude Include="..\include\node2D.h" />
     <ClInclude Include="..\include\object.h" />
     <ClInclude Include="..\include\objectController.h" />
     <ClInclude Include="..\include\objectCreator.h" />
@@ -139,6 +144,7 @@
     <ClInclude Include="..\include\staticGraphicItem.h" />
     <ClInclude Include="..\include\tete.h" />
     <ClInclude Include="..\include\teteManager.h" />
+    <ClInclude Include="..\include\userNode.h" />
     <ClInclude Include="..\include\utility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +156,7 @@
     <ClCompile Include="..\src\cinderGraphicItem.cpp" />
     <ClCompile Include="..\src\cinderInteractItem.cpp" />
     <ClCompile Include="..\src\client.cpp" />
+    <ClCompile Include="..\src\clientNode.cpp" />
     <ClCompile Include="..\src\genericNode.cpp" />
     <ClCompile Include="..\src\graphicItem.cpp" />
     <ClCompile Include="..\src\gridsNetworkItem.cpp" />
@@ -158,8 +165,10 @@
     <ClCompile Include="..\src\identity.cpp" />
     <ClCompile Include="..\src\identityManager.cpp" />
     <ClCompile Include="..\src\interactItem.cpp" />
+    <ClCompile Include="..\src\link.cpp" />
     <ClCompile Include="..\src\networkItem.cpp" />
     <ClCompile Include="..\src\node.cpp" />
+    <ClCompile Include="..\src\node2D.cpp" />
     <ClCompile Include="..\src\object.cpp" />
     <ClCompile Include="..\src\objectController.cpp" />
     <ClCompile Include="..\src\objectCreator.cpp" />

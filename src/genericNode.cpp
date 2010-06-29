@@ -18,6 +18,7 @@
 #include <tete.h>
 #include <grids/interface.h>
 #include <node.h>
+#include <link.h>
 
 namespace Atelier {
     GenericNode::GenericNode(const ID& new_id) : Node(new_id) {
@@ -46,15 +47,15 @@ namespace Atelier {
         //    CINDER_RESOURCE( ../resources/, earthNormal.png, 131, PNG ))));
     }
 
-    Prism GenericNode::bounding_prism() {
+    Prism GenericNode::bounding_prism() const {
         return CinderGraphicItem::bounding_prism();
     }
 
-    Rect GenericNode::bounding_rect() {
+    Rect GenericNode::bounding_rect() const {
         return CinderGraphicItem::bounding_rect();
     }
 
-    AABox GenericNode::bounding_aabox() {
+    AABox GenericNode::bounding_aabox() const {
         return CinderGraphicItem::bounding_aabox();
     }
 
@@ -196,7 +197,9 @@ namespace Atelier {
 	void GenericNode::request_create_object(Vec3D pos) {
 		Tete request;
 		request.set_position(pos);
-		request.links().push_back(&(Client::user_identity())); // Presumable the user created this
+		request.links().push_back(new Link(&(Client::user_identity()),
+			LinkFlags(true, true, true)));
+		//request.links().push_back(&(Client::user_identity())); // Presumable the user created this
 		request.attr()["type"] = "GenericNode";
 
 		GridsNetworkItem::request_create_object(request);

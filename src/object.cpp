@@ -1,32 +1,40 @@
 
-#include "object.h"
+#include <object.h>
+#include <objectController.h>
 
 namespace Atelier {
 
     Object::Object(const ID& new_id) {
         id_ = new_id;
+
+		ObjectController::instance() += this;
     }
 
     Object::~Object() {
+		ObjectController::instance() -= this;
     }
 
     const ID& Object::id() {
         return id_;
     }
 
-    const ID& Object::owner() {
-        return owner_;
+	std::list<const Identity*>& Object::links() {
+		return links_;
+	}
+
+    const std::list<const Identity*>& Object::links() const {
+		return links_;
     }
 
-    Vec3D Object::position() {
+    Vec3D Object::position() const {
         return position_;
     }
 
-    Vec3D Object::rotation() {
+    Vec3D Object::rotation() const {
         return rotation_;
     }
 
-    Vec3D Object::scale() {
+    Vec3D Object::scale() const {
         return scale_;
     }
 

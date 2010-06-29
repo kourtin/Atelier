@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <list>
+
 #include "define.h"
 
 // Tetes v Values. Tetes are events, nugets of information 
@@ -16,13 +18,14 @@ namespace Atelier {
     public:
         virtual const ID& id() = 0;
 
-        virtual const ID& owner() = 0;
+		virtual std::list<const Identity*>& links() = 0;
+        virtual const std::list<const Identity*>& links() const = 0;
 
 		virtual std::string type() = 0;
 
-        virtual Vec3D position() = 0;
-        virtual Vec3D rotation() = 0;
-        virtual Vec3D scale() = 0;
+        virtual Vec3D position() const = 0;
+        virtual Vec3D rotation() const = 0;
+        virtual Vec3D scale() const = 0;
 
         virtual void set_position(Vec3D) = 0;
         virtual void set_rotation(Vec3D) = 0;

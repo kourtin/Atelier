@@ -13,19 +13,23 @@ namespace Atelier {
         return Object::id();
     }
 
-    const ID& Node::owner() {
-        return Object::owner();
+	std::list<const Identity*>& Node::links() {
+        return Object::links();
     }
 
-    Vec3D Node::position() {
+    const std::list<const Identity*>& Node::links() const {
+        return Object::links();
+    }
+
+    Vec3D Node::position() const {
         return Object::position();
     }
 
-    Vec3D Node::rotation() {
+    Vec3D Node::rotation() const {
         return Object::rotation();
     }
 
-    Vec3D Node::scale() {
+    Vec3D Node::scale() const {
         return Object::scale();
     }
 }

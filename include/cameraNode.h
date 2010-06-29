@@ -24,9 +24,9 @@ namespace Atelier {
 
         void call_matrix();
 
-        virtual Rect bounding_rect();
-        virtual Prism bounding_prism();
-        virtual AABox bounding_aabox();
+        virtual Rect bounding_rect() const;
+        virtual Prism bounding_prism() const;
+        virtual AABox bounding_aabox() const;
 
         virtual void receive_tete(const Tete&);
         virtual void activate(const Identity&);

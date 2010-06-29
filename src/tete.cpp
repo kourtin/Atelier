@@ -5,6 +5,7 @@
 #include <grids/protocol.h>
 #include <utility.h>
 #include <teteManager.h>
+#include <link.h>
 
 namespace Atelier {
     Tete::Tete() {
@@ -12,8 +13,8 @@ namespace Atelier {
 		value_["id"] = Utility::create_uuid();
     }
 
-    Tete::Tete(const std::vector<const Identity*>& link_idents, const Value& val) {
-        links_ = link_idents;
+    Tete::Tete(const std::vector<const Link*>& links_, const Value& val) {
+        this->links_ = links_;
         value_ = val;
         // Parse value_ to figure out Type
         set_type_from_value(val);
@@ -27,11 +28,11 @@ namespace Atelier {
         return !links_.empty();
     }
 
-    const std::vector<const Identity*>& Tete::links() const {
+    const std::vector<const Link*>& Tete::links() const {
         return links_;
     }
 
-	std::vector<const Identity*> Tete::links() {
+	std::vector<const Link*> Tete::links() {
 		return links_;
 	}
 
@@ -118,8 +119,9 @@ namespace Atelier {
 	// Static
 	///////////////////////
 
-	Tete* Tete::create_tete(const std::vector<const Identity*>& idents, const Value& val) {
-		Tete* tete = new Tete(idents, val);
+	Tete* Tete::create_tete(const std::vector<const Link*>& links, 
+		const Value& val) {
+		Tete* tete = new Tete(links, val);
 
 		TeteManager::instance().tete_queue_.push(tete);
 

@@ -12,12 +12,13 @@ namespace Atelier {
         virtual ~Object();
 
         const ID& id();
-        const ID& owner();
+		std::list<const Identity*>& links();
+		const std::list<const Identity*>& links() const;
         Identity identity();
 
-        virtual Vec3D position();
-        virtual Vec3D rotation();
-        virtual Vec3D scale();
+        virtual Vec3D position() const;
+        virtual Vec3D rotation() const;
+        virtual Vec3D scale() const;
 
         virtual void set_position(Vec3D);
         virtual void set_rotation(Vec3D);
@@ -25,7 +26,7 @@ namespace Atelier {
 
     private:
         ID id_;
-        ID owner_;
+        std::list<const Identity*> links_;
         Vec3D position_;
         Vec3D rotation_;
         Vec3D scale_;

@@ -10,6 +10,8 @@ class CinderApp;
 
 namespace Atelier {
     class GenericNode; // Needed for testing
+	class ClientNode; // The node-type interface with the system
+	class TeteManager;
 
     class Client {
     public:
@@ -33,7 +35,7 @@ namespace Atelier {
 
     private:
 		Identity create_user_identity();
-		void enter_default_room();
+		void create_user_node();
 
         static CinderApp* app_;
         static Renderer renderer_;
@@ -41,5 +43,8 @@ namespace Atelier {
         static CameraNode* active_camera_;
         static Identity user_identity_;
         static Grids::Interface grids_interface_;
+
+		TeteManager* tete_manager_;
+		ClientNode* client_node_;
     };
 }
