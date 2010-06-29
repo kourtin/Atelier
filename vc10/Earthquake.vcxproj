@@ -116,7 +116,6 @@
     <ClInclude Include="..\include\client.h" />
     <ClInclude Include="..\include\clientNode.h" />
     <ClInclude Include="..\include\define.h" />
-    <ClInclude Include="..\include\generic2DNode.h" />
     <ClInclude Include="..\include\genericNode.h" />
     <ClInclude Include="..\include\genericNode2D.h" />
     <ClInclude Include="..\include\graphicItem.h" />
@@ -177,9 +176,12 @@
     <ClCompile Include="..\src\spaceGraphics.cpp" />
     <ClCompile Include="..\src\tete.cpp" />
     <ClCompile Include="..\src\teteManager.cpp" />
+    <ClCompile Include="..\src\userNode.cpp" />
     <ClCompile Include="..\src\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README" />
+    <None Include="..\TODO" />
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

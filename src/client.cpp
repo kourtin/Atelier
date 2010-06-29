@@ -9,6 +9,7 @@
 #include <utility.h>
 #include <teteManager.h>
 #include <clientNode.h>
+#include <userNode.h>
 
 namespace Atelier {
     Client::Client(CinderApp* app) {
@@ -45,7 +46,7 @@ namespace Atelier {
         // NOTE: this method binds GL textures, and therefore MUST be in the setup() method.
         node->init();
         SpaceGraphics* static_item = new Atelier::SpaceGraphics();
-   
+		
         renderer_.add_item(node);
         renderer_.add_static_item(static_item);
         renderer_.init();
@@ -108,6 +109,6 @@ namespace Atelier {
 	}
 
 	void Client::create_user_node() {
-
+		UserNode::
 	}
 }

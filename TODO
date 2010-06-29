@@ -1,0 +1,15 @@
+
+Next step: create a test chat between Cinder client and an Eliza bot.
+
+1. Client: create Identity
+2. Client: create UserNode
+3. Client: create CameraNode
+3. Bot: create Identity
+4. Bot: create UserNode
+5. Client: test that you can see the a user node of the bot
+6. Client: create a ChatObject
+7. Bot: recognize and store ChatObject
+8. Client: create a ChatMessageNode
+9. Client: check that ChatObject can manipulate, more, edit the ChatMessageNode
+10.Bot: create a ChatMessageNode
+11.Client: check that created Node has proper links

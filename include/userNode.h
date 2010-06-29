@@ -6,14 +6,18 @@
 #include <node.h>
 
 namespace Atelier {
-	class UserNode : Node {
+	class UserNode : public Node {
 		UserNode(const ID&);
 		virtual ~UserNode();
+
+		static void request_create(const ID&);
 
         virtual Prism bounding_prism() const;
         virtual AABox bounding_aabox() const;
 		virtual Rect bounding_rect() const;
 
 		virtual void render(RenderDimension, RenderPass);
+
+
 	};
 }

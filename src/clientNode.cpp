@@ -2,6 +2,7 @@
 #include <clientNode.h>
 #include <tete.h>
 #include <client.h>
+#include <userNode.h>
 
 namespace Atelier {
 	ClientNode::ClientNode(const ID& new_id) : Object(new_id) {
@@ -37,6 +38,16 @@ namespace Atelier {
 		// Listen for UserNode
 		// Create CameraNode
 		if (type == "UserNode") {
+			if (!tete.has_links())
+				return;
+
+			if (tete.links()[0].actor() != Client::user_identity())
+				return;
+
+			UserNode* node = new UserNode(tete.id());
+			node->create_object(tete);
+
+			CameraNode::request_create(node);
 			
 		} else if (type == "CameraNode") {
 

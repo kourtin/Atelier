@@ -16,6 +16,7 @@ namespace cinder {
 namespace Atelier {
     class Tete;
     class Identity;
+	class UserNode;
 
     class CameraNode : public Object, public Cinder3DInteractItem,
         public CinderGraphicItem, public GridsNetworkItem {
@@ -42,8 +43,9 @@ namespace Atelier {
 
 		virtual std::string type() { return "CameraNode"; }
 
-    protected:
+		static void request_create(UserNode*);
 
+    protected:
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);
 

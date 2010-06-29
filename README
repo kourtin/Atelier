@@ -1,0 +1,9 @@
+
+
+Dictionary of Terms:
+
+*Object - all objects that have a network representation are of the Object type
+*Item - Abstract base classses that add functionality to Objects. Interaction Items add
+        interaction, graphic Items and visual representations.
+*Node - An Object that inherits from one or more *Items is a named node.
+
