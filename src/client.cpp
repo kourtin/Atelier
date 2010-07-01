@@ -21,39 +21,28 @@ namespace Atelier {
     GenericNode* Client::node;
 
     void Client::init() {
+		set_user_identity(create_user_identity()); // Should load from disk in future
+
 		tete_manager_ = new TeteManager();
+		// Note that I don't request this node from the network. All other nodes should be
 		client_node_ = new ClientNode(Utility::create_uuid());
 
 		(*tete_manager_) += client_node_; // Register the node to receive Tetes
-
-		// Get room list
-		// Request create user
-		// Request create camera
 
         grids_interface_.init();
         grids_interface_.connect_to_node();
 		grids_interface_.request_list_rooms();
 
-		set_user_identity(create_user_identity()); // Should load from disk in future
-
-		create_user_node();
-
-        active_camera_ = new CameraNode(Utility::create_uuid());
-        renderer_.set_camera(active_camera_);
-
-        node = new GenericNode(Utility::create_uuid());
-
-        // NOTE: this method binds GL textures, and therefore MUST be in the setup() method.
-        node->init();
         SpaceGraphics* static_item = new Atelier::SpaceGraphics();
-		
-        renderer_.add_item(node);
         renderer_.add_static_item(static_item);
+
         renderer_.init();
     }
 
     void Client::update() {
         grids_interface_.update();
+
+		TeteManager::instance().update();
 
         renderer_.update();
         renderer_.call_camera_matrix();
@@ -106,9 +95,5 @@ namespace Atelier {
         Identity ident(Utility::create_uuid());
         ident.set_name("Patrick Tierney");
         return ident;
-	}
-
-	void Client::create_user_node() {
-		UserNode::
 	}
 }

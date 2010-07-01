@@ -30,6 +30,8 @@ namespace Grids {
 		static const char* method_key;
         static const char* broadcast_key;
 
+		bool protocol_initiated();
+
     private:
         void handle_message(const std::string&);
         size_t protocol_write(const std::string&);
@@ -37,7 +39,6 @@ namespace Grids {
         void send_protocol_initialization_string();
         std::string stringify_value(const Value&);
         void grids_read();
-        void protocol_initiated();
         void protocol_initiated_encrypted();
 
         boost::asio::io_service io_service_;

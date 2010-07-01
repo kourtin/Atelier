@@ -33,9 +33,10 @@ namespace Atelier {
 
         static Grids::Interface& grids_interface();
 
+		friend class ClientNode;
+
     private:
 		Identity create_user_identity();
-		void create_user_node();
 
         static CinderApp* app_;
         static Renderer renderer_;

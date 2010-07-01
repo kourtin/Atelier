@@ -80,7 +80,7 @@ namespace Atelier {
         return *this;
     }
 
-    bool Identity::operator<(const Identity& ident) {
+    bool Identity::operator<(const Identity& ident) const {
         std::string first = id_;
         std::string second = ident.id_;
 
@@ -97,13 +97,17 @@ namespace Atelier {
         return false;
     }
 
-    bool Identity::operator==(const Identity& ident) {
+    bool Identity::operator==(const Identity& ident) const {
         if (id_ != ident.id_)
             return false;
 
         assert(object_ == ident.object_);
         return true;
     }
+
+	bool Identity::operator!=(const Identity& ident) const {
+		return !(*this == ident);
+	}
 
     void Identity::set_name(const std::string& new_name) {
         name_ = new_name;

@@ -3,21 +3,39 @@
 #include <tete.h>
 #include <client.h>
 #include <userNode.h>
+#include <cameraNode.h>
+#include <link.h>
+#include <teteManager.h>
+#include <objectCreator.h>
+#include <grids/interface.h>
 
 namespace Atelier {
 	ClientNode::ClientNode(const ID& new_id) : Object(new_id) {
-
+		expecting_tetes_ = true;
 	}
 
 	ClientNode::~ClientNode() {
 	}
 
 	void ClientNode::receive_tete(const Tete& tete) {
-		if (!is_our_tete(tete))
-			return;
+		ci::app::console() << "ClientNode receiving tete:" << std::endl <<
+			tete.value().toStyledString() << std::endl;
+		
+		const Identity* creator = Tete::get_creator(tete);
 
-		if (tete.type() == Tete::CREATE)
-			parse_create_tete(tete);
+		if (!expecting_tetes_ || creator == NULL ||
+			*creator != Client::user_identity()) {
+			// Let the object creator figure shit out
+			if (tete.type() == Tete::LIST_ROOMS)
+				parse_list_rooms(tete);
+			else if (tete.type() == Tete::CREATE_ROOM)
+				parse_create_room(tete);
+			else
+				ObjectCreator::instance().receive_tete(tete); 
+		} else { // Then it's probably some initialization bullshit
+			if (tete.type() == Tete::CREATE)
+				parse_create_tete(tete);
+		}
 	}
 
 	void ClientNode::create_object(const Tete& tete) {
@@ -38,19 +56,18 @@ namespace Atelier {
 		// Listen for UserNode
 		// Create CameraNode
 		if (type == "UserNode") {
-			if (!tete.has_links())
-				return;
-
-			if (tete.links()[0].actor() != Client::user_identity())
-				return;
-
 			UserNode* node = new UserNode(tete.id());
 			node->create_object(tete);
 
 			CameraNode::request_create(node);
-			
 		} else if (type == "CameraNode") {
+			CameraNode* cam_node = new CameraNode(tete.id());
+			cam_node->create_object(tete);
 
+			Client::renderer().set_camera(cam_node);
+			Client::set_active_camera(cam_node);
+			// Everything has been created, we don't need to listen for any more tetes
+			expecting_tetes_ = false;
 		}
 	}
 
@@ -63,6 +80,25 @@ namespace Atelier {
 		return owner_id == Client::user_identity().id();
 	}
 
+	void ClientNode::parse_list_rooms(const Tete& tete) {
+		if (tete.value()["rooms"].empty()) {
+			Grids::Interface::instance().request_create_room();
+			return;
+		}
+
+		if (Client::user_identity().current_room().empty()) {
+			Client::user_identity_.set_current_room(
+				tete.value()["rooms"][0u].asString());
+			
+			UserNode::request_create(Client::user_identity().id());
+		}
+	}
+
+	void ClientNode::parse_create_room(const Tete& tete) {
+		//if (tete.value()["success"].empty())
+		//	return;
+		Grids::Interface::instance().request_list_rooms();
+	}
 
 
 }

@@ -2,7 +2,7 @@
 /* ObjectCreator
 	Basically this object uses the type information from a Tete
 	and generates an object.
-	By far the most jenk piece of code...
+	Of any single piece of code, this needs work.
 */
 
 #pragma once
@@ -19,12 +19,12 @@ namespace Atelier {
 
 		static ObjectCreator& instance();
 
+		// Note: these methods should not be considered time-critical
+		void receive_tete(const Tete&);
 		Object* create_object(const Tete&);
+		Object* update_object(const Tete&);
 
 	private:
 		static ObjectCreator* instance_;
-
-		GenericNode* create_generic_node(const Tete&);
-		CameraNode* create_camera_node(const Tete&);
 	};
 }

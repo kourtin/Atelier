@@ -13,3 +13,10 @@ Next step: create a test chat between Cinder client and an Eliza bot.
 9. Client: check that ChatObject can manipulate, more, edit the ChatMessageNode
 10.Bot: create a ChatMessageNode
 11.Client: check that created Node has proper links
+
+
+
+node = new GenericNode(Utility::create_uuid());
+
+// NOTE: this method binds GL textures, and therefore MUST be in the setup() method.
+node->init();

@@ -57,8 +57,9 @@ namespace Atelier {
         const std::string& name() const;
 
         Identity& operator=(const Identity& ident);
-        bool operator<(const Identity& ident); // uses the id string
-        bool operator==(const Identity& ident);
+        bool operator<(const Identity& ident) const; // uses the id string
+        bool operator==(const Identity& ident) const;
+		bool operator!=(const Identity& ident) const;
 
     private:
         Object* object_;
@@ -73,6 +74,7 @@ namespace Atelier {
 	/////////////////////////
     public:
         static void register_identity(const Identity&);
+		// Input Value must have structure value["id"], value["name"], etc..
         static const Identity* get_identity_from_value(const Value&);
         static const Identity* get_identity_from_id(const ID&);
         // Probably should overload this 

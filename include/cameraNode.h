@@ -43,9 +43,8 @@ namespace Atelier {
 
 		virtual std::string type() { return "CameraNode"; }
 
-		static void request_create(UserNode*);
+		static void request_create(const UserNode*);
 
-    protected:
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);
 

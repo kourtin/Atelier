@@ -103,6 +103,9 @@ namespace Atelier {
     }
 
     void Renderer::update() {
+		if (camera_ == NULL)
+			return;
+
         camera_->cam()->getCamera().getBillboardVectors(&billboard_right_, &billboard_up_);
     }
 

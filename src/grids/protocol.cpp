@@ -155,8 +155,18 @@ namespace Grids {
     }
 
     void Protocol::check_network() {
-        if (socket_->available() > 0u)
-            grids_read();
+		if (protocol_initiated_ == false || socket_ == NULL)
+			return;
+
+		try {
+			if (socket_->available() > 0u)
+				grids_read();
+		} catch (boost::system::system_error er) {
+			// Probably not connected to network, abort and force reconnect
+			ci::app::console() << "Error reading from network: " <<
+				std::endl << er.what() << std::endl;
+			protocol_initiated_ = false;
+		}
     }
 
     void Protocol::grids_read() {
@@ -239,7 +249,7 @@ namespace Grids {
             // protocol initiation message
            ci::app::console() << "Grids session initiated" << 
                std::endl;
-            protocol_initiated();
+            protocol_initiated_ = true;
         } else if (msg.find("--", 0, 2) == 0) {
             // encrypted protocol message
             protocol_initiated_encrypted();
@@ -263,8 +273,8 @@ namespace Grids {
         }
     }
 
-    void Protocol::protocol_initiated() {
-        protocol_initiated_ = true;
+    bool Protocol::protocol_initiated() {
+        return protocol_initiated_;
     }
 
     void Protocol::protocol_initiated_encrypted() {

@@ -1,4 +1,6 @@
 
+#include <list>
+
 #include <cinder/app/App.h>
 
 #include <grids/interface.h>
@@ -20,6 +22,7 @@ namespace Grids {
 
     Interface::Interface() {
         instance_ = this;
+		reject_confirmation_ = true;
     }
 
     void Interface::init() {
@@ -51,11 +54,17 @@ namespace Grids {
     }
 
     Atelier::Tete* Interface::parse_network_event(Value& val) {
-        // This is the id of the tete (of the Object itself), not the creator / owner
+		// TODO: FIX THIS IF STATEMENT!!!!!!!!!!!!!!!!!!!!!!!
+		if (reject_confirmation_ && !val["success"].empty() && 
+			val[Protocol::method_key].asString() != GRIDS_LIST_ROOMS && 
+			val[Protocol::method_key].asString() != GRIDS_CREATE_ROOM)
+			return NULL;
+		
+		// This is the id of the tete (of the Object itself), not the creator / owner
         Atelier::ID tete_id = val["id"].asString();
 
         int num_links = 0;
-        std::vector<const Atelier::Link*> link_vector;
+        Atelier::LinkList link_list;
 
         if (!val["attr"]["links"].empty()) {
             Value& links = val["attr"]["links"];
@@ -63,7 +72,7 @@ namespace Grids {
             for (Value::iterator it = links.begin(); it != links.end(); ++it) {
 				const Atelier::Link* link = Atelier::Link::get_link_from_value(*it); 
 
-                link_vector.push_back(link);
+                link_list.push_back(link);
             }
         }
 
@@ -73,13 +82,14 @@ namespace Grids {
         // Note: every Atelier::Object in existance should have an Identity, so if 
         // we can't find an identity, the object doesn't exist (yet?), and is probably
         // from the network.
-
+		
         // This will copy the value, so it can be deleted
-        Atelier::Tete* tete = new Atelier::Tete(link_vector, val);
+        Atelier::Tete* tete = Atelier::Tete::create_tete(link_list, val);
 
         return tete;
     }
 
+	// Is there a way to make these valid of you're not connected to the network?
 	void Interface::request_list_rooms() {
 		protocol_->send_request(GRIDS_LIST_ROOMS, false);
 	}
@@ -117,14 +127,24 @@ namespace Grids {
 	void Interface::send_tete(Atelier::Tete& tete) {
 		set_value_links(tete.value(), tete);
 
-		protocol_->send_request(tete.value());
+		send_request(tete);
+	}
+
+	void Interface::send_request(Atelier::Tete& tete) {
+		if (protocol_->protocol_initiated())
+			protocol_->send_request(tete.value());
+		else {
+			// Make a copy so we don't fuck with local data
+			Value val = tete.value();
+			parse_network_event(val);
+		}
 	}
 
 	// Converts from Tete identities to links
 	void Interface::set_value_links(Value& val, Atelier::Tete& tete) {
-		std::vector<const Atelier::Link*> links = tete.links();
+		Atelier::LinkList links = tete.links();
 
-		for (std::vector<const Atelier::Link*>::iterator it = links.begin();
+		for (Atelier::LinkList::iterator it = links.begin();
 			it != links.end(); ++it) {
 			Value link_value;
 			link_value["id"] = (*it)->actor().id();

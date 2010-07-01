@@ -1,8 +1,11 @@
 
 #include <algorithm>
 
+#include <cinder/app/App.h>
+
 #include <teteManager.h>
 #include <object.h>
+#include <tete.h>
 
 namespace Atelier {
 	TeteManager::TeteManager() {
@@ -20,6 +23,12 @@ namespace Atelier {
 		while (!tete_queue_.empty()) {
 			const Tete& tete = *(tete_queue_.front());
 			
+			if (registered_objects_.empty()) {
+				ci::app::console() << "No objects registered, droping message:" 
+					<< std::endl << tete.value().toStyledString() << 
+					std::endl;
+			}
+
 			for (std::list<Object*>::const_iterator it = registered_objects_.begin();
 				it != registered_objects_.end(); ++it) {
 				(*it)->receive_tete(tete);

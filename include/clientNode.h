@@ -22,6 +22,11 @@ namespace Atelier {
 
 	private:
 		void parse_create_tete(const Tete&);
+		void parse_list_rooms(const Tete&);
+		void parse_create_room(const Tete&);
+
 		bool is_our_tete(const Tete&);
+
+		bool expecting_tetes_;
 	};
 }

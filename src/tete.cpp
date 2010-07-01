@@ -11,14 +11,23 @@ namespace Atelier {
     Tete::Tete() {
         type_ = INVALID;
 		value_["id"] = Utility::create_uuid();
+		id_ = value_["id"].asString();
     }
 
-    Tete::Tete(const std::vector<const Link*>& links_, const Value& val) {
+    Tete::Tete(const LinkList& links_, const Value& val) {
         this->links_ = links_;
         value_ = val;
         // Parse value_ to figure out Type
         set_type_from_value(val);
+		id_ = value_["id"].asString();
     }
+
+	Tete::~Tete() {
+		for (LinkList::const_iterator it = links_.begin();
+			it != links_.end(); ++it) {
+			delete (*it);
+		}
+	}
 
     Tete::Type Tete::type() const {
         return type_;
@@ -28,11 +37,11 @@ namespace Atelier {
         return !links_.empty();
     }
 
-    const std::vector<const Link*>& Tete::links() const {
+    const LinkList& Tete::links() const {
         return links_;
     }
 
-	std::vector<const Link*> Tete::links() {
+	LinkList Tete::links() {
 		return links_;
 	}
 
@@ -63,10 +72,9 @@ namespace Atelier {
         else
             type_ = INVALID;
     }
-
 	
 	const ID& Tete::id() const {
-		return value_["id"].asString();
+		return id_;
 	}
 
 	bool Tete::has_matrix() const {
@@ -119,7 +127,7 @@ namespace Atelier {
 	// Static
 	///////////////////////
 
-	Tete* Tete::create_tete(const std::vector<const Link*>& links, 
+	Tete* Tete::create_tete(const LinkList& links, 
 		const Value& val) {
 		Tete* tete = new Tete(links, val);
 
@@ -141,4 +149,27 @@ namespace Atelier {
 		return tete;
 	}
 
+	bool Tete::linked_to_identity(const Identity& ident, const Tete& tete) {
+		const LinkList& links = tete.links();
+
+		for(LinkList::const_iterator it = links.begin(); it != links.end(); ++it) {
+			if ((*it)->actor() == ident)
+				return true;
+		}
+		return false;
+	}
+
+	const Identity* Tete::get_creator(const Tete& tete) {
+		if (tete.has_links() == false)
+			return NULL;
+
+		const LinkList& links = tete.links();
+
+		for(LinkList::const_iterator it = links.begin(); it != links.end(); ++it) {
+			if ((*it)->flags().creator)
+				return &((*it)->actor()); 
+		}
+
+		return NULL;
+	}
 }

@@ -7,3 +7,13 @@ Dictionary of Terms:
         interaction, graphic Items and visual representations.
 *Node - An Object that inherits from one or more *Items is a named node.
 
+
+
+Creation of objects in Client:
+1. Client connects to the server
+2. Client requests room list
+3. On receiving room list, client sets room to 1st room
+4. Client requests a UserNode
+5. On receiving a UserNode, client creates UserNode.
+6. Client requests a CameraNode
+7. On receiving a CameraNode, client 

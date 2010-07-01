@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <queue>
+#include <list>
 
 #include "define.h"
 
@@ -10,10 +11,13 @@ namespace Atelier {
 	class Link;
 	class Identity;
 
+	typedef std::list<const Link*> LinkList;
+
     class Tete {
     public:
         Tete();
-        Tete(const std::vector<const Link*>& links, const Value&);
+        Tete(const LinkList& links, const Value&);
+		~Tete();
 
         enum Type {
             INVALID,
@@ -26,8 +30,8 @@ namespace Atelier {
         };
 
         bool has_links() const;
-        const std::vector<const Link*>& links() const;
-		std::vector<const Link*> links();
+        const LinkList& links() const;
+		LinkList links();
         const Value& value() const;
 		Value& value();
         Type type() const;
@@ -47,16 +51,21 @@ namespace Atelier {
 
     private:
         Value value_;
-        std::vector<const Link*> links_;
+        LinkList links_;
         Type type_;
+		ID id_;
 
 	/////////////////////////////
-	// Static Utility Stuff
+	// Static utility methods
 	////////////////////////////
 	public:
-		static Tete* create_tete(const std::vector<const Link*>&, 
+		static Tete* create_tete(const LinkList&, 
 			const Value&);
 		static Tete* next_tete();
 		static bool queued_tetes();
+		
+		static bool linked_to_identity(const Identity&, const Tete&);
+		// Returns creator, or NULL if there is none
+		static const Identity* get_creator(const Tete&);
     };
 }

@@ -47,12 +47,15 @@ namespace Grids {
 
 		void send_tete(Atelier::Tete&);
 
+		void send_request(Atelier::Tete&);
+
     private:
 		void set_value_links(Value&, Atelier::Tete&);
 
         static Protocol* protocol_;
         bool connected_;
         static Interface* instance_;
+		bool reject_confirmation_;
 
         static const char* server_address_;
     };

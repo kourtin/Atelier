@@ -3,14 +3,15 @@
 #include "cinder/MayaCamUI.h"
 #include "cinder/Camera.h"
 
-#include "define.h"
-#include "cameraNode.h"
-#include "identity.h"
-#include "genericNode.h" // Needed for testing
-#include "client.h"
-#include "basicApp.h"
-#include "tete.h"
+#include <define.h>
+#include <cameraNode.h>
+#include <identity.h>
+#include <genericNode.h> // Needed for testing
+#include <client.h>
+#include <basicApp.h>
+#include <tete.h>
 #include <gridsNetworkItem.h>
+#include <link.h>
 
 namespace Atelier {
     CameraNode::CameraNode(const ID& new_id) : Object(new_id) {
@@ -98,4 +99,14 @@ namespace Atelier {
 
     void CameraNode::request_update_object(const Value&) {
     }
+
+	void CameraNode::request_create(const UserNode* node) {
+		Tete request;
+		
+		request.links().push_back(new Link(&(Client::user_identity()),
+			LinkFlags(true, true, true)));
+		request.attr()["type"] = "CameraNode";
+
+		GridsNetworkItem::request_create_object(request);
+	}
 }
