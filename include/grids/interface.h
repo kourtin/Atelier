@@ -51,11 +51,13 @@ namespace Grids {
 
     private:
 		void set_value_links(Value&, Atelier::Tete&);
+		Value generate_local_room();
 
         static Protocol* protocol_;
         bool connected_;
         static Interface* instance_;
 		bool reject_confirmation_;
+		ID local_room_;
 
         static const char* server_address_;
     };

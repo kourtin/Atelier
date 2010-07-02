@@ -9,6 +9,7 @@ namespace Atelier {
 	class Identity;
 
 	class IdentityManager {
+    public:
 		IdentityManager();
 
 		static IdentityManager& instance();
@@ -21,6 +22,5 @@ namespace Atelier {
             id_identity_ptr_map_iterator_;
 
 		static IdentityManager* instance_;
-
 	};
 }

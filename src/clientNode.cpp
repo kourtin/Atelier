@@ -11,7 +11,7 @@
 
 namespace Atelier {
 	ClientNode::ClientNode(const ID& new_id) : Object(new_id) {
-		expecting_tetes_ = true;
+		initializing_ = true;
 	}
 
 	ClientNode::~ClientNode() {
@@ -23,7 +23,7 @@ namespace Atelier {
 		
 		const Identity* creator = Tete::get_creator(tete);
 
-		if (!expecting_tetes_ || creator == NULL ||
+		if (!initializing_ || creator == NULL ||
 			*creator != Client::user_identity()) {
 			// Let the object creator figure shit out
 			if (tete.type() == Tete::LIST_ROOMS)
@@ -67,7 +67,7 @@ namespace Atelier {
 			Client::renderer().set_camera(cam_node);
 			Client::set_active_camera(cam_node);
 			// Everything has been created, we don't need to listen for any more tetes
-			expecting_tetes_ = false;
+			initializing_ = false;
 		}
 	}
 
@@ -87,7 +87,7 @@ namespace Atelier {
 		}
 
 		if (Client::user_identity().current_room().empty()) {
-			Client::user_identity_.set_current_room(
+			Client::user_identity_->set_current_room(
 				tete.value()["rooms"][0u].asString());
 			
 			UserNode::request_create(Client::user_identity().id());

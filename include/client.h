@@ -12,6 +12,7 @@ namespace Atelier {
     class GenericNode; // Needed for testing
 	class ClientNode; // The node-type interface with the system
 	class TeteManager;
+    class IdentityManager;
 
     class Client {
     public:
@@ -22,7 +23,6 @@ namespace Atelier {
         void draw();
 
         static const Identity& user_identity();
-        static void set_user_identity(const Identity&);
         static CinderApp& app();
         static Renderer& renderer();
         static const CameraNode& active_camera();
@@ -36,14 +36,15 @@ namespace Atelier {
 		friend class ClientNode;
 
     private:
-		Identity create_user_identity();
+		Identity* create_user_identity();
 
         static CinderApp* app_;
         static Renderer renderer_;
         ObjectController object_controller_;
         static CameraNode* active_camera_;
-        static Identity user_identity_;
+        static Identity* user_identity_;
         static Grids::Interface grids_interface_;
+        IdentityManager* identity_manager_;
 
 		TeteManager* tete_manager_;
 		ClientNode* client_node_;

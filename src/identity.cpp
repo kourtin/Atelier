@@ -38,7 +38,12 @@ namespace Atelier {
     Identity::~Identity() {
     }
 
-    Object* Identity::object() const {
+    // See Meyers Item #3 for explanation of this code
+    Object* Identity::object() {
+        return const_cast<Object*>(static_cast<const Identity&>(*this).object());
+    }
+
+    const Object* Identity::object() const {
         return is_valid_ ? object_ : NULL;
     }
 
@@ -140,18 +145,21 @@ namespace Atelier {
         if (IdentityManager::instance().id_identity_ptr_map_iterator_ == 
 			IdentityManager::instance().id_identity_ptr_map_.end())
             IdentityManager::instance().id_identity_ptr_map_[ident.id()] = &ident;
-
     }
 
     const Identity* Identity::get_identity_from_value(const Value& val) {
         if (val["id"].empty())
             return NULL;
 
-        return get_identity_from_id(val["id"].asString());
+        ID val_id = val["id"].asString();
+        return get_identity_from_id(val_id);
     }
 
     // Maybe instead this should throw an exception?
     const Identity* Identity::get_identity_from_id(const ID& in_id) {
+        std::map<const ID, const Identity*>& temp_map = 
+            IdentityManager::instance().id_identity_ptr_map_;
+
         IdentityManager::instance().id_identity_ptr_map_iterator_ = 
 			IdentityManager::instance().id_identity_ptr_map_.find(in_id);
 

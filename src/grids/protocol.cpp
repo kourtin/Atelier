@@ -24,6 +24,7 @@ namespace Grids {
         query_ = NULL;
         socket_ = NULL;
         writer_ = NULL;
+		protocol_initiated_ = false;
     }
 
     void Protocol::init() {

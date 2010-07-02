@@ -12,9 +12,12 @@
 #include <tete.h>
 #include <gridsNetworkItem.h>
 #include <link.h>
+#include <userNode.h>
 
 namespace Atelier {
     CameraNode::CameraNode(const ID& new_id) : Object(new_id) {
+		ci::app::console() << "Creating CameraNode" << std::endl;
+
         cam_ = new ci::MayaCamUI();
         zoom_speed_ = 30.0f;
         far_clip_ = 10000.0f;
@@ -100,11 +103,16 @@ namespace Atelier {
     void CameraNode::request_update_object(const Value&) {
     }
 
-	void CameraNode::request_create(const UserNode* node) {
+	void CameraNode::request_create(UserNode* node) {
+        ci::app::console() << "Requesting create camera" << std::endl;
+
 		Tete request;
 		
 		request.links().push_back(new Link(&(Client::user_identity()),
 			LinkFlags(true, true, true)));
+        const Identity* ident = node->identity();
+        request.links().push_back(new Link(ident,
+			LinkFlags(true, true)));
 		request.attr()["type"] = "CameraNode";
 
 		GridsNetworkItem::request_create_object(request);

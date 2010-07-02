@@ -14,7 +14,8 @@ namespace Atelier {
         const ID& id();
 		std::list<const Identity*>& links();
 		const std::list<const Identity*>& links() const;
-        Identity identity();
+        //Identity* identity();
+        const Identity* identity() const;
 
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;

@@ -1,6 +1,7 @@
 
 #include <object.h>
 #include <objectController.h>
+#include <identity.h>
 
 namespace Atelier {
 
@@ -8,6 +9,7 @@ namespace Atelier {
         id_ = new_id;
 
 		ObjectController::instance() += this;
+        Identity::create_identity(id_, this);
     }
 
     Object::~Object() {
@@ -49,8 +51,13 @@ namespace Atelier {
     void Object::set_scale(Vec3D vec) {
         scale_ = vec;
     }
+    /*
+    Identity* Object::identity() {
+        Identity::get_identity_or_create(this);
+    }
+    */
 
-    Identity Object::identity() {
-        return Identity(id_, this);
+    const Identity* Object::identity() const {
+        return Identity::get_identity_from_id(id_);
     }
 }

@@ -41,7 +41,7 @@ namespace Atelier {
 		else
 			created_object = new GenericNode(tete.id());
 
-		if (created_object = NULL) {
+		if (created_object == NULL) {
 			ci::app::console() << "Could not create object due to unknown error"
 				<< std::endl;
 			return NULL;

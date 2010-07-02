@@ -41,7 +41,7 @@ namespace Atelier {
         return links_;
     }
 
-	LinkList Tete::links() {
+	LinkList& Tete::links() {
 		return links_;
 	}
 

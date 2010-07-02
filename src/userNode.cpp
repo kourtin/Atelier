@@ -6,6 +6,7 @@
 
 namespace Atelier {
 	UserNode::UserNode(const ID& in_id) : Node(in_id) {
+		ci::app::console() << "Creating UserNode" << std::endl;
 	}
 
 	UserNode::~UserNode() {

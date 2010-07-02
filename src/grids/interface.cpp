@@ -10,6 +10,7 @@
 #include <tete.h>
 #include <identity.h>
 #include <link.h>
+#include <utility.h>
 
 namespace Grids {
     const char* Interface::server_address_ = "mmmii.net";
@@ -23,6 +24,7 @@ namespace Grids {
     Interface::Interface() {
         instance_ = this;
 		reject_confirmation_ = true;
+		local_room_ = Atelier::Utility::create_uuid();
     }
 
     void Interface::init() {
@@ -91,7 +93,12 @@ namespace Grids {
 
 	// Is there a way to make these valid of you're not connected to the network?
 	void Interface::request_list_rooms() {
-		protocol_->send_request(GRIDS_LIST_ROOMS, false);
+		if (protocol_->protocol_initiated())
+			protocol_->send_request(GRIDS_LIST_ROOMS, false);
+		else {
+			Value val = generate_local_room();
+			parse_network_event(val);
+		}
 	}
 
 	void Interface::request_create_room() {
@@ -149,8 +156,21 @@ namespace Grids {
 			Value link_value;
 			link_value["id"] = (*it)->actor().id();
 			link_value["name"] = (*it)->actor().name();
+            link_value["read"] = (*it)->flags().can_read;
+            link_value["modify"] = (*it)->flags().can_modify;
+            link_value["creator"] = (*it)->flags().creator;
+            link_value["remove"] = (*it)->flags().remove;
 
 			val["attr"]["links"].append(link_value);
 		}
+	}
+
+	// A dummy method used when the interface isn't connected to a node
+	Value Interface::generate_local_room() {
+		Value val;
+		val[Protocol::method_key] = GRIDS_LIST_ROOMS;
+		val["rooms"][0u] = local_room_;
+
+		return val;
 	}
 }

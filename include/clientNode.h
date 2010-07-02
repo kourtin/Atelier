@@ -27,6 +27,6 @@ namespace Atelier {
 
 		bool is_our_tete(const Tete&);
 
-		bool expecting_tetes_;
+		bool initializing_;
 	};
 }

@@ -35,13 +35,17 @@ namespace Atelier {
     class Object;
 
     class Identity {
-    public:
+        // Use create_identity to create an identity
+    private:  
         Identity();
         Identity(const ID&);
         Identity(const ID&, Object*);
+
+    public:
         ~Identity();
 
-        Object* object() const;
+        Object* object();
+        const Object* object() const;
         void set_object(Object*);
         const ID& id() const;
         void set_id(const ID&);

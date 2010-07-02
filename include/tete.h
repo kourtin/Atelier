@@ -31,7 +31,7 @@ namespace Atelier {
 
         bool has_links() const;
         const LinkList& links() const;
-		LinkList links();
+		LinkList& links();
         const Value& value() const;
 		Value& value();
         Type type() const;
