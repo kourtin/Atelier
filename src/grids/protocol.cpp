@@ -78,6 +78,8 @@ namespace Grids {
         // hooray we are connnected! initialize protocol
         send_protocol_initialization_string();
         
+        protocol_initiated_ = true;
+
         return true;
     }
 

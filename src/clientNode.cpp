@@ -8,6 +8,7 @@
 #include <teteManager.h>
 #include <objectCreator.h>
 #include <grids/interface.h>
+#include <clientUserNode.h>
 
 namespace Atelier {
 	ClientNode::ClientNode(const ID& new_id) : Object(new_id) {
@@ -56,8 +57,10 @@ namespace Atelier {
 		// Listen for UserNode
 		// Create CameraNode
 		if (type == "UserNode") {
-			UserNode* node = new UserNode(tete.id());
+			UserNode* node = new ClientUserNode(tete.id());
 			node->create_object(tete);
+
+            Client::renderer() += node;
 
 			CameraNode::request_create(node);
 		} else if (type == "CameraNode") {

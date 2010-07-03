@@ -115,6 +115,7 @@
     <ClInclude Include="..\include\cinderInteractItem.h" />
     <ClInclude Include="..\include\client.h" />
     <ClInclude Include="..\include\clientNode.h" />
+    <ClInclude Include="..\include\clientUserNode.h" />
     <ClInclude Include="..\include\define.h" />
     <ClInclude Include="..\include\genericNode.h" />
     <ClInclude Include="..\include\genericNode2D.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="..\src\cinderInteractItem.cpp" />
     <ClCompile Include="..\src\client.cpp" />
     <ClCompile Include="..\src\clientNode.cpp" />
+    <ClCompile Include="..\src\clientUserNode.cpp" />
     <ClCompile Include="..\src\genericNode.cpp" />
     <ClCompile Include="..\src\graphicItem.cpp" />
     <ClCompile Include="..\src\gridsNetworkItem.cpp" />

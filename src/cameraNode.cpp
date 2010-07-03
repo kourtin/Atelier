@@ -108,11 +108,9 @@ namespace Atelier {
 
 		Tete request;
 		
-		request.links().push_back(new Link(&(Client::user_identity()),
-			LinkFlags(true, true, true)));
         const Identity* ident = node->identity();
         request.links().push_back(new Link(ident,
-			LinkFlags(true, true)));
+			LinkFlags(true, true, true)));
 		request.attr()["type"] = "CameraNode";
 
 		GridsNetworkItem::request_create_object(request);

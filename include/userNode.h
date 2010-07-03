@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+#include <cinder/Text.h>
+
 #include <node.h>
 
 namespace Atelier {
@@ -26,5 +30,18 @@ namespace Atelier {
 		virtual Rect bounding_rect() const;
 
 		virtual void render(RenderDimension, RenderPass);
+
+    private:
+        void draw_box();
+        void draw_text();
+        void draw_text_billboard();
+        void init_matrix();
+        void restore_matrix();
+
+        ci::gl::Texture user_name_texture_;
+        ci::TextLayout layout_;
+        float text_size_;
+
+        std::string user_name_;
 	};
 }

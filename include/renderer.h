@@ -23,6 +23,10 @@ namespace Atelier {
         void add_item(GraphicItem*);
         void add_item(GraphicItem&);
         void remove_item(GraphicItem*);
+        void operator+=(GraphicItem&);
+        void operator+=(GraphicItem*);
+        void operator-=(GraphicItem&);
+        void operator-=(GraphicItem*);
 
         void update(); // Should be called after the camera node is updated 
         void render();

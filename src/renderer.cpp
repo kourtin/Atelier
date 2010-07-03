@@ -21,6 +21,22 @@ namespace Atelier {
         camera_ = cam;
     }
 
+    void Renderer::operator+=(GraphicItem& item) {
+        add_item(item);
+    }
+
+    void Renderer::operator+=(GraphicItem* item) {
+        add_item(item);
+    }
+
+    void Renderer::operator-=(GraphicItem& item) {
+        remove_item(&item);
+    }
+
+    void Renderer::operator-=(GraphicItem* item) {
+        remove_item(item);
+    }
+
     void Renderer::add_item(GraphicItem* item) {
         if(item == NULL)
             return;

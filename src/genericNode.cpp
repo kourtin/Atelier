@@ -141,13 +141,21 @@ namespace Atelier {
 
         glBegin( GL_QUADS );
         glTexCoord2f( 0, 1 );
-        glVertex3f(right.x * perLeft + up.x * perLeft, right.y * perLeft + up.y * perLeft, right.z * perLeft + up.z * perLeft);
+        glVertex3f(right.x * perLeft + up.x * perLeft, 
+            right.y * perLeft + up.y * perLeft, 
+            right.z * perLeft + up.z * perLeft);
         glTexCoord2f( 1, 1 );
-        glVertex3f(right.x * perRight + up.x * perLeft, right.y * perRight + up.y * perLeft, right.z * perRight + up.z * perLeft);
+        glVertex3f(right.x * perRight + up.x * perLeft, 
+            right.y * perRight + up.y * perLeft, 
+            right.z * perRight + up.z * perLeft);
         glTexCoord2f( 1, 0 );
-        glVertex3f(right.x * perRight + up.x * perRight, right.y * perRight + up.y * perRight, right.z * perRight + up.z * perRight);
+        glVertex3f(right.x * perRight + up.x * perRight, 
+            right.y * perRight + up.y * perRight, 
+            right.z * perRight + up.z * perRight);
         glTexCoord2f( 0, 0 );
-        glVertex3f(right.x * perLeft + up.x * perRight,	right.y * perLeft + up.y * perRight, right.z * perLeft + up.z * perRight);
+        glVertex3f(right.x * perLeft + up.x * perRight,	
+            right.y * perLeft + up.y * perRight, 
+            right.z * perLeft + up.z * perRight);
         glEnd();
         glDisable( GL_TEXTURE_2D );
     }

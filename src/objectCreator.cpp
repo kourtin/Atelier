@@ -53,7 +53,7 @@ namespace Atelier {
 			dynamic_cast<CinderGraphicItem*>(created_object);
 
 		if (graphic_item != NULL)
-			Client::renderer().add_item(*graphic_item);
+            Client::renderer() += graphic_item;
 
 		return created_object;
 	}

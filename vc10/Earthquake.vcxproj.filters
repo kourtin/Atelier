@@ -137,6 +137,9 @@
     <ClInclude Include="..\include\link.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\clientUserNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\basicApp.cpp">
@@ -230,6 +233,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\userNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\clientUserNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

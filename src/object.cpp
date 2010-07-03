@@ -9,7 +9,7 @@ namespace Atelier {
         id_ = new_id;
 
 		ObjectController::instance() += this;
-        Identity::create_identity(id_, this);
+        Identity::create_identity(id_, this); // registers identity
     }
 
     Object::~Object() {
