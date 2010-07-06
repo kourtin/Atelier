@@ -77,7 +77,7 @@ namespace Atelier {
     // Static utility methods
 	/////////////////////////
     public:
-        static void register_identity(const Identity&);
+        static void register_identity(Identity&);
 		// Input Value must have structure value["id"], value["name"], etc..
         static const Identity* get_identity_from_value(const Value&);
         static const Identity* get_identity_from_id(const ID&);
@@ -86,5 +86,8 @@ namespace Atelier {
         // Use this if you receive a message but can't find the 
         // Identity of the creator.
         static Identity* create_identity(const Value&);
+
+    private:
+        static Identity* get_identity_from_id_internal(const ID&);
     };
 }

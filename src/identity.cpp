@@ -138,7 +138,7 @@ namespace Atelier {
     // Static Utility stuff
     ///////////////////////
     
-    void Identity::register_identity(const Identity& ident) {
+    void Identity::register_identity(Identity& ident) {
 		IdentityManager::instance().id_identity_ptr_map_iterator_ = 
 			IdentityManager::instance().id_identity_ptr_map_.find(ident.id());
 
@@ -157,7 +157,11 @@ namespace Atelier {
 
     // Maybe instead this should throw an exception?
     const Identity* Identity::get_identity_from_id(const ID& in_id) {
-        std::map<const ID, const Identity*>& temp_map = 
+        return get_identity_from_id_internal(in_id);
+    }
+
+    Identity* Identity::get_identity_from_id_internal(const ID& in_id) {
+        std::map<const ID, Identity*>& temp_map = 
             IdentityManager::instance().id_identity_ptr_map_;
 
         IdentityManager::instance().id_identity_ptr_map_iterator_ = 
@@ -174,7 +178,12 @@ namespace Atelier {
         if (in_id.empty())
             return NULL;
 
-        Identity* ident = new Identity(in_id, obj);
+        Identity* ident = get_identity_from_id_internal(in_id);
+
+        if (ident == NULL)
+            ident = new Identity(in_id, obj);
+        else
+            ident->set_object(obj);
 
         register_identity(*ident);
 
@@ -190,10 +199,6 @@ namespace Atelier {
 
         if (!val["name"].empty())
             ident->set_name(val["name"].asString());
-
-        // What about other attributes such as color, font, hat size?
-        // This should be transmitted as the creation, etc, of a 
-        // separate object.
 
         register_identity(*ident);
 

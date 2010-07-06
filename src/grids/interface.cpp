@@ -68,13 +68,19 @@ namespace Grids {
         int num_links = 0;
         Atelier::LinkList link_list;
 
+        // Note: I think this is the problem:
+        // The program receives a CreateObject event, but is linked to itself
+        // therefore creating the object is sort of deligated to the 
+        // get_identity... method. ??
+
         if (!val["attr"]["links"].empty()) {
             Value& links = val["attr"]["links"];
 
             for (Value::iterator it = links.begin(); it != links.end(); ++it) {
 				const Atelier::Link* link = Atelier::Link::get_link_from_value(*it); 
 
-                link_list.push_back(link);
+                if (link != NULL)
+                    link_list.push_back(link);
             }
         }
 

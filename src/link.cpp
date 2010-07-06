@@ -44,6 +44,9 @@ namespace Atelier {
 		if (ident == NULL)
 			ident = Identity::create_identity(val);
 
+        if (ident == NULL)
+            return NULL;
+
 		bool read_flag = val["read"].asBool();
 		bool modify_flag = val["modify"].asBool();
 		bool creator_flag = val["creator"].asBool();

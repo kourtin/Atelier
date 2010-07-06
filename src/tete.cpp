@@ -1,4 +1,6 @@
 
+#include <cinder/app/App.h>
+
 #include <tete.h>
 #include <identity.h>
 #include <grids/interface.h>
@@ -160,15 +162,25 @@ namespace Atelier {
 	}
 
 	const Identity* Tete::get_creator(const Tete& tete) {
-		if (tete.has_links() == false)
-			return NULL;
+		if (tete.has_links() == false) {
+            ci::app::console() << "Tete has no links, returning." << std::endl
+                << "Offending Tete:" << std::endl << tete.value().toStyledString();
 
+			return NULL;
+        }
+        
 		const LinkList& links = tete.links();
 
 		for(LinkList::const_iterator it = links.begin(); it != links.end(); ++it) {
-			if ((*it)->flags().creator)
-				return &((*it)->actor()); 
+			if ((*it)->flags().creator) {
+                ci::app::console() << "Iterating over links of tete: " << 
+                tete.id() << std::endl;
+				return &((*it)->actor());
+            }
 		}
+
+        ci::app::console() << "Tete has no links, returning." << std::endl
+                << "Offending Tete:" << std::endl << tete.value().toStyledString();
 
 		return NULL;
 	}
