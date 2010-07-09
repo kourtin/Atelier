@@ -14,36 +14,46 @@ use Grids::Console;
 use Grids::Conf;
 use JSON::XS;
 
-package ElizaBot
+package Atelier;
 
-my $id = Grids::Identity->new();
+my $TRUE;
+my $FALSE;
+
+package ElizaBot;
+
+my $id;
 my $client;
 my $room;
-my $chat; # the id of the current ChatNode the bot is linked to 
-my $name = "Eliza";
-my $color = [rand()*10000 % 255,
-                 rand()*10000 % 255,
-                 rand()*10000 % 255 ];
+my $name;
+my $color;
 my $chat_node_id;
 my $last_chat_message_node_id;
+my $chat_bot;
 
-my $eliza = new Chatbot::Eliza $bot_name, "script.txt";
-
-package main
+package main;
 
 my $network_pause = 0.1;
 
+$Atelier::TRUE = JSON::XS::true;
+$Atelier::FALSE = JSON::XS::false;
+
+$ElizaBot::id = Grids::Identity->new();
+$ElizaBot::name = "Eliza";
+#$ElizaBot::color = [rand()*10000 % 255,
+#                    rand()*10000 % 255,
+#                    rand()*10000 % 255 ];
+$ElizaBot::chat_bot = new Chatbot::Eliza $name, "script.txt";
 
 my $con = Grids::Console->new(
-    title => $ElizaBot::name
-    prompt => "$ElizaBot::name >",
+    title => "$ElizaBot::name",
+    prompt => "$ElizaBot::name>",
     );
 
 run();
 
 sub connect {
     my $address = Grids::Address::IPv4->new( address => '127.0.0.1' );
-    $client->connect($address);
+    $ElizaBot::client->connect($address);
 }
 
 sub connected_cb {
@@ -52,25 +62,25 @@ sub connected_cb {
     # Don't crash the server
     select(undef,undef,undef, $network_pause);
 
-    $client->dispatch_event('Room.List');
+    $ElizaBot::client->dispatch_event('Room.List');
 }
 
 sub list_rooms_cb {
     my ($c, $evt) = @_;
 
     my $rooms = $evt->args->{rooms};
-    $room = $rooms->[0];
+    $ElizaBot::room = $rooms->[0];
 
     # No rooms on the server
-    unless ($room) { 
+    unless ($ElizaBot::room) { 
         create_room();
         return; 
     } 
 
-    $con->print("$bot_name has set room to: $room");
+    $con->print($ElizaBot::name . " has set room to:" . $ElizaBot::room);
 }
 
-sub create_room { $client->dispatch_event('Room.Create'); }
+sub create_room { $ElizaBot::client->dispatch_event('Room.Create'); }
 
 sub create_room_cb { } # When someone else creates a room
 
@@ -93,11 +103,11 @@ sub create_object_cb {
     } elsif ($evt->args->{attr}->{type} eq "ChatNode") {
         $con->print("Received ChatNode");
         
-        $chat_node_id = $evt->{id};
+        $ElizaBot::chat_node_id = $evt->{id};
     } elsif ($evt->args->{attr}->{type} eq "ChatMessageNode") {
         $con->print("Received ChatMessageNode");
         
-        process_chat_message_node($evt);
+        process_chat_message_node($evt->args);
     }
 }
 
@@ -119,20 +129,20 @@ sub update_object_cb {
     my $new_id = Grids::UUID->new_id();
     my $chat_id = $evt->args->{attr}->{chat_id};
 
-    my $reply = $eliza->transform($tete_text);
+    my $reply = $ElizaBot::chat_bot->transform($tete_text);
 
     my $node_value = { '_broadcast' => 1, 
                        pos => [0,0,0], 
                        rot => [0,0,0], 
                        scl => [1,1,1], 
                        id => $new_id, 
-                       room_id => $room, 
+                       room_id => $ElizaBot::room, 
                        attr => { type => 'ChatMessage', 
-                                 links => [ { id => $chat, read => 1, modify => 1 },
-                                            { id => $id->{uuid}, creator => 1, read => 1, modify => 1 } ], 
+                                 links => [ { id => $ElizaBot::chat_node_id, read => 1, modify => 1 },
+                                            { id => $ElizaBot::id->{uuid}, creator => 1, read => 1, modify => 1 } ], 
                                  text => $reply } };
 
-    $client->dispatch_event('Room.CreateObject', $node_value);
+    $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
 }
 
 # Requests to the network that a UserNode be created
@@ -148,53 +158,69 @@ sub request_create_user_node {
     $ran_y *= $test_scale;
     $ran_z *= $test_scale;
 
-    my $node_value = { '_broadcast' => 1, 
+    my $node_value = { '_broadcast' => $Atelier::TRUE, 
                        pos => [$ran_x, $ran_y, $ran_z], 
                        rot => [0,0,0], 
                        scl => [1,1,1], 
-                       id => $id->{uuid}, 
-                       room_id => $room, 
+                       id => $ElizaBot::id->{uuid}, 
+                       room_id => $ElizaBot::room, 
                        attr => { type => 'UserNode', 
-                                 links => [ { id => $id->{uuid},
-                                              name => $bot_name, 
+                                 links => [ { id => $ElizaBot::id->{uuid},
+                                              name => $ElizaBot::name, 
                                               read => JSON::XS::true, 
                                               modify => JSON::XS::true,
                                               creator => JSON::XS::true } ] } };
 
-    $client->dispatch_event('Room.CreateObject', $node_value);
+    $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
 }
 
 sub process_chat_message_node {
     my ($node) = @_;
-    my $tete_text = $evt->args->{attr}->{text};
+    my $tete_text = $node->{attr}->{text};
     
-    my $reply = $eliza->transform($tete_text);
+    $ElizaBot::last_chat_message_node_id = $node->{id};
+    my $reply = $ElizaBot::chat_bot->transform($tete_text);
 
-    
-    
+    create_chat_message_node($ElizaBot::chat_node_id, 
+                             $ElizaBot::last_chat_message_node_id,
+                             $reply);
 }
 
 # TODO: resolve position, etc
+# Creates a message node, and links it to the last node it received.
 sub create_chat_message_node {
-    my ($chat_id, $text) = @_;
+    my ($chat_node_id, $chat_message_node_id, $text) = @_;
     
-    my $node_value = { '_broadcast' => 1,
+    my $node_value = { '_broadcast' => $Atelier::TRUE,
                        pos => [0,0,0],
                        rot => [0,0,0],
                        scl => [1,1,1],
                        id => Grids::UUID->new_id(),
-                       room_id =>
+                       room_id => $ElizaBot::room,
+                       attr => { type => 'ChatMessageNode',
+                                 text => $text,
+                                 links => [ { id => $ElizaBot::id->{uuid},
+                                              name => $ElizaBot::name,
+                                              read => $Atelier::TRUE,
+                                              modify => $Atelier::TRUE,
+                                              creator => $Atelier::TRUE },
+                                            { id => $chat_node_id,
+                                              read => $Atelier::TRUE,
+                                              move => $Atelier::TRUE },
+                                            { id => $chat_message_node_id,
+                                              read => $Atelier::TRUE } ] } };
 
+    $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
 }
 
 sub run {
     # main loop condition
     my $main = AnyEvent->condvar;
 
-    $client = Grids::Client->new(id => $id, use_encryption => 0, debug => 0, auto_flush_queue => 1);
+    $ElizaBot::client = Grids::Client->new(id => $ElizaBot::id, use_encryption => 0, debug => 0, auto_flush_queue => 1);
 
     # Refer to Grids::Node::Hooks.. for hooks
-    $client->register_hooks(
+    $ElizaBot::client->register_hooks(
         'Authentication.Login' => \&connected_cb,
         'Broadcast.Event' => \&broadcast_cb,
         'Connected' => \&connected_cb,
