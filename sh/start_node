@@ -1,0 +1,12 @@
+perl \
+-I../../crypt-otr/lib \
+-I../../crypt-otr/blib/arch \
+-I../../crypt-otr/blib/lib \
+-I../../crypt-otr/blib/arch/auto/Crypt/OTR/ \
+-I../../grids/lib/Grids/VM/Memory/lib \
+-I../../grids/lib/Grids/VM/Register/lib \
+-I../../grids/lib \
+-I../../grids/lib/Grids/VM/blib/arch/auto \
+-I../../grids/lib/Grids/VM/blib/arch/auto/Grids/VM/Memory \
+-I../../grids/lib/Grids/VM/blib/arch/auto/Grids/VM/Register \
+../../grids/tools/node/gridsnode.pl -d
