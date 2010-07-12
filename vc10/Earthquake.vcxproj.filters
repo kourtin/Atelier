@@ -140,6 +140,12 @@
     <ClInclude Include="..\include\clientUserNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\chatNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\chatMessageNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\basicApp.cpp">
@@ -236,6 +242,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\clientUserNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\chatNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\chatMessageNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

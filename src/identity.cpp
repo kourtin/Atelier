@@ -194,7 +194,7 @@ namespace Atelier {
         if (val["id"].empty())
             return NULL;
         ID owner_id  = val["id"].asString();
-        // This is called when there's no local object, 
+
         Identity* ident = new Identity(owner_id);
 
         if (!val["name"].empty())

@@ -103,7 +103,7 @@ namespace Grids {
 			protocol_->send_request(GRIDS_LIST_ROOMS, false);
 		else {
 			Value val = generate_local_room();
-            ci::app::console() << "Not connected to network, using local room: " <<
+            ci::app::console() << "WARNING: Not connected to network, using local room: " <<
                 val["rooms"][0u].asString() << std::endl;
 			parse_network_event(val);
             

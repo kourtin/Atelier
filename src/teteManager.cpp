@@ -24,7 +24,7 @@ namespace Atelier {
 			const Tete& tete = *(tete_queue_.front());
 			
 			if (registered_objects_.empty()) {
-				ci::app::console() << "No objects registered, droping message:" 
+				ci::app::console() << "WARNING: No objects registered, droping message:" 
 					<< std::endl << tete.value().toStyledString() << 
 					std::endl;
 			}

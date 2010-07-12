@@ -16,7 +16,7 @@
 
 namespace Atelier {
     CameraNode::CameraNode(const ID& new_id) : Object(new_id) {
-		ci::app::console() << "Creating CameraNode" << std::endl;
+		//ci::app::console() << "Creating CameraNode" << std::endl;
 
         cam_ = new ci::MayaCamUI();
         zoom_speed_ = 30.0f;
@@ -104,7 +104,7 @@ namespace Atelier {
     }
 
 	void CameraNode::request_create(UserNode* node) {
-        ci::app::console() << "Requesting create camera" << std::endl;
+        //ci::app::console() << "Requesting create camera" << std::endl;
 
 		Tete request;
 		

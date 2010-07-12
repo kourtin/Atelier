@@ -28,8 +28,6 @@ namespace Atelier {
 	Object* ObjectCreator::create_object(const Tete& tete) {
 		std::string type = tete.value()["attr"]["type"].asString();
 
-		ci::app::console() << "Type = " << type << std::endl;
-
 		Object* created_object = NULL;
 
 		if (type == "CameraNode")
@@ -42,8 +40,7 @@ namespace Atelier {
 			created_object = new GenericNode(tete.id());
 
 		if (created_object == NULL) {
-			ci::app::console() << "Could not create object due to unknown error"
-				<< std::endl;
+			ci::app::console() << "WARNING: could not find object type" << std::endl;
 			return NULL;
 		}
 

@@ -7,9 +7,14 @@
 namespace Atelier {
 	UserNode::UserNode(const ID& in_id) : Node(in_id) {
 		text_size_ = 48.0f;
+        layout_ = NULL;
+        user_name_texture_ = NULL;
+        user_name_ = "";
 	}
 
 	UserNode::~UserNode() {
+        delete user_name_texture_;
+        delete layout_;
 	}
 
 	void UserNode::request_create(const ID& req_id) {
@@ -36,6 +41,8 @@ namespace Atelier {
 	}
 
 	void UserNode::create_object(const Tete& tete) {
+        Object::create_object(tete);
+
         const Identity* creator = Tete::get_creator(tete);
 
         if (creator == NULL) {
@@ -46,13 +53,13 @@ namespace Atelier {
 
         user_name_ = creator->name();
 
-        layout_.setFont(ci::Font("HelveticaNeue", text_size_));
-        layout_.setColor(ci::Color(1, 1, 1));
-        
-        layout_.addCenteredLine(user_name_);
+        layout_ = new ci::TextLayout();
+        layout_->setFont(ci::Font("HelveticaNeue", text_size_));
+        layout_->setColor(ci::Color(1, 1, 1));
+        layout_->addCenteredLine(user_name_);
 
-        // TODO: understand why this doesn't work
-	    //user_name_texture_ = ci::gl::Texture(layout_.render(true));
+	    user_name_texture_ = new ci::gl::Texture(layout_->render(true));
+        user_name_texture_->disable();
 	}
 
 	void UserNode::update_object(const Tete&) {
@@ -109,16 +116,15 @@ namespace Atelier {
 
     void UserNode::draw_text() {
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		ci::gl::enableDepthWrite( false );
-        glEnable(GL_TEXTURE_2D);
-        user_name_texture_.bind();
-
+		ci::gl::enableDepthWrite(false);
+        user_name_texture_->enableAndBind();
         draw_text_billboard();
+        user_name_texture_->disable();
     }
 
     void UserNode::draw_text_billboard() {
-        float w = user_name_texture_.getWidth();
-        float h = user_name_texture_.getHeight();
+        float w = user_name_texture_->getWidth();
+        float h = user_name_texture_->getHeight();
 
         Vec3D right;
         Vec3D up;
@@ -148,6 +154,6 @@ namespace Atelier {
             right.y * perLeft + up.y * perRight, 
             right.z * perLeft + up.z * perRight);
         glEnd();
-        glDisable( GL_TEXTURE_2D );
+        //glDisable( GL_TEXTURE_2D ); // called in draw_text();
     }
 }

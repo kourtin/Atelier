@@ -11,6 +11,7 @@
 #include <clientNode.h>
 #include <userNode.h>
 #include <identityManager.h>
+#include <chatMessageNode.h>
 
 namespace Atelier {
     Client::Client(CinderApp* app) {
@@ -40,6 +41,8 @@ namespace Atelier {
         renderer_.add_static_item(static_item);
 
         renderer_.init();
+
+        ChatMessageNode* m_node = new ChatMessageNode("lolhi");
     }
 
     void Client::update() {

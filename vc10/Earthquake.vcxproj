@@ -109,6 +109,8 @@
     <ClInclude Include="..\include\aaBox.h" />
     <ClInclude Include="..\include\basicApp.h" />
     <ClInclude Include="..\include\cameraNode.h" />
+    <ClInclude Include="..\include\chatMessageNode.h" />
+    <ClInclude Include="..\include\chatNode.h" />
     <ClInclude Include="..\include\cinder2DInteractItem.h" />
     <ClInclude Include="..\include\cinder3DInteractItem.h" />
     <ClInclude Include="..\include\cinderGraphicItem.h" />
@@ -151,6 +153,8 @@
     <ClCompile Include="..\src\aaBox.cpp" />
     <ClCompile Include="..\src\basicApp.cpp" />
     <ClCompile Include="..\src\cameraNode.cpp" />
+    <ClCompile Include="..\src\chatMessageNode.cpp" />
+    <ClCompile Include="..\src\chatNode.cpp" />
     <ClCompile Include="..\src\cinder2DInteractItem.cpp" />
     <ClCompile Include="..\src\cinder3DInteractItem.cpp" />
     <ClCompile Include="..\src\cinderGraphicItem.cpp" />

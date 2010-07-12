@@ -1,6 +1,8 @@
 
 #include <iostream> // for NULL
 
+#include <cinder/app/App.h>
+
 #include <link.h>
 #include <identity.h>
 #include <define.h>
@@ -44,8 +46,11 @@ namespace Atelier {
 		if (ident == NULL)
 			ident = Identity::create_identity(val);
 
-        if (ident == NULL)
+        if (ident == NULL) {
+            ci::app::console() << "CRITICAL: unable to create identity for: " << std::endl 
+                << val.toStyledString() << std::endl;
             return NULL;
+        }
 
 		bool read_flag = val["read"].asBool();
 		bool modify_flag = val["modify"].asBool();

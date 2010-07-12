@@ -2,11 +2,16 @@
 #include <object.h>
 #include <objectController.h>
 #include <identity.h>
+#include <tete.h>
 
 namespace Atelier {
 
     Object::Object(const ID& new_id) {
         id_ = new_id;
+
+        position_ = Vec3D(0.0, 0.0, 0.0);
+        rotation_ = Vec3D(0.0, 0.0, 0.0);
+        scale_ = Vec3D(1.0, 1.0, 1.0);
 
 		ObjectController::instance() += this;
         Identity::create_identity(id_, this); // registers identity
@@ -59,5 +64,26 @@ namespace Atelier {
 
     const Identity* Object::identity() const {
         return Identity::get_identity_from_id(id_);
+    }
+
+    void Object::create_object(const Tete& tete) {
+        if (!tete.value()["pos"].empty()) {
+            position_ = Vec3D(tete.value()["pos"][0u].asDouble(),
+                tete.value()["pos"][1u].asDouble(), 
+                tete.value()["pos"][2u].asDouble());
+        }
+
+        if (!tete.value()["rot"].empty()) {
+            rotation_ = Vec3D(tete.value()["rot"][0u].asDouble(),
+                tete.value()["rot"][1u].asDouble(),
+                tete.value()["rot"][2u].asDouble());
+        }
+
+        if (!tete.value()["scl"].empty()) {
+            scale_ = Vec3D(tete.value()["scl"][0u].asDouble(),
+                tete.value()["scl"][1u].asDouble(),
+                tete.value()["scl"][2u].asDouble());
+        }
+        // TODO: finish this...
     }
 }

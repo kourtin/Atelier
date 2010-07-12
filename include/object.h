@@ -25,6 +25,8 @@ namespace Atelier {
         virtual void set_rotation(Vec3D);
         virtual void set_scale(Vec3D);
 
+        virtual void create_object(const Tete&);
+
     private:
         ID id_;
         std::list<const Identity*> links_;

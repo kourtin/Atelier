@@ -6,7 +6,7 @@
 #include <gridsNetworkItem.h>
 #include <cinder3DInteractItem.h>
 
-class CinderApp;
+//class CinderApp;
 
 namespace Atelier {
     class Node : public Object, public Cinder3DInteractItem, 
@@ -16,8 +16,6 @@ namespace Atelier {
         virtual ~Node();
 
         const ID& id();
-		std::list<const Identity*>& links();
-        const std::list<const Identity*>& links() const;
 
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;

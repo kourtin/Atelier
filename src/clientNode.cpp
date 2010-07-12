@@ -19,8 +19,8 @@ namespace Atelier {
 	}
 
 	void ClientNode::receive_tete(const Tete& tete) {
-		ci::app::console() << "ClientNode receiving tete:" << std::endl <<
-			tete.value().toStyledString() << std::endl;
+		//ci::app::console() << "ClientNode receiving tete:" << std::endl <<
+		//	tete.value().toStyledString() << std::endl;
 		
 		const Identity* creator = Tete::get_creator(tete);
 

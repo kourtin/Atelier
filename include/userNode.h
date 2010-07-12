@@ -38,8 +38,8 @@ namespace Atelier {
         void init_matrix();
         void restore_matrix();
 
-        ci::gl::Texture user_name_texture_;
-        ci::TextLayout layout_;
+        ci::gl::Texture* user_name_texture_;
+        ci::TextLayout* layout_;
         float text_size_;
 
         std::string user_name_;

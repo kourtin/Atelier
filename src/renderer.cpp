@@ -66,8 +66,8 @@ namespace Atelier {
         glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	
         ci::gl::enableAlphaBlending();
-        ci::gl::enableDepthRead( true );
-        ci::gl::enableDepthWrite( true );
+        ci::gl::enableDepthRead(true);
+        ci::gl::enableDepthWrite(true);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     }
 

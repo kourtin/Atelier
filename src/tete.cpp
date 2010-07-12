@@ -163,7 +163,7 @@ namespace Atelier {
 
 	const Identity* Tete::get_creator(const Tete& tete) {
 		if (tete.has_links() == false) {
-            ci::app::console() << "Tete has no links, returning." << std::endl
+            ci::app::console() << "WARNING: Cannot find creator" << std::endl
                 << "Offending Tete:" << std::endl << tete.value().toStyledString();
 
 			return NULL;
@@ -173,14 +173,12 @@ namespace Atelier {
 
 		for(LinkList::const_iterator it = links.begin(); it != links.end(); ++it) {
 			if ((*it)->flags().creator) {
-                ci::app::console() << "Iterating over links of tete: " << 
-                tete.id() << std::endl;
 				return &((*it)->actor());
             }
 		}
 
-        ci::app::console() << "Tete has no links, returning." << std::endl
-                << "Offending Tete:" << std::endl << tete.value().toStyledString();
+        ci::app::console() << "WARNING: Cannot find creator" << std::endl
+            << "Offending Tete:" << std::endl << tete.value().toStyledString();
 
 		return NULL;
 	}
