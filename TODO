@@ -10,7 +10,7 @@ Next step: create a test chat between Cinder client and an Eliza bot.
 6. Client: create a ChatObject
 7. Bot: recognize and store ChatObject
 8. Client: create a ChatMessageNode
-9. Client: check that ChatObject can manipulate, more, edit the ChatMessageNode
+9. Client: check that ChatObject can move ChatMessageNodes
 10.Bot: create a ChatMessageNode
 11.Client: check that created Node has proper links
 

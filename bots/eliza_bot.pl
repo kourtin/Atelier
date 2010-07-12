@@ -16,8 +16,8 @@ use JSON::XS;
 
 package Atelier;
 
-my $TRUE;
-my $FALSE;
+my $TRUE = JSON::XS::true;
+my $FALSE = JSON::XS::false;
 
 package ElizaBot;
 
@@ -139,7 +139,7 @@ sub update_object_cb {
                        room_id => $ElizaBot::room, 
                        attr => { type => 'ChatMessage', 
                                  links => [ { id => $ElizaBot::chat_node_id, read => 1, modify => 1 },
-                                            { id => $ElizaBot::id->{uuid}, creator => 1, read => 1, modify => 1 } ], 
+                                            { id => $ElizaBot::id->name, creator => 1, read => 1, modify => 1 } ], 
                                  text => $reply } };
 
     $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
@@ -151,9 +151,7 @@ sub request_create_user_node {
     my $ran_y = rand(2) - 1;
     my $ran_z = rand(2) - 1;
 
-    $con->print("x = $ran_x, y = $ran_y, z = $ran_z");
-
-    my $test_scale = 0;
+    my $test_scale = 100;
     $ran_x *= $test_scale;
     $ran_y *= $test_scale;
     $ran_z *= $test_scale;
@@ -162,13 +160,13 @@ sub request_create_user_node {
                        pos => [$ran_x, $ran_y, $ran_z], 
                        rot => [0,0,0], 
                        scl => [1,1,1], 
-                       id => $ElizaBot::id->{uuid}, 
+                       id => $ElizaBot::id->name, 
                        room_id => $ElizaBot::room, 
                        attr => { type => 'UserNode', 
-                                 links => [ { id => $ElizaBot::id->{uuid},
+                                 links => [ { id => $ElizaBot::id->name, 
                                               name => $ElizaBot::name, 
                                               read => JSON::XS::true, 
-                                              modify => JSON::XS::true,
+                                              modify => JSON::XS::true, 
                                               creator => JSON::XS::true } ] } };
 
     $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
@@ -176,8 +174,8 @@ sub request_create_user_node {
 
 sub process_chat_message_node {
     my ($node) = @_;
+
     my $tete_text = $node->{attr}->{text};
-    
     $ElizaBot::last_chat_message_node_id = $node->{id};
     my $reply = $ElizaBot::chat_bot->transform($tete_text);
 
@@ -199,7 +197,7 @@ sub create_chat_message_node {
                        room_id => $ElizaBot::room,
                        attr => { type => 'ChatMessageNode',
                                  text => $text,
-                                 links => [ { id => $ElizaBot::id->{uuid},
+                                 links => [ { id => $ElizaBot::id->name,
                                               name => $ElizaBot::name,
                                               read => $Atelier::TRUE,
                                               modify => $Atelier::TRUE,
@@ -216,9 +214,10 @@ sub create_chat_message_node {
 sub run {
     # main loop condition
     my $main = AnyEvent->condvar;
-
-    $ElizaBot::client = Grids::Client->new(id => $ElizaBot::id, use_encryption => 0, debug => 0, auto_flush_queue => 1);
-
+    
+    $ElizaBot::client = Grids::Client->new(id => $ElizaBot::id, use_encryption => 0, 
+                                           debug => 0, auto_flush_queue => 1);
+    
     # Refer to Grids::Node::Hooks.. for hooks
     $ElizaBot::client->register_hooks(
         'Authentication.Login' => \&connected_cb,
