@@ -60,7 +60,8 @@ namespace Atelier {
         // Look out for the creation of a new object
         if (tete.type() == Tete::CREATE && tete.id() == active_node_create_id_) {
             // Great, now I know it's arrived, when do I grab the object?
-            TeteManager::instance() -= this; // don't need to listen anymore
+            ci::app::console() << "Removing tete" << std::endl;
+            //TeteManager::instance() -= this; // don't need to listen anymore
             active_node_create_id_.clear();
         }
     }
@@ -80,11 +81,30 @@ namespace Atelier {
             text_buffer_ += event.getChar();
 
             if (active_node_create_id_.empty()) {
+                // TODO: Fix this memory leak
+
                 // Request create a node, but make sure to update it
+                ci::app::console() << "Adding Tete" << std::endl;
                 TeteManager::instance() += this;
                 active_node_create_id_ = Utility::create_uuid();
+                std::deque<Link*> temp_links;
+                /* WTF
+                std::tr1::shared_ptr<Link> temp_link(new Link(&(Client::user_identity()),
+			        LinkFlags(true, true, true)));
+                */
+                //temp_links.push_back(temp_link.get());
+                temp_links.push_back(new Link(&(Client::user_identity()),
+			        LinkFlags(true, true, true)));
+
                 ChatMessageNode::request_create(active_node_create_id_,
-                    *identity(), text_buffer_, std::deque<Link*>());
+                    *identity(), text_buffer_, temp_links);
+
+                /*
+                for (std::deque<Link*>::const_iterator it = temp_links.begin();
+                    it != temp_links.end(); ++it) {
+                    delete *it;
+                }
+                */
             } else if (active_node_ != NULL) {
                 // Update the current node, and send an update request
                 ChatMessageNode::request_update_text(*(active_node_->identity()),

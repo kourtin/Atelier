@@ -9,8 +9,8 @@
 #include <link.h>
 
 namespace Atelier {
-    ChatMessageNode::ChatMessageNode(const ID& in_id) :
-        Node(in_id) {
+    ChatMessageNode::ChatMessageNode(const ID& in_id) : Node(in_id) {
+        //ci::app::console() << "Creating ChatMessageNode" << std::endl;
         text_size_ = 48.0f;
         text_texture_ = NULL;
         layout_ = NULL;
@@ -62,6 +62,9 @@ namespace Atelier {
         Object::create_object(tete);
 
         text_ = tete.attr()["text"].asString();
+
+        generate_layout();
+        generate_texture();
     }
 
     void ChatMessageNode::update_object(const Tete& tete) {
