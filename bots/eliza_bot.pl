@@ -14,6 +14,8 @@ use Grids::Console;
 use Grids::Conf;
 use JSON::XS;
 
+use Data::Dumper;
+
 package Atelier;
 
 my $TRUE = JSON::XS::true;
@@ -29,6 +31,7 @@ my $color;
 my $chat_node_id;
 my $last_chat_message_node_id;
 my $chat_bot;
+my $user_node_id;
 
 package main;
 
@@ -90,59 +93,37 @@ sub create_object_cb {
     my($c, $evt) = @_;
 
     return unless($evt);
-    my $args = $evt->args;
-    return if( $args->{success});  # Filter out the bounceback confirmation code
-    return if( $args->{error}); 	
+    return if( $evt->args->{success});  # Filter out the bounceback confirmation code
+    return if( $evt->args->{error}); 	
     return unless( $evt->args->{attr}->{type} );
     #return unless( $evt->args->{attr}->{type} eq "CameraNode" );
 
     if ($evt->args->{attr}->{type} eq "CameraNode") {
-        $con->print("Requesting UserNode");
-
+        #$con->print("Requesting UserNode");
         request_create_user_node();
+    } elsif (($evt->args->{attr}->{type} eq "UserNode") && 
+        (get_tete_creator_id($evt) eq $ElizaBot::id->name)) {
+        $ElizaBot::user_node_id = $evt->args->{id};
     } elsif ($evt->args->{attr}->{type} eq "ChatNode") {
-        $con->print("Received ChatNode");
-        
+        #$con->print("Received ChatNode"); 
         $ElizaBot::chat_node_id = $evt->{id};
-    } elsif ($evt->args->{attr}->{type} eq "ChatMessageNode") {
-        $con->print("Received ChatMessageNode");
-        
-        process_chat_message_node($evt->args);
+    } elsif (($evt->args->{attr}->{type} eq "ChatMessageNode") &&
+        (get_tete_creator_id($evt) ne $ElizaBot::id->name)) {
+        #$con->print("Received ChatMessageNode");        
     }
 }
 
 sub update_object_cb {
     my($c, $evt) = @_;
 
-    return;
-
     return unless($evt);
-    my $args = $evt->args;
-    return if( $args->{success});  # Filter out the bounceback confirmation code
-    return if( $args->{error}); 	
-    return unless( $evt->args->{attr}->{type} );
-    return unless( $evt->args->{attr}->{finished} );
-    return unless( $evt->args->{attr}->{type} eq "Tete" );
+    return if($evt->args->{success});  # Filter out the bounceback confirmation code
+    return if($evt->args->{error}); 	
+    return unless($evt->args->{attr}->{type});
+    return unless($evt->args->{attr}->{type} eq "ChatMessageNode");
+    return unless($evt->args->{attr}->{finished}); # ie enter pressed, not an intermediate keypress  
 
-    my $tete_text = $evt->args->{attr}->{text};
-    my $tete_id = $evt->args->{attr}->{id};
-    my $new_id = Grids::UUID->new_id();
-    my $chat_id = $evt->args->{attr}->{chat_id};
-
-    my $reply = $ElizaBot::chat_bot->transform($tete_text);
-
-    my $node_value = { '_broadcast' => 1, 
-                       pos => [0,0,0], 
-                       rot => [0,0,0], 
-                       scl => [1,1,1], 
-                       id => $new_id, 
-                       room_id => $ElizaBot::room, 
-                       attr => { type => 'ChatMessage', 
-                                 links => [ { id => $ElizaBot::chat_node_id, read => 1, modify => 1 },
-                                            { id => $ElizaBot::id->name, creator => 1, read => 1, modify => 1 } ], 
-                                 text => $reply } };
-
-    $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
+    process_chat_message_node($evt->args);
 }
 
 # Requests to the network that a UserNode be created
@@ -175,9 +156,9 @@ sub request_create_user_node {
 sub process_chat_message_node {
     my ($node) = @_;
 
-    my $tete_text = $node->{attr}->{text};
+    my $message_text = $node->{attr}->{text};
     $ElizaBot::last_chat_message_node_id = $node->{id};
-    my $reply = $ElizaBot::chat_bot->transform($tete_text);
+    my $reply = $ElizaBot::chat_bot->transform($message_text);
 
     create_chat_message_node($ElizaBot::chat_node_id, 
                              $ElizaBot::last_chat_message_node_id,
@@ -210,6 +191,25 @@ sub create_chat_message_node {
 
     $ElizaBot::client->dispatch_event('Room.CreateObject', $node_value);
 }
+
+sub get_tete_creator_id {
+    my ($evt) = @_;
+    return "" unless ($evt->args->{attr}->{links});
+
+    my $i = 0;
+    foreach ($evt->args->{attr}->{links}) {
+        next unless ($evt->args->{attr}->{links}->[$i]->{creator});
+
+        if ($evt->args->{attr}->{links}->[$i]->{creator} == $Atelier::TRUE) {
+            #$con->print("Found creator: " . $evt->args->{attr}->{links}->[$i]->{id}); 
+            return $evt->args->{attr}->{links}->[$i]->{id};
+        }
+        $i++;
+    }
+
+    return "";
+}
+
 
 sub run {
     # main loop condition

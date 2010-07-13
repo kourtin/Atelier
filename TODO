@@ -14,7 +14,9 @@ Next step: create a test chat between Cinder client and an Eliza bot.
 10.Bot: create a ChatMessageNode
 11.Client: check that created Node has proper links
 
-
+Note:
+* Update ChatMessageNode to contain a bool in attr()["finished"] when enter is pressed.
+  Perhaps this could be a more universal flag. Deactivate. Attention-Lost
 
 node = new GenericNode(Utility::create_uuid());
 
