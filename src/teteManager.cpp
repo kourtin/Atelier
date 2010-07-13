@@ -20,6 +20,9 @@ namespace Atelier {
 
 	// this probably shouldn't block
 	void TeteManager::update() {
+        // receive_tete may try to modify registered_objects_. Guard against it
+        std::list<Object*> reg_copy = registered_objects_;
+
 		while (!tete_queue_.empty()) {
 			const Tete& tete = *(tete_queue_.front());
 			
@@ -28,9 +31,9 @@ namespace Atelier {
 					<< std::endl << tete.value().toStyledString() << 
 					std::endl;
 			}
-
-			for (std::list<Object*>::const_iterator it = registered_objects_.begin();
-				it != registered_objects_.end(); ++it) {
+            
+			for (std::list<Object*>::const_iterator it = reg_copy.begin();
+				it != reg_copy.end(); ++it) {
 				(*it)->receive_tete(tete);
 			}
 			tete_queue_.pop();

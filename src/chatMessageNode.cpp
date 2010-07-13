@@ -72,7 +72,7 @@ namespace Atelier {
 
         if (!tete.attr()["text"].empty()) {
             text_ = tete.attr()["text"].asString();
-            // update texture
+            generate_texture(); // update texture
         }
     }
 
@@ -85,6 +85,9 @@ namespace Atelier {
     }
 
     void ChatMessageNode::render(RenderDimension dim, RenderPass) {
+        if (text_texture_ == NULL)
+            return;
+
         // For now limit drawing to 2 dimensions
         if (dim == RenderDimension::TWO_D) {
             init_matrix();

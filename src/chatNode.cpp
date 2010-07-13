@@ -13,6 +13,8 @@ namespace Atelier {
         ci::app::console() << "Creating ChatNode" << std::endl;
         active_node_ = NULL;
         container_ = NULL;
+        active_node_identity_ = NULL;
+        unsent_chars_ = false;
     }
 
     ChatNode::~ChatNode() {
@@ -56,47 +58,53 @@ namespace Atelier {
     void ChatNode::update_object_matrix(const Tete& tete) {
     }
 
-    void ChatNode::receive_tete(const Tete& tete) {
-        // Look out for the creation of a new object
-        if (tete.type() == Tete::CREATE && tete.id() == active_node_create_id_) {
-            // Great, now I know it's arrived, when do I grab the object?
-            ci::app::console() << "Removing tete" << std::endl;
-            //TeteManager::instance() -= this; // don't need to listen anymore
-            active_node_create_id_.clear();
-        }
-    }
-
     void ChatNode::activate(const Identity& ident) {
     }
 
+    // This might not be neaded
+    void ChatNode::receive_tete(const Tete& tete) {
+        // Look out for the creation of a new object
+        if (tete.type() == Tete::CREATE && active_node_identity_ != NULL && 
+            tete.id() == active_node_identity_->id()) {
+            // Great, now I know it's arrived, when do I grab the object?
+            TeteManager::instance() -= this; // don't need to listen anymore
+
+            if (unsent_chars_ && active_node_identity_->object() != NULL) {
+                // The identity may not have been created yet, ie only works some of the 
+                // time. Needs some kind of callback mechanism...
+                ChatMessageNode::request_update_text(*active_node_identity_, text_buffer_);
+            }
+        }
+    }
+
+    // TODO: Fix this memory leak from new Link(...)
     bool ChatNode::keyDown(ci::app::KeyEvent event) {
         if (event.getCode() == ci::app::KeyEvent::KEY_RETURN) {
             if (active_node_ != NULL) {
                 // Finish updating and deactivate
                 active_node_ = NULL;
                 text_buffer_.clear();
-                active_node_create_id_.clear();
+                active_node_identity_ = NULL;
             }
         } else {
             text_buffer_ += event.getChar();
+            unsent_chars_ = true;
 
-            if (active_node_create_id_.empty()) {
-                // TODO: Fix this memory leak
-
+            if (active_node_identity_ == NULL) {
                 // Request create a node, but make sure to update it
-                ci::app::console() << "Adding Tete" << std::endl;
                 TeteManager::instance() += this;
-                active_node_create_id_ = Utility::create_uuid();
+                ID create_id_ = Utility::create_uuid();
+                active_node_identity_ = Identity::create_identity(create_id_, NULL);
                 std::deque<Link*> temp_links;
                 /* WTF
                 std::tr1::shared_ptr<Link> temp_link(new Link(&(Client::user_identity()),
 			        LinkFlags(true, true, true)));
+                temp_links.push_back(temp_link.get());
                 */
-                //temp_links.push_back(temp_link.get());
                 temp_links.push_back(new Link(&(Client::user_identity()),
 			        LinkFlags(true, true, true)));
 
-                ChatMessageNode::request_create(active_node_create_id_,
+                ChatMessageNode::request_create(create_id_,
                     *identity(), text_buffer_, temp_links);
 
                 /*
@@ -105,10 +113,12 @@ namespace Atelier {
                     delete *it;
                 }
                 */
-            } else if (active_node_ != NULL) {
+            } else if (active_node_identity_ != NULL && 
+                active_node_identity_->object() != NULL) {
                 // Update the current node, and send an update request
-                ChatMessageNode::request_update_text(*(active_node_->identity()),
+                ChatMessageNode::request_update_text(*active_node_identity_,
                     text_buffer_);
+                unsent_chars_ = false;
             }
         }
 

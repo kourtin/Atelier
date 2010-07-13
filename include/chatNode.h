@@ -41,6 +41,7 @@ namespace Atelier {
         const InteractItem* container_; // The UserNode
         std::string text_buffer_;
         ChatMessageNode* active_node_; // the node you're typing into
-        ID active_node_create_id_;
+        Identity* active_node_identity_;
+        bool unsent_chars_;
     };
 }
