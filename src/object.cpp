@@ -9,9 +9,9 @@ namespace Atelier {
     Object::Object(const ID& new_id) {
         id_ = new_id;
 
-        position_ = Vec3D(0.0, 0.0, 0.0);
-        rotation_ = Vec3D(0.0, 0.0, 0.0);
-        scale_ = Vec3D(1.0, 1.0, 1.0);
+        position_ = Vec3D(0.0f, 0.0f, 0.0f);
+        rotation_ = Vec3D(0.0f, 0.0f, 0.0f);
+        scale_ = Vec3D(1.0f, 1.0f, 1.0f);
 
 		ObjectController::instance() += this;
         Identity::create_identity(id_, this); // registers identity

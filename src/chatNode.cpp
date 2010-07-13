@@ -4,11 +4,15 @@
 #include <chatNode.h>
 #include <client.h>
 #include <link.h>
+#include <teteManager.h>
+#include <utility.h>
+#include <chatMessageNode.h>
 
 namespace Atelier {
     ChatNode::ChatNode(const ID& in_id) : Object(in_id) {
         ci::app::console() << "Creating ChatNode" << std::endl;
         active_node_ = NULL;
+        container_ = NULL;
     }
 
     ChatNode::~ChatNode() {
@@ -53,6 +57,12 @@ namespace Atelier {
     }
 
     void ChatNode::receive_tete(const Tete& tete) {
+        // Look out for the creation of a new object
+        if (tete.type() == Tete::CREATE && tete.id() == active_node_create_id_) {
+            // Great, now I know it's arrived, when do I grab the object?
+            TeteManager::instance() -= this; // don't need to listen anymore
+            active_node_create_id_.clear();
+        }
     }
 
     void ChatNode::activate(const Identity& ident) {
@@ -64,16 +74,23 @@ namespace Atelier {
                 // Finish updating and deactivate
                 active_node_ = NULL;
                 text_buffer_.clear();
+                active_node_create_id_.clear();
             }
         } else {
-            if (active_node_ == NULL) {
-                // Request create a node, but make sure to update it    
-            } else {
+            text_buffer_ += event.getChar();
+
+            if (active_node_create_id_.empty()) {
+                // Request create a node, but make sure to update it
+                TeteManager::instance() += this;
+                active_node_create_id_ = Utility::create_uuid();
+                ChatMessageNode::request_create(active_node_create_id_,
+                    *identity(), text_buffer_, std::deque<Link*>());
+            } else if (active_node_ != NULL) {
                 // Update the current node, and send an update request
+                ChatMessageNode::request_update_text(*(active_node_->identity()),
+                    text_buffer_);
             }
         }
-
-        text_buffer_ += event.getChar();
 
         return false;
     }
