@@ -137,4 +137,12 @@ namespace Atelier {
 		// Send stuff to the network
 		Grids::Interface::instance().send_tete(tete);
 	}
+
+    void GridsNetworkItem::request_update_object(Tete& tete) {
+        Grids::Interface::instance().set_value_from_type(tete, Tete::UPDATE);
+        Grids::Interface::instance().set_value_from_broadcast(tete, true);
+        tete.value()["room_id"] = Client::user_identity().current_room();
+
+        Grids::Interface::instance().send_tete(tete);
+    }
 }

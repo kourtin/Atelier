@@ -60,6 +60,8 @@ namespace Atelier {
 			UserNode* node = new ClientUserNode(tete.id());
 			node->create_object(tete);
 
+            Client::user_identity_->set_object(node);
+
             Client::renderer() += node;
 
 			CameraNode::request_create(node);

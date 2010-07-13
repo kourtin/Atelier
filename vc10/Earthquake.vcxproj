@@ -111,6 +111,7 @@
     <ClInclude Include="..\include\cameraNode.h" />
     <ClInclude Include="..\include\chatMessageNode.h" />
     <ClInclude Include="..\include\chatNode.h" />
+    <ClInclude Include="..\include\chatOrganizer.h" />
     <ClInclude Include="..\include\cinder2DInteractItem.h" />
     <ClInclude Include="..\include\cinder3DInteractItem.h" />
     <ClInclude Include="..\include\cinderGraphicItem.h" />

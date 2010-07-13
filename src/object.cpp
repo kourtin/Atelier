@@ -67,6 +67,15 @@ namespace Atelier {
     }
 
     void Object::create_object(const Tete& tete) {
+        set_matrix_from_tete(tete);
+        // TODO: finish this...
+    }
+
+    void Object::update_object(const Tete& tete) {
+        set_matrix_from_tete(tete);
+    }
+
+    void Object::set_matrix_from_tete(const Tete& tete) {
         if (!tete.value()["pos"].empty()) {
             position_ = Vec3D(tete.value()["pos"][0u].asDouble(),
                 tete.value()["pos"][1u].asDouble(), 
@@ -84,6 +93,5 @@ namespace Atelier {
                 tete.value()["scl"][1u].asDouble(),
                 tete.value()["scl"][2u].asDouble());
         }
-        // TODO: finish this...
     }
 }

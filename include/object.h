@@ -26,8 +26,11 @@ namespace Atelier {
         virtual void set_scale(Vec3D);
 
         virtual void create_object(const Tete&);
+        virtual void update_object(const Tete&);
 
     private:
+        void set_matrix_from_tete(const Tete&);
+
         ID id_;
         std::list<const Identity*> links_;
         Vec3D position_;

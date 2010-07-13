@@ -13,6 +13,7 @@ namespace Atelier {
         virtual void request_create_room(const Value&);
 
 		static void request_create_object(Tete&);
+        static void request_update_object(Tete&);
 
         virtual void request_create_object(Value&);
         virtual void request_create_object(const Vec3D&,

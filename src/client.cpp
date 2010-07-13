@@ -42,7 +42,7 @@ namespace Atelier {
 
         renderer_.init();
 
-        ChatMessageNode* m_node = new ChatMessageNode("lolhi");
+        //ChatMessageNode* m_node = new ChatMessageNode("lolhi");
     }
 
     void Client::update() {

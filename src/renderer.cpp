@@ -94,9 +94,9 @@ namespace Atelier {
     }
 
     void Renderer::draw2d() {
-        glBegin(GL_LINES);
+        //glBegin(GL_LINES);
         draw_items(RenderDimension::TWO_D, GL_LINES);
-        glEnd();
+        //glEnd();
     }
 
     void Renderer::end2d() {

@@ -3,6 +3,7 @@
 #include <tete.h>
 #include <link.h>
 #include <client.h>
+#include <chatNode.h>
 
 namespace Atelier {
 	UserNode::UserNode(const ID& in_id) : Node(in_id) {
@@ -52,6 +53,9 @@ namespace Atelier {
         }
 
         user_name_ = creator->name();
+
+        if (user_name_ == "Eliza")
+            ChatNode::request_create();
 
         layout_ = new ci::TextLayout();
         layout_->setFont(ci::Font("HelveticaNeue", text_size_));
