@@ -26,6 +26,8 @@ namespace Atelier {
 		friend class Tete;
 
 	private:
+        void distribute_update(const Tete&);
+
 		static TeteManager* tete_manager_;
 
 		std::queue<Tete*> tete_queue_;

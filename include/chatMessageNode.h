@@ -47,8 +47,12 @@ namespace Atelier {
         void generate_layout();
 
         std::string text_;
-        ci::gl::Texture* text_texture_;
-        ci::TextLayout* layout_;
+
+        typedef std::tr1::shared_ptr<ci::gl::Texture> TexturePtr;
+        typedef std::tr1::shared_ptr<ci::TextLayout> LayoutPtr;
+
+        TexturePtr text_texture_;
+        LayoutPtr layout_;
         float text_size_;
     };
 }

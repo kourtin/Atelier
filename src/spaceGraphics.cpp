@@ -11,9 +11,11 @@ namespace Atelier {
     SpaceGraphics::~SpaceGraphics() {
     }
 
-    void SpaceGraphics::render(RenderDimension dimension, RenderPass pass) {
-        draw_axis();
-        draw_grid_plane_lines();
+    void SpaceGraphics::render(RenderDimension dim, RenderPass pass) {
+        if (dim == RenderDimension::THREE) {
+            draw_axis();
+            draw_grid_plane_lines();
+        }
     }
 
     void SpaceGraphics::init_line_weights() {

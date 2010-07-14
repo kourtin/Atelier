@@ -125,8 +125,7 @@ namespace Atelier {
 	// Static
 	///////////////////////
 
-	Tete* Tete::create_tete(const LinkList& links, 
-		const Value& val) {
+	Tete* Tete::create_tete(const LinkList& links, const Value& val) {
 		Tete* tete = new Tete(links, val);
 
 		TeteManager::instance().tete_queue_.push(tete);

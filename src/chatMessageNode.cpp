@@ -7,14 +7,15 @@
 #include <tete.h>
 #include <client.h>
 #include <link.h>
+#include <utility.h>
 
 namespace Atelier {
     ChatMessageNode::ChatMessageNode(const ID& in_id) : Node(in_id) {
         //ci::app::console() << "Creating ChatMessageNode" << std::endl;
         text_size_ = 48.0f;
-        text_texture_ = NULL;
-        layout_ = NULL;
         text_ = "";
+
+        set_position(Vec3D(100.f, 100.f, 0.0f));
     }
 
     ChatMessageNode::~ChatMessageNode() {
@@ -36,11 +37,13 @@ namespace Atelier {
         GridsNetworkItem::request_create_object(request);
     }
 
+    // Each update event has a unique update key
     void ChatMessageNode::request_update_text(const Identity& node_ident, 
         const std::string& new_text) {
         Tete request;
 
         request.value()["id"] = node_ident.id();
+        request.attr()["update_key"] = Utility::create_uuid();
         request.attr()["type"] = "ChatMessageNode";
         request.attr()["text"] = new_text;
 
@@ -52,6 +55,7 @@ namespace Atelier {
         Tete request;
 
         request.value()["id"] = node_ident.id();
+        request.attr()["update_key"] = Utility::create_uuid();
         request.attr()["type"] = "ChatMessageNode";
         request.attr()["text"] = final_text;
         request.attr()["finished"] = true;
@@ -60,7 +64,7 @@ namespace Atelier {
     }
 
     Rect ChatMessageNode::bounding_rect() const {
-        if (text_texture_ == NULL)
+        if (text_texture_.get() == NULL)
             return Rect();
 
         float text_width = text_texture_->getWidth();
@@ -111,14 +115,16 @@ namespace Atelier {
     void ChatMessageNode::render(RenderDimension dim, RenderPass) {
         if (text_texture_ == NULL)
             return;
-
+        
         // For now limit drawing to 2 dimensions
-        if (dim == RenderDimension::TWO_D) {
+        if (dim == RenderDimension::TWO) {
             init_matrix();
+            //glBegin(GL_LINES);
+            //glVertex2f(0.0f, 0.0f);
+            //glVertex2f(100.0f, 100.0f);
+            //glEnd();
             draw_text();
             restore_matrix();
-        } else if (dim == RenderDimension::THREE_D) {
-
         }
 	}
 
@@ -156,42 +162,51 @@ namespace Atelier {
 
         glBegin( GL_QUADS );
         glTexCoord2f( 0, 1 );
+        glVertex2f(0.0f, text_texture_->getHeight());
+        /*
         glVertex3f(right.x * perLeft + up.x * perLeft, 
             right.y * perLeft + up.y * perLeft, 
             right.z * perLeft + up.z * perLeft);
+        */
         glTexCoord2f( 1, 1 );
+        glVertex2f(text_texture_->getWidth(), text_texture_->getHeight());
+        /*
         glVertex3f(right.x * perRight + up.x * perLeft, 
             right.y * perRight + up.y * perLeft, 
             right.z * perRight + up.z * perLeft);
+        */
         glTexCoord2f( 1, 0 );
+        glVertex2f(text_texture_->getWidth(), 0.0f);
+        /*
         glVertex3f(right.x * perRight + up.x * perRight, 
             right.y * perRight + up.y * perRight, 
             right.z * perRight + up.z * perRight);
+        */
         glTexCoord2f( 0, 0 );
+        glVertex2f(0.0f, 0.0f);
+        /*
         glVertex3f(right.x * perLeft + up.x * perRight,	
             right.y * perLeft + up.y * perRight, 
             right.z * perLeft + up.z * perRight);
+        */
         glEnd();
         //glDisable( GL_TEXTURE_2D ); // called in draw_text();
     }
 
     void ChatMessageNode::generate_layout() {
-        layout_ = new ci::TextLayout();
+        layout_ = LayoutPtr(new ci::TextLayout());
         layout_->setFont(ci::Font("HelveticaNeue", text_size_));
         layout_->setColor(ci::Color(1, 1, 1));
     }
 
     void ChatMessageNode::generate_texture() {
-        if (layout_ == NULL)
-            generate_layout();
+        generate_layout();
 
-        layout_->clear(ci::ColorA(0.0f, 0.0f, 0.0f, 1.0f));
+        layout_->clear(ci::ColorA());
         layout_->addCenteredLine(text_);
-
-        if (text_texture_ != NULL)
-            delete text_texture_;
-
-        text_texture_ = new ci::gl::Texture(layout_->render(true));
+        
+        text_texture_ = TexturePtr(new ci::gl::Texture(layout_->render(true)));
+        text_texture_->disable(); // Required for bug. TODO: remove
     }
 
     

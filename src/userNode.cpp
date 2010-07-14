@@ -76,11 +76,13 @@ namespace Atelier {
 	void UserNode::receive_tete(const Tete&) {
 	}
 
-	void UserNode::render(RenderDimension, RenderPass) {
-        init_matrix();
-        draw_box();
-        draw_text();
-        restore_matrix();
+	void UserNode::render(RenderDimension dim, RenderPass) {
+        if (dim == RenderDimension::THREE) {
+            init_matrix();
+            draw_box();
+            draw_text();
+            restore_matrix();
+        }
 	}
 
     void UserNode::init_matrix() {

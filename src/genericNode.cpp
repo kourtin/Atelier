@@ -67,11 +67,13 @@ namespace Atelier {
     }
 
     void GenericNode::render(RenderDimension dim, RenderPass pass) {
-        init_matrix();
-        draw_box();
-        draw_text();
-        restore_matrix();
-        draw_aabox();
+        if (dim == RenderDimension::THREE) {
+            init_matrix();
+            draw_box();
+            draw_text();
+            restore_matrix();
+            draw_aabox();
+        }
     }
 
     void GenericNode::init_matrix() {

@@ -39,6 +39,8 @@ namespace Atelier {
 
         void set_type_from_value(const Value&);
 
+        // For create and update events, the ID points to Object being 
+        // created or updated. 
 		const ID& id() const;
 		bool has_matrix() const;
 		Vec3D position() const;

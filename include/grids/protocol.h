@@ -50,7 +50,7 @@ namespace Grids {
         Json::FastWriter* writer_;
 		Json::Reader* reader_;
 
-        static const bool debug_print_ = true;
+        static const bool debug_print_ = false;
 
         bool protocol_initiated_;
         bool protocol_initiated_encrypted_;

@@ -21,8 +21,8 @@ namespace Atelier {
     typedef GLenum RenderPass;
 
     enum RenderDimension {
-        TWO_D,
-        THREE_D
+        TWO,
+        THREE
     };
 
     static char* INVALID_ID = "invalid";

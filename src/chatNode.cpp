@@ -73,8 +73,7 @@ namespace Atelier {
             if (unsent_chars_ && active_node_identity_->object() != NULL) {
                 // The identity may not have been created yet, ie only works some of the 
                 // time. Needs some kind of callback mechanism...
-                ChatMessageNode::request_update_text(*active_node_identity_, 
-                    text_buffer_);
+                ChatMessageNode::request_update_text(*active_node_identity_, text_buffer_);
             }
         }
     }

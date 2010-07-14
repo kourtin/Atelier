@@ -6,6 +6,7 @@
 #include <teteManager.h>
 #include <object.h>
 #include <tete.h>
+#include <objectController.h>
 
 namespace Atelier {
 	TeteManager::TeteManager() {
@@ -32,6 +33,10 @@ namespace Atelier {
 					std::endl;
 			}
             
+            // The object being updated should always receive the update event
+            if (tete.type() == Tete::UPDATE)
+                distribute_update(tete);
+
 			for (std::list<Object*>::const_iterator it = reg_copy.begin();
 				it != reg_copy.end(); ++it) {
 				(*it)->receive_tete(tete);
@@ -39,6 +44,15 @@ namespace Atelier {
 			tete_queue_.pop();
 		}
 	}
+
+    void TeteManager::distribute_update(const Tete& tete) {
+        Object* obj = ObjectController::instance().get_object_from_id(tete.id());
+
+        if(obj == NULL)
+            return;
+
+        obj->update_object(tete);
+    }
 
 	void TeteManager::operator+=(Object* obj) {
 		registered_objects_it_ = find(registered_objects_.begin(),

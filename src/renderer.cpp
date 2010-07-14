@@ -57,9 +57,9 @@ namespace Atelier {
         draw3d();
         end3d();
 
-        //begin2d();
-        //draw2d();
-        //end2d();
+        begin2d();
+        draw2d();
+        end2d();
     }
 
     void Renderer::begin3d() {
@@ -75,7 +75,7 @@ namespace Atelier {
     }
 
     void Renderer::draw3d() {
-        draw_items(THREE_D, GL_LINES);
+        draw_items(RenderDimension::THREE, GL_LINES);
     }
 
     void Renderer::draw_items(RenderDimension dim, GLenum pass) {
@@ -95,7 +95,7 @@ namespace Atelier {
 
     void Renderer::draw2d() {
         //glBegin(GL_LINES);
-        draw_items(RenderDimension::TWO_D, GL_LINES);
+        draw_items(RenderDimension::TWO, GL_LINES);
         //glEnd();
     }
 
