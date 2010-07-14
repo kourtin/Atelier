@@ -40,7 +40,7 @@ namespace Atelier {
 		return flags_;
 	}
 
-	Link* Link::get_link_from_value(const Value& val) {
+	LinkPtr Link::get_link_from_value(const Value& val) {
 		const Identity* ident = Identity::get_identity_from_value(val);
 
 		if (ident == NULL)
@@ -49,7 +49,7 @@ namespace Atelier {
         if (ident == NULL) {
             ci::app::console() << "CRITICAL: unable to create identity for: " << std::endl 
                 << val.toStyledString() << std::endl;
-            return NULL;
+            return LinkPtr();
         }
 
 		bool read_flag = val["read"].asBool();
@@ -57,7 +57,9 @@ namespace Atelier {
 		bool creator_flag = val["creator"].asBool();
 		bool remove_flag = val["remove"].asBool();
 
-		return new Link(ident, LinkFlags(read_flag, modify_flag, 
-			creator_flag, remove_flag));
+        LinkPtr new_link(new Link(ident, LinkFlags(read_flag, modify_flag, 
+			creator_flag, remove_flag)));
+
+		return new_link;
 	}
 }

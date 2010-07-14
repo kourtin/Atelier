@@ -104,13 +104,11 @@ namespace Atelier {
     }
 
 	void CameraNode::request_create(UserNode* node) {
-        //ci::app::console() << "Requesting create camera" << std::endl;
-
 		Tete request;
 		
         const Identity* ident = node->identity();
-        request.links().push_back(new Link(ident,
-			LinkFlags(true, true, true)));
+        LinkPtr ident_link(new Link(ident, LinkFlags(true, true, true)));
+        request.links().push_back(ident_link);
 		request.attr()["type"] = "CameraNode";
 
 		GridsNetworkItem::request_create_object(request);

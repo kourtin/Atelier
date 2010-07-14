@@ -7,6 +7,7 @@
 #include <cinder/gl/Texture.h>
 
 #include <node.h>
+#include <link.h>
 
 namespace Atelier {
     class Link;
@@ -17,8 +18,10 @@ namespace Atelier {
         virtual ~ChatMessageNode();
 
         static void request_create(const ID& req_id, const Identity& chat_ident, 
-            std::string initial_text, const std::deque<Link*>& links);
+            std::string initial_text, const std::deque<LinkPtr>& links);
         static void request_update_text(const Identity& node_ident, 
+            const std::string&);
+        static void request_finish_update(const Identity& node_ident, 
             const std::string&);
 
         std::string type() { return "ChatMessageNode"; }

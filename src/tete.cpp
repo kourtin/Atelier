@@ -25,10 +25,6 @@ namespace Atelier {
     }
 
 	Tete::~Tete() {
-		for (LinkList::const_iterator it = links_.begin();
-			it != links_.end(); ++it) {
-			delete (*it);
-		}
 	}
 
     Tete::Type Tete::type() const {
@@ -155,7 +151,7 @@ namespace Atelier {
 		const LinkList& links = tete.links();
 
 		for(LinkList::const_iterator it = links.begin(); it != links.end(); ++it) {
-			if ((*it)->actor() == ident)
+			if (it->get()->actor() == ident)
 				return true;
 		}
 		return false;
@@ -172,7 +168,7 @@ namespace Atelier {
 		const LinkList& links = tete.links();
 
 		for(LinkList::const_iterator it = links.begin(); it != links.end(); ++it) {
-			if ((*it)->flags().creator) {
+			if (it->get()->flags().creator) {
 				return &((*it)->actor());
             }
 		}

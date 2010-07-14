@@ -207,12 +207,11 @@ namespace Atelier {
 	void GenericNode::request_create_object(Vec3D pos) {
 		Tete request;
 		request.set_position(pos);
-		request.links().push_back(new Link(&(Client::user_identity()),
+        LinkPtr client_link(new Link(&(Client::user_identity()),
 			LinkFlags(true, true, true)));
-		//request.links().push_back(&(Client::user_identity())); // Presumable the user created this
+		request.links().push_back(client_link);
 		request.attr()["type"] = "GenericNode";
 
 		GridsNetworkItem::request_create_object(request);
-		// Maybe send the tete elsewhere
 	}
 }

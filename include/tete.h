@@ -5,13 +5,14 @@
 #include <queue>
 #include <list>
 
-#include "define.h"
+#include <define.h>
+#include <link.h>
 
 namespace Atelier {
 	class Link;
 	class Identity;
 
-	typedef std::list<const Link*> LinkList;
+	typedef std::list<LinkConstPtr> LinkList;
 
     class Tete {
     public:

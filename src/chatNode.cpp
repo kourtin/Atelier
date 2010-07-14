@@ -23,8 +23,9 @@ namespace Atelier {
     void ChatNode::request_create() {
         Tete request;
 
-		request.links().push_back(new Link(&(Client::user_identity()),
+        LinkPtr client_link(new Link(&(Client::user_identity()),
 			LinkFlags(true, true, true)));
+		request.links().push_back(client_link);
 		request.attr()["type"] = "ChatNode";
 
 		GridsNetworkItem::request_create_object(request);
@@ -72,7 +73,8 @@ namespace Atelier {
             if (unsent_chars_ && active_node_identity_->object() != NULL) {
                 // The identity may not have been created yet, ie only works some of the 
                 // time. Needs some kind of callback mechanism...
-                ChatMessageNode::request_update_text(*active_node_identity_, text_buffer_);
+                ChatMessageNode::request_update_text(*active_node_identity_, 
+                    text_buffer_);
             }
         }
     }
@@ -80,8 +82,12 @@ namespace Atelier {
     // TODO: Fix this memory leak from new Link(...)
     bool ChatNode::keyDown(ci::app::KeyEvent event) {
         if (event.getCode() == ci::app::KeyEvent::KEY_RETURN) {
-            if (active_node_ != NULL) {
-                // Finish updating and deactivate
+            if (active_node_identity_ != NULL && 
+                active_node_identity_->object() != NULL) {
+                // Finish updating by sending finished flag and deactivate
+                ChatMessageNode::request_finish_update(*active_node_identity_, 
+                    text_buffer_);
+
                 active_node_ = NULL;
                 text_buffer_.clear();
                 active_node_identity_ = NULL;
@@ -95,24 +101,15 @@ namespace Atelier {
                 TeteManager::instance() += this;
                 ID create_id_ = Utility::create_uuid();
                 active_node_identity_ = Identity::create_identity(create_id_, NULL);
-                std::deque<Link*> temp_links;
-                /* WTF
-                std::tr1::shared_ptr<Link> temp_link(new Link(&(Client::user_identity()),
-			        LinkFlags(true, true, true)));
-                temp_links.push_back(temp_link.get());
-                */
-                temp_links.push_back(new Link(&(Client::user_identity()),
-			        LinkFlags(true, true, true)));
+
+                LinkPtr user_link(new Link(&(Client::user_identity()),
+                    LinkFlags(true, true, true)));
+                std::deque<LinkPtr> temp_links;
+                temp_links.push_back(user_link);
 
                 ChatMessageNode::request_create(create_id_,
                     *identity(), text_buffer_, temp_links);
 
-                /*
-                for (std::deque<Link*>::const_iterator it = temp_links.begin();
-                    it != temp_links.end(); ++it) {
-                    delete *it;
-                }
-                */
             } else if (active_node_identity_ != NULL && 
                 active_node_identity_->object() != NULL) {
                 // Update the current node, and send an update request

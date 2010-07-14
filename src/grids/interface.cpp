@@ -77,9 +77,9 @@ namespace Grids {
             Value& links = val["attr"]["links"];
 
             for (Value::iterator it = links.begin(); it != links.end(); ++it) {
-				const Atelier::Link* link = Atelier::Link::get_link_from_value(*it); 
+				Atelier::LinkConstPtr link = Atelier::Link::get_link_from_value(*it); 
 
-                if (link != NULL)
+                if (link.get() != NULL)
                     link_list.push_back(link);
             }
         }
@@ -163,12 +163,12 @@ namespace Grids {
 		for (Atelier::LinkList::iterator it = links.begin();
 			it != links.end(); ++it) {
 			Value link_value;
-			link_value["id"] = (*it)->actor().id();
-			link_value["name"] = (*it)->actor().name();
-            link_value["read"] = (*it)->flags().can_read;
-            link_value["modify"] = (*it)->flags().can_modify;
-            link_value["creator"] = (*it)->flags().creator;
-            link_value["remove"] = (*it)->flags().remove;
+			link_value["id"] = it->get()->actor().id();
+            link_value["name"] = it->get()->actor().name();
+            link_value["read"] = it->get()->flags().can_read;
+            link_value["modify"] = it->get()->flags().can_modify;
+            link_value["creator"] = it->get()->flags().creator;
+            link_value["remove"] = it->get()->flags().remove;
 
 			val["attr"]["links"].append(link_value);
 		}

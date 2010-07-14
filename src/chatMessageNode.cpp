@@ -21,14 +21,15 @@ namespace Atelier {
     }
 
     void ChatMessageNode::request_create(const ID& req_id, const Identity& chat_ident,
-        std::string initial_text, const std::deque<Link*>& links) {
+        std::string initial_text, const std::deque<LinkPtr>& links) {
         Tete request;
         request.value()["id"] = req_id;
         // request.set_position(organizer_->get_next_position());
-        for(std::deque<Link*>::const_iterator it = links.begin(); it != links.end(); ++it) {
+        for(std::deque<LinkPtr>::const_iterator it = links.begin(); it != links.end(); ++it) {
             request.links().push_back(*it);
         }
-        request.links().push_back(new Link(&chat_ident, LinkFlags(true, true)));
+        LinkPtr chat_link(new Link(&chat_ident, LinkFlags(true, true)));
+        request.links().push_back(chat_link);
         request.attr()["type"] = "ChatMessageNode";
         request.attr()["text"] = initial_text;
 
@@ -36,18 +37,41 @@ namespace Atelier {
     }
 
     void ChatMessageNode::request_update_text(const Identity& node_ident, 
-        const std::string& new_text_) {
+        const std::string& new_text) {
         Tete request;
 
         request.value()["id"] = node_ident.id();
         request.attr()["type"] = "ChatMessageNode";
-        request.attr()["text"] = new_text_;
+        request.attr()["text"] = new_text;
+
+        GridsNetworkItem::request_update_object(request);
+    }
+
+    void ChatMessageNode::request_finish_update(const Identity& node_ident,
+        const std::string& final_text) {
+        Tete request;
+
+        request.value()["id"] = node_ident.id();
+        request.attr()["type"] = "ChatMessageNode";
+        request.attr()["text"] = final_text;
+        request.attr()["finished"] = true;
 
         GridsNetworkItem::request_update_object(request);
     }
 
     Rect ChatMessageNode::bounding_rect() const {
-        return Rect();
+        if (text_texture_ == NULL)
+            return Rect();
+
+        float text_width = text_texture_->getWidth();
+        float text_height = text_texture_->getHeight();
+        float pos_x = position().x;
+        float pos_y = position().y;
+
+        return Rect(pos_x - text_width / 2.0f,
+            pos_y - text_height / 2.0f,
+            pos_x + text_width / 2.0f,
+            pos_y + text_height / 2.0f);
     }
 
     Prism ChatMessageNode::bounding_prism() const {

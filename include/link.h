@@ -25,6 +25,11 @@ namespace Atelier {
 		}
 	};
 
+    class Link;
+
+    typedef std::tr1::shared_ptr<Link> LinkPtr;
+    typedef std::tr1::shared_ptr<const Link> LinkConstPtr;
+
 	class Link {
 	public:
 		Link(const Identity* actor, LinkFlags);
@@ -47,6 +52,8 @@ namespace Atelier {
 	// Static utility methods
 	////////////////////////
 	public:
-		static Link* get_link_from_value(const Value&);
+		static LinkPtr get_link_from_value(const Value&);
 	};
+
+
 }

@@ -22,8 +22,9 @@ namespace Atelier {
 		Tete request;
 	
         request.value()["id"] = req_id;
-		request.links().push_back(new Link(&(Client::user_identity()),
+        LinkPtr client_link(new Link(&(Client::user_identity()),
 			LinkFlags(true, true, true)));
+		request.links().push_back(client_link);
 		request.attr()["type"] = "UserNode";
 
 		GridsNetworkItem::request_create_object(request);

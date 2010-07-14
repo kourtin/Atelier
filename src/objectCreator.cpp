@@ -7,6 +7,7 @@
 #include <client.h>
 #include <userNode.h>
 #include <chatNode.h>
+#include <chatMessageNode.h>
 
 namespace Atelier {
 	ObjectCreator::ObjectCreator() {
@@ -39,6 +40,8 @@ namespace Atelier {
 			created_object = new UserNode(tete.id());
         else if (type == "ChatNode")
             created_object = new ChatNode(tete.id());
+        else if (type == "ChatMessageNode")
+            created_object = new ChatMessageNode(tete.id());
 		else
 			created_object = new GenericNode(tete.id());
 
