@@ -17,6 +17,7 @@ namespace Atelier {
     class Tete;
     class Identity;
 	class UserNode;
+    class Link;
 
     typedef std::tr1::shared_ptr<UserNode> UserNodePtr;
 
@@ -25,7 +26,20 @@ namespace Atelier {
     public:
         CameraNode(const ID&);
 
+        virtual const ID& id();
+
+        virtual std::list<const Link*>& links();
+		virtual const std::list<const Link*>& links() const;
+
         void call_matrix();
+
+        virtual Vec3D position() const;
+        virtual Vec3D rotation() const;
+        virtual Vec3D scale() const;
+
+        virtual void set_position(Vec3D);
+        virtual void set_rotation(Vec3D);
+        virtual void set_scale(Vec3D);
 
         virtual Rect bounding_rect() const;
         virtual Prism bounding_prism() const;

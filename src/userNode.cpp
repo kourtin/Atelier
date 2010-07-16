@@ -43,7 +43,7 @@ namespace Atelier {
 	}
 
 	void UserNode::create_object(const Tete& tete) {
-        Object::create_object(tete);
+        Node::create_object(tete);
 
         const Identity* creator = Tete::get_creator(tete);
 

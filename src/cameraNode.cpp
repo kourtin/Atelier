@@ -25,6 +25,42 @@ namespace Atelier {
         create_camera();
     }
 
+    const ID& CameraNode::id() {
+        return Object::id();
+    }
+
+    std::list<const Link*>& CameraNode::links() {
+        return Object::links();
+    }
+
+	const std::list<const Link*>& CameraNode::links() const {
+        return Object::links();
+    }
+
+    Vec3D CameraNode::position() const {
+        return Object::position();
+    }
+
+    Vec3D CameraNode::rotation() const {
+        return Object::rotation();
+    }
+
+    Vec3D CameraNode::scale() const {
+        return Object::scale();
+    }
+
+    void CameraNode::set_position(Vec3D vec) {
+        Object::set_position(vec);
+    }
+
+    void CameraNode::set_rotation(Vec3D vec) {
+        Object::set_rotation(vec);
+    }
+    
+    void CameraNode::set_scale(Vec3D vec) {
+        Object::set_scale(vec);
+    }
+
     void CameraNode::call_matrix() {
         ci::gl::setMatrices(cam_->getCamera());
     }

@@ -87,7 +87,7 @@ namespace Atelier {
     }
 
     void ChatMessageNode::create_object(const Tete& tete) {
-        Object::create_object(tete);
+        Node::create_object(tete);
 
         text_ = tete.attr()["text"].asString();
 

@@ -34,6 +34,26 @@ namespace Atelier {
 		return Object::scale();
 	}
 
+    void Node2D::set_position(Vec3D vec) {
+        Object::set_position(vec);
+    }
+
+    void Node2D::set_rotation(Vec3D vec) {
+        Object::set_rotation(vec);
+    }
+    
+    void Node2D::set_scale(Vec3D vec) {
+        Object::set_scale(vec);
+    }
+    
+	void Node2D::create_object(const Tete& tete) {
+        Object::create_object(tete);
+	}
+
+	void Node2D::update_object(const Tete& tete) {
+        Object::update_object(tete);
+	}
+
 	const InteractItem& Node2D::container() {
 		return *container_;
 	}
@@ -41,4 +61,8 @@ namespace Atelier {
 	void Node2D::set_container(InteractItem& item) {
 		container_ = &item;
 	}
+
+    void Node2D::activate(const Identity& ident) {
+        GridsNetworkItem::activate(ident);
+    }
 }

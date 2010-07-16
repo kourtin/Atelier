@@ -185,7 +185,7 @@ namespace Atelier {
     }
 
     void GenericNode::create_object(const Tete& tete) {
-        Object::create_object(tete);
+        Node::create_object(tete);
 
 		if (tete.has_matrix()) {
 			set_position(tete.position());

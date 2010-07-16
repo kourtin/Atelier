@@ -24,6 +24,15 @@ namespace Atelier {
         virtual Vec3D rotation() const;
         virtual Vec3D scale() const;
 
+        virtual void set_position(Vec3D);
+        virtual void set_rotation(Vec3D);
+        virtual void set_scale(Vec3D);
+
+        virtual void create_object(const Tete&);
+        virtual void update_object(const Tete&);
+
+        void activate(const Identity&);
+
 	private:
 		InteractItem* container_;
 	};

@@ -19,6 +19,19 @@ namespace Atelier {
         ChatNode(const ID&);
         virtual ~ChatNode();
 
+        virtual const ID& id();
+
+        virtual std::list<const Link*>& links();
+		virtual const std::list<const Link*>& links() const;
+
+        virtual Vec3D position() const;
+        virtual Vec3D rotation() const;
+        virtual Vec3D scale() const;
+
+        virtual void set_position(Vec3D);
+        virtual void set_rotation(Vec3D);
+        virtual void set_scale(Vec3D);
+
         std::string type() { return "ChatNode"; }
 
         static void request_create();

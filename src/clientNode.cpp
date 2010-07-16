@@ -40,13 +40,49 @@ namespace Atelier {
 		}
 	}
 
-	void ClientNode::create_object(const Tete& tete) {
+    const ID& ClientNode::id() {
+        return Object::id();
+    }
+
+    std::list<const Link*>& ClientNode::links() {
+        return Object::links();
+    }
+
+	const std::list<const Link*>& ClientNode::links() const {
+        return Object::links();
+    }
+
+    Vec3D ClientNode::position() const {
+        return Object::position();
+    }
+
+    Vec3D ClientNode::rotation() const {
+        return Object::rotation();
+    }
+
+    Vec3D ClientNode::scale() const {
+        return Object::scale();
+    }
+
+    void ClientNode::set_position(Vec3D vec) {
+        Object::set_position(vec);
+    }
+
+    void ClientNode::set_rotation(Vec3D vec) {
+        Object::set_rotation(vec);
+    }
+    
+    void ClientNode::set_scale(Vec3D vec) {
+        Object::set_scale(vec);
+    }
+
+	void ClientNode::create_object(const Tete&) {
 	}
 
-	void ClientNode::update_object(const Tete& tete) {
+	void ClientNode::update_object(const Tete&) {
 	}
 
-	void ClientNode::update_object_matrix(const Tete& tete) {
+	void ClientNode::update_object_matrix(const Tete&) {
 	}
 
 	void ClientNode::parse_create_tete(const Tete& tete) {
@@ -112,6 +148,10 @@ namespace Atelier {
 		//	return;
 		Grids::Interface::instance().request_list_rooms();
 	}
+
+    void ClientNode::activate(const Identity& ident) {
+        GridsNetworkItem::activate(ident);
+    }
 
 
 }

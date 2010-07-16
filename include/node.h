@@ -29,6 +29,8 @@ namespace Atelier {
         virtual std::list<const Link*>& links();
 		virtual const std::list<const Link*>& links() const;
 
+        virtual void create_object(const Tete&);
+
         virtual void update_object(const Tete&);
     };
 }

@@ -19,6 +19,10 @@ namespace Atelier {
     ChatNode::~ChatNode() {
     }
 
+    const ID& ChatNode::id() {
+        return Object::id();
+    }
+
     void ChatNode::request_create() {
         Tete request;
 
@@ -51,6 +55,38 @@ namespace Atelier {
         }
 
         container_ = item;
+    }
+
+    std::list<const Link*>& ChatNode::links() {
+        return Object::links();
+    }
+
+	const std::list<const Link*>& ChatNode::links() const {
+        return Object::links();
+    }
+
+    Vec3D ChatNode::position() const {
+        return Object::position();
+    }
+
+    Vec3D ChatNode::rotation() const {
+        return Object::rotation();
+    }
+
+    Vec3D ChatNode::scale() const {
+        return Object::scale();
+    }
+
+    void ChatNode::set_position(Vec3D vec) {
+        Object::set_position(vec);
+    }
+
+    void ChatNode::set_rotation(Vec3D vec) {
+        Object::set_rotation(vec);
+    }
+    
+    void ChatNode::set_scale(Vec3D vec) {
+        Object::set_scale(vec);
     }
 
     void ChatNode::update_object(const Tete& tete) {

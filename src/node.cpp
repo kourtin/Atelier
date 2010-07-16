@@ -53,4 +53,8 @@ namespace Atelier {
         Object::update_object(tete);
     }
 
+    void Node::create_object(const Tete& tete) {
+        Object::create_object(tete);
+    }
+
 }
