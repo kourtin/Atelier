@@ -28,7 +28,7 @@ namespace Atelier {
         is_valid_ = true;
     }
 
-    Identity::Identity(const ID& new_id, Object* object) {
+    Identity::Identity(const ID& new_id, ObjectPtr object) {
         id_ = new_id;
         object_ = object;
         is_local_ = object_ != NULL;
@@ -39,15 +39,16 @@ namespace Atelier {
     }
 
     // See Meyers Item #3 for explanation of this code
-    Object* Identity::object() {
-        return const_cast<Object*>(static_cast<const Identity&>(*this).object());
+    ObjectPtr Identity::object() {
+        //return const_cast<Object*>(static_cast<const Identity&>(*this).object());
+        return is_valid_ ? object_ : ObjectPtr();
     }
 
-    const Object* Identity::object() const {
-        return is_valid_ ? object_ : NULL;
+    const ObjectPtr Identity::object() const {
+        return is_valid_ ? object_ : ObjectPtr();
     }
 
-    void Identity::set_object(Object* obj) {
+    void Identity::set_object(ObjectPtr obj) {
         assert(obj);
         assert(id_ == obj->id());
         object_ = obj;
@@ -62,8 +63,8 @@ namespace Atelier {
     void Identity::set_id(const ID& new_id) {
         id_ = new_id;
 
-        Object* temp_object = ObjectController::instance().get_object_from_id(new_id);
-        if(temp_object && object_)
+        ObjectPtr temp_object = ObjectController::instance().get_object_from_id(new_id);
+        if(temp_object.get() && object_.get())
             assert(temp_object == object_);
 
         temp_object ? is_local_ = true : is_local_ = false;
@@ -174,7 +175,7 @@ namespace Atelier {
         return IdentityManager::instance().id_identity_ptr_map_iterator_->second;
     }
 
-    Identity* Identity::create_identity(ID& in_id, Object* obj) {
+    Identity* Identity::create_identity(ID& in_id, ObjectPtr obj) {
         if (in_id.empty())
             return NULL;
 

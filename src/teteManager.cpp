@@ -19,10 +19,10 @@ namespace Atelier {
 		return *tete_manager_;
 	}
 
-	// this probably shouldn't block
+	// this probably shouldn't block, or should run in a background thread
 	void TeteManager::update() {
         // receive_tete may try to modify registered_objects_. Guard against it
-        std::list<Object*> reg_copy = registered_objects_;
+        std::list<ObjectPtr> reg_copy = registered_objects_;
 
 		while (!tete_queue_.empty()) {
 			const Tete& tete = *(tete_queue_.front());
@@ -37,7 +37,7 @@ namespace Atelier {
             if (tete.type() == Tete::UPDATE)
                 distribute_update(tete);
 
-			for (std::list<Object*>::const_iterator it = reg_copy.begin();
+			for (std::list<ObjectPtr>::const_iterator it = reg_copy.begin();
 				it != reg_copy.end(); ++it) {
 				(*it)->receive_tete(tete);
 			}
@@ -46,15 +46,15 @@ namespace Atelier {
 	}
 
     void TeteManager::distribute_update(const Tete& tete) {
-        Object* obj = ObjectController::instance().get_object_from_id(tete.id());
+        ObjectPtr obj = ObjectController::instance().get_object_from_id(tete.id());
 
-        if(obj == NULL)
+        if(obj.get() == NULL)
             return;
 
         obj->update_object(tete);
     }
 
-	void TeteManager::operator+=(Object* obj) {
+	void TeteManager::operator+=(ObjectPtr obj) {
 		registered_objects_it_ = find(registered_objects_.begin(),
 			registered_objects_.end(), obj);
 
@@ -62,7 +62,7 @@ namespace Atelier {
 			registered_objects_.push_back(obj);
 	}
 
-	void TeteManager::operator-=(Object* obj) {
+	void TeteManager::operator-=(ObjectPtr obj) {
 		registered_objects_it_ = find(registered_objects_.begin(),
 			registered_objects_.end(), obj);
 

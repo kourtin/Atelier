@@ -17,38 +17,38 @@ namespace Atelier {
     void Renderer::init() {
     }
 
-    void Renderer::set_camera(CameraNode* cam) {
+    void Renderer::set_camera(CameraNodePtr cam) {
         camera_ = cam;
     }
-
+    /*
     void Renderer::operator+=(GraphicItem& item) {
         add_item(item);
     }
-
-    void Renderer::operator+=(GraphicItem* item) {
+    */
+    void Renderer::operator+=(GraphicItemPtr item) {
         add_item(item);
     }
-
+    /*
     void Renderer::operator-=(GraphicItem& item) {
         remove_item(&item);
     }
-
-    void Renderer::operator-=(GraphicItem* item) {
+    */
+    void Renderer::operator-=(GraphicItemPtr item) {
         remove_item(item);
     }
 
-    void Renderer::add_item(GraphicItem* item) {
-        if(item == NULL)
+    void Renderer::add_item(GraphicItemPtr item) {
+        if(item.get() == NULL)
             return;
 
         items_.push_back(item);
     }
-
+    /*
     void Renderer::add_item(GraphicItem& item) {
         add_item(&item);
     }
-
-    void Renderer::remove_item(GraphicItem* item) {
+    */
+    void Renderer::remove_item(GraphicItemPtr item) {
         // TODO: write this
     }
 
@@ -79,7 +79,7 @@ namespace Atelier {
     }
 
     void Renderer::draw_items(RenderDimension dim, GLenum pass) {
-        for (std::vector<GraphicItem*>::const_iterator it = items_.begin(); it != items_.end(); ++it) {
+        for (std::vector<GraphicItemPtr>::const_iterator it = items_.begin(); it != items_.end(); ++it) {
             (*it)->render(dim, pass);
         }
 
@@ -114,12 +114,12 @@ namespace Atelier {
     }
 
     void Renderer::call_camera_matrix() {
-        if(camera_)
+        if(camera_.get())
             camera_->call_matrix();
     }
 
     void Renderer::update() {
-		if (camera_ == NULL)
+		if (camera_.get() == NULL)
 			return;
 
         camera_->cam()->getCamera().getBillboardVectors(&billboard_right_, &billboard_up_);

@@ -9,6 +9,7 @@
 #include <objectCreator.h>
 #include <grids/interface.h>
 #include <clientUserNode.h>
+#include <identity.h>
 
 namespace Atelier {
 	ClientNode::ClientNode(const ID& new_id) : Object(new_id) {
@@ -57,20 +58,27 @@ namespace Atelier {
 		// Listen for UserNode
 		// Create CameraNode
 		if (type == "UserNode") {
-			UserNode* node = new ClientUserNode(tete.id());
+			UserNodePtr node(new ClientUserNode(tete.id()));
 			node->create_object(tete);
 
             Client::user_identity_->set_object(node);
 
             Client::renderer() += node;
 
+            ObjectController::instance() += node;
+            Identity::create_identity(id, node);
+
 			CameraNode::request_create(node);
 		} else if (type == "CameraNode") {
-			CameraNode* cam_node = new CameraNode(tete.id());
+			CameraNodePtr cam_node(new CameraNode(tete.id()));
 			cam_node->create_object(tete);
 
 			Client::renderer().set_camera(cam_node);
-			Client::set_active_camera(cam_node);
+			Client::set_active_camera(cam_node.get());
+
+            ObjectController::instance() += cam_node;
+            Identity::create_identity(tete.id(), cam_node);
+
 			// Everything has been created, we don't need to listen for any more tetes
 			initializing_ = false;
 		}

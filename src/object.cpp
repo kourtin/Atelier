@@ -1,4 +1,7 @@
 
+#include <boost/thread/locks.hpp>
+#include <boost/thread/mutex.hpp>
+
 #include <object.h>
 #include <objectController.h>
 #include <identity.h>
@@ -13,49 +16,88 @@ namespace Atelier {
         rotation_ = Vec3D(0.0f, 0.0f, 0.0f);
         scale_ = Vec3D(1.0f, 1.0f, 1.0f);
 
-		ObjectController::instance() += this;
-        Identity::create_identity(id_, this); // registers identity
+		//ObjectController::instance() += this;
+        //Identity::create_identity(id_, this); // registers identity
     }
 
     Object::~Object() {
-		ObjectController::instance() -= this;
+		//ObjectController::instance() -= this;
     }
 
     const ID& Object::id() {
         return id_;
     }
 
-	std::list<const Identity*>& Object::links() {
+	std::list<const Link*>& Object::links() {
 		return links_;
 	}
 
-    const std::list<const Identity*>& Object::links() const {
+    const std::list<const Link*>& Object::links() const {
 		return links_;
     }
 
     Vec3D Object::position() const {
+        ScopedLock l(position_mutex_);
         return position_;
     }
 
     Vec3D Object::rotation() const {
+        ScopedLock l(rotation_mutex_);
         return rotation_;
     }
 
     Vec3D Object::scale() const {
+        ScopedLock l(scale_mutex_);
         return scale_;
     }
 
     void Object::set_position(Vec3D vec) {
+        ScopedLock l(position_mutex_);
         position_ = vec;
     }
 
     void Object::set_rotation(Vec3D vec) {
+        ScopedLock l(rotation_mutex_);
         rotation_ = vec;
     }
 
     void Object::set_scale(Vec3D vec) {
+        ScopedLock l(scale_mutex_);
         scale_ = vec;
     }
+
+    void Object::lock_position() const {
+        position_mutex_.lock();
+    }
+
+    void Object::lock_rotation() const {
+        rotation_mutex_.lock();
+    }
+
+    void Object::lock_scale() const {
+        scale_mutex_.lock();
+    }
+
+    void Object::unlock_position() const {
+        position_mutex_.unlock();
+    }
+
+    void Object::unlock_rotation() const {
+        rotation_mutex_.unlock();
+    }
+
+    void Object::unlock_scale() const {
+        scale_mutex_.unlock();
+    }
+
+    void Object::lock_links() const {
+        links_mutex_.lock();
+    }
+
+    void Object::unlock_links() const {
+        links_mutex_.unlock();
+    }
+
     /*
     Identity* Object::identity() {
         Identity::get_identity_or_create(this);

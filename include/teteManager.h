@@ -12,6 +12,8 @@ namespace Atelier {
 	class Tete;
 	class Object;
 
+    typedef std::tr1::shared_ptr<Object> ObjectPtr;
+
 	class TeteManager {
 	public:
 		TeteManager();
@@ -20,8 +22,8 @@ namespace Atelier {
 
 		void update();
 
-		void operator+=(Object* obj); // register object for Tete delivery
-		void operator-=(Object* obj); // unregister object
+		void operator+=(ObjectPtr obj); // register object for Tete delivery
+		void operator-=(ObjectPtr obj); // unregister object
 
 		friend class Tete;
 
@@ -31,7 +33,7 @@ namespace Atelier {
 		static TeteManager* tete_manager_;
 
 		std::queue<Tete*> tete_queue_;
-		std::list<Object*> registered_objects_;
-		std::list<Object*>::const_iterator registered_objects_it_;
+		std::list<ObjectPtr> registered_objects_;
+		std::list<ObjectPtr>::const_iterator registered_objects_it_;
 	};
 }

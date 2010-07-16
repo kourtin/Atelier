@@ -156,6 +156,7 @@
     <ClCompile Include="..\src\cameraNode.cpp" />
     <ClCompile Include="..\src\chatMessageNode.cpp" />
     <ClCompile Include="..\src\chatNode.cpp" />
+    <ClCompile Include="..\src\chatOrganizer.cpp" />
     <ClCompile Include="..\src\cinder2DInteractItem.cpp" />
     <ClCompile Include="..\src\cinder3DInteractItem.cpp" />
     <ClCompile Include="..\src\cinderGraphicItem.cpp" />

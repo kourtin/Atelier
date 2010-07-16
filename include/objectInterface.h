@@ -13,13 +13,14 @@
 namespace Atelier {
     class Identity;
     class Tete;
+    class Link;
 
     class ObjectInterface {
     public:
         virtual const ID& id() = 0;
 
-		virtual std::list<const Identity*>& links() = 0;
-        virtual const std::list<const Identity*>& links() const = 0;
+		virtual std::list<const Link*>& links() = 0;
+        virtual const std::list<const Link*>& links() const = 0;
 
 		virtual std::string type() = 0;
 

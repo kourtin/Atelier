@@ -103,7 +103,7 @@ namespace Atelier {
     void CameraNode::request_update_object(const Value&) {
     }
 
-	void CameraNode::request_create(UserNode* node) {
+	void CameraNode::request_create(UserNodePtr node) {
 		Tete request;
 		
         const Identity* ident = node->identity();

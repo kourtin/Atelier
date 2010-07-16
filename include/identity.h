@@ -29,24 +29,25 @@
 
 #include <map>
 
-#include "define.h"
+#include <define.h>
 
 namespace Atelier {
     class Object;
+    typedef std::tr1::shared_ptr<Object> ObjectPtr;
 
     class Identity {
         // Use create_identity to create an identity
     private:  
         Identity();
         Identity(const ID&);
-        Identity(const ID&, Object*);
+        Identity(const ID&, ObjectPtr);
 
     public:
         ~Identity();
 
-        Object* object();
-        const Object* object() const;
-        void set_object(Object*);
+        ObjectPtr object();
+        const ObjectPtr object() const;
+        void set_object(ObjectPtr);
         const ID& id() const;
         void set_id(const ID&);
         const ID& current_room() const;
@@ -66,7 +67,7 @@ namespace Atelier {
 		bool operator!=(const Identity& ident) const;
 
     private:
-        Object* object_;
+        ObjectPtr object_;
         ID id_;
         ID current_room_;
         std::string name_;
@@ -82,7 +83,7 @@ namespace Atelier {
         static const Identity* get_identity_from_value(const Value&);
         static const Identity* get_identity_from_id(const ID&);
         // Use this when you have an Object* for the Identity
-        static Identity* create_identity(ID&, Object*);
+        static Identity* create_identity(ID&, ObjectPtr);
         // Use this when you only have the ID and/or name of the Object
         static Identity* create_identity(const Value&);
 

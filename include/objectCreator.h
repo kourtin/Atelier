@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <object.h>
+
 namespace Atelier {
 	class Object;
 	class Tete;
@@ -21,8 +23,8 @@ namespace Atelier {
 
 		// Note: these methods should not be considered time-critical
 		void receive_tete(const Tete&);
-		Object* create_object(const Tete&);
-		Object* update_object(const Tete&);
+		ObjectPtr create_object(const Tete&);
+		void update_object(const Tete&);
 
 	private:
 		static ObjectCreator* instance_;

@@ -8,14 +8,14 @@ namespace Atelier {
         instance_ = this;
     }
     
-    Object* ObjectController::get_object_from_id(const ID& in_id) const {
-        std::map<ID, Object*>::const_iterator it = id_object_map_.find(in_id);
+    ObjectPtr ObjectController::get_object_from_id(const ID& in_id) const {
+        std::map<ID, ObjectPtr>::const_iterator it = id_object_map_.find(in_id);
 
         return it == id_object_map_.end() ? NULL : 
             it->second;
     }
 
-	Object* ObjectController::operator[](const ID& in_id) const {
+	ObjectPtr ObjectController::operator[](const ID& in_id) const {
 		return get_object_from_id(in_id);
 	}
 
@@ -25,7 +25,7 @@ namespace Atelier {
         return *instance_;
     }
 
-	void ObjectController::operator+=(Object* obj) {
+	void ObjectController::operator+=(ObjectPtr obj) {
 		// Check if the object has already been registered
 		id_object_map_it_ = id_object_map_.find(obj->id());
 
@@ -35,7 +35,7 @@ namespace Atelier {
 		id_object_map_[obj->id()] = obj;
 	}
 
-	void ObjectController::operator-=(Object* obj) {
+	void ObjectController::operator-=(ObjectPtr obj) {
 		id_object_map_it_ = id_object_map_.find(obj->id());
 
 		if (id_object_map_it_ == id_object_map_.end())

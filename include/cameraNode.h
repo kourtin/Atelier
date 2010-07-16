@@ -18,6 +18,8 @@ namespace Atelier {
     class Identity;
 	class UserNode;
 
+    typedef std::tr1::shared_ptr<UserNode> UserNodePtr;
+
     class CameraNode : public Object, public Cinder3DInteractItem,
         public CinderGraphicItem, public GridsNetworkItem {
     public:
@@ -43,7 +45,7 @@ namespace Atelier {
 
 		virtual std::string type() { return "CameraNode"; }
 
-		static void request_create(UserNode*);
+		static void request_create(UserNodePtr);
 
         virtual void request_create_object(const Value&);
         virtual void request_update_object(const Value&);
@@ -57,4 +59,6 @@ namespace Atelier {
         float zoom_speed_;
         float far_clip_;
     };
+
+    typedef std::tr1::shared_ptr<CameraNode> CameraNodePtr;
 }

@@ -44,4 +44,6 @@ namespace Atelier {
 
         std::string user_name_;
 	};
+
+    typedef std::tr1::shared_ptr<UserNode> UserNodePtr;
 }

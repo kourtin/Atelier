@@ -16,4 +16,6 @@ namespace Atelier {
         virtual AABox bounding_aabox() const;
         virtual void render(RenderDimension, RenderPass);
     };
+
+    typedef std::tr1::shared_ptr<CinderGraphicItem> CinderGraphicItemPtr;
 }

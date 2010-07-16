@@ -13,20 +13,23 @@ namespace Atelier {
     class CameraNode;
     class StaticGraphicItem;
 
+    typedef std::tr1::shared_ptr<GraphicItem> GraphicItemPtr;
+    typedef std::tr1::shared_ptr<CameraNode> CameraNodePtr;
+
     class Renderer {
     public:
         Renderer();
 
         void init();
 
-        void set_camera(CameraNode*);
-        void add_item(GraphicItem*);
-        void add_item(GraphicItem&);
-        void remove_item(GraphicItem*);
-        void operator+=(GraphicItem&);
-        void operator+=(GraphicItem*);
-        void operator-=(GraphicItem&);
-        void operator-=(GraphicItem*);
+        void set_camera(CameraNodePtr);
+        void add_item(GraphicItemPtr);
+        //void add_item(GraphicItem&);
+        void remove_item(GraphicItemPtr);
+        //void operator+=(GraphicItem&);
+        void operator+=(GraphicItemPtr);
+        //void operator-=(GraphicItem&);
+        void operator-=(GraphicItemPtr);
 
         void update(); // Should be called after the camera node is updated 
         void render();
@@ -51,9 +54,9 @@ namespace Atelier {
 
         void draw_items(RenderDimension, GLenum);
 
-        std::vector<GraphicItem*> items_;
+        std::vector<GraphicItemPtr> items_;
         std::vector<StaticGraphicItem*> static_items_;
-        CameraNode* camera_;
+        CameraNodePtr camera_;
         Vec3D billboard_right_;
         Vec3D billboard_up_;
     };

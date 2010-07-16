@@ -14,11 +14,11 @@ namespace Atelier {
 		return Object::id();
 	}
 
-	std::list<const Identity*>& Node2D::links() {
+	std::list<const Link*>& Node2D::links() {
 		return Object::links();
 	}
 
-	const std::list<const Identity*>& Node2D::links() const {
+	const std::list<const Link*>& Node2D::links() const {
 		return Object::links();
 	}
 

@@ -12,7 +12,6 @@ namespace Atelier {
     ChatNode::ChatNode(const ID& in_id) : Object(in_id) {
         ci::app::console() << "Creating ChatNode" << std::endl;
         active_node_ = NULL;
-        container_ = NULL;
         active_node_identity_ = NULL;
         unsent_chars_ = false;
     }
@@ -34,17 +33,18 @@ namespace Atelier {
     void ChatNode::create_object(const Tete& tete) {
         Object::create_object(tete);
 
-        const Object* obj = Client::user_identity().object();
+        const ObjectPtr obj = Client::user_identity().object();
 
-        if (obj == NULL) {
+        if (obj.get() == NULL) {
             ci::app::console() << "CRITICAL: unable to get UserNode for client" <<
                 std::endl;
             return;
         }
         
-        const InteractItem* item = dynamic_cast<const InteractItem*>(obj);
+        const std::tr1::shared_ptr<InteractItem> item = 
+            std::dynamic_pointer_cast<InteractItem>(obj);
 
-        if (item == NULL) {
+        if (item.get() == NULL) {
             ci::app::console() << "CRITICAL: unable to get UserNode for client" <<
                 std::endl;
             return;
@@ -68,7 +68,7 @@ namespace Atelier {
         if (tete.type() == Tete::CREATE && active_node_identity_ != NULL && 
             tete.id() == active_node_identity_->id()) {
             // Great, now I know it's arrived, when do I grab the object?
-            TeteManager::instance() -= this; // don't need to listen anymore
+                TeteManager::instance() -= ObjectController::instance()[id()]; // don't need to listen anymore
 
             if (unsent_chars_ && active_node_identity_->object() != NULL) {
                 // The identity may not have been created yet, ie only works some of the 
@@ -97,7 +97,7 @@ namespace Atelier {
 
             if (active_node_identity_ == NULL) {
                 // Request create a node, but make sure to update it
-                TeteManager::instance() += this;
+                TeteManager::instance() += ObjectController::instance()[id()];
                 ID create_id_ = Utility::create_uuid();
                 active_node_identity_ = Identity::create_identity(create_id_, NULL);
 
