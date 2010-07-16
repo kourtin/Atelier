@@ -20,5 +20,15 @@ namespace Atelier {
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;
         virtual Vec3D scale() const;
+
+        virtual void set_position(Vec3D);
+        virtual void set_rotation(Vec3D);
+        virtual void set_scale(Vec3D);
+
+        virtual void activate(const Identity&);
+        virtual std::list<const Link*>& links();
+		virtual const std::list<const Link*>& links() const;
+
+        virtual void update_object(const Tete&);
     };
 }

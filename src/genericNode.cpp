@@ -67,7 +67,7 @@ namespace Atelier {
     }
 
     void GenericNode::render(RenderDimension dim, RenderPass pass) {
-        if (dim == RenderDimension::THREE) {
+        if (dim == THREE) {
             init_matrix();
             draw_box();
             draw_text();
@@ -128,8 +128,8 @@ namespace Atelier {
     }
 
     void GenericNode::draw_text_billboard() {
-        float w = text_.getWidth();
-        float h = text_.getHeight();
+        float w = static_cast<float>(text_.getWidth());
+        float h = static_cast<float>(text_.getHeight());
 
         Vec3D right;
         Vec3D up;
@@ -163,8 +163,8 @@ namespace Atelier {
     }
 
     void GenericNode::draw_text_static() {
-        float w = text_.getWidth();
-        float h = text_.getHeight();
+        float w = static_cast<float>(text_.getWidth());
+        float h = static_cast<float>(text_.getHeight());
 
         glBegin( GL_QUADS );
         glTexCoord2f( 0, 1 );

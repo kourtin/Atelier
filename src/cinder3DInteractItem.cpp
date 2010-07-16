@@ -23,7 +23,7 @@ namespace Atelier {
         float cam_y = static_cast<float>(mouse_event.getY()) / 
             static_cast<float>(Client::app().getWindowHeight());
 
-        cam_y = 1.0 - cam_y; // TODO: why do I need to do this? Is this a bug?
+        cam_y = 1.0f - cam_y; // TODO: why do I need to do this? Is this a bug?
         
         // NOTE: make sure the camera has the proper aspect ratio set
         ci::Ray ray = Client::active_camera().cam()->getCamera().generateRay(cam_x, cam_y, Client::app().getWindowAspectRatio());

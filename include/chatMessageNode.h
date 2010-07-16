@@ -1,8 +1,6 @@
 
 #pragma once
 
-
-
 #include <cinder/Text.h>
 #include <cinder/gl/Texture.h>
 
@@ -55,4 +53,6 @@ namespace Atelier {
         LayoutPtr layout_;
         float text_size_;
     };
+
+    typedef std::tr1::shared_ptr<ChatMessageNode> ChatMessageNodePtr;
 }

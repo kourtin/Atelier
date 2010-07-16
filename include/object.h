@@ -16,12 +16,12 @@ namespace Atelier {
         virtual ~Object();
 
         const ID& id();
-		std::list<const Link*>& links();
-		const std::list<const Link*>& links() const;
+		virtual std::list<const Link*>& links();
+		virtual const std::list<const Link*>& links() const;
         // A more thread-safe method
-        std::vector<Link> links_copy() const;
+        virtual std::deque<Link> links_copy() const;
         //Identity* identity();
-        const Identity* identity() const;
+        virtual const Identity* identity() const;
 
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;
@@ -35,14 +35,14 @@ namespace Atelier {
         virtual void update_object(const Tete&);
 
         // Thread utility methods
-        void lock_position() const;
-        void unlock_position() const;
-        void lock_rotation() const;
-        void unlock_rotation() const;
-        void lock_scale() const;
-        void unlock_scale() const;
-        void lock_links() const;
-        void unlock_links() const;
+        virtual void lock_position() const;
+        virtual void unlock_position() const;
+        virtual void lock_rotation() const;
+        virtual void unlock_rotation() const;
+        virtual void lock_scale() const;
+        virtual void unlock_scale() const;
+        virtual void lock_links() const;
+        virtual void unlock_links() const;
 
     private:
         void set_matrix_from_tete(const Tete&);

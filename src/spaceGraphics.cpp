@@ -12,7 +12,7 @@ namespace Atelier {
     }
 
     void SpaceGraphics::render(RenderDimension dim, RenderPass pass) {
-        if (dim == RenderDimension::THREE) {
+        if (dim == THREE) {
             draw_axis();
             draw_grid_plane_lines();
         }

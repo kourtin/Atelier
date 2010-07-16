@@ -24,4 +24,33 @@ namespace Atelier {
     Vec3D Node::scale() const {
         return Object::scale();
     }
+
+    void Node::set_position(Vec3D vec) {
+        Object::set_position(vec);
+    }
+
+    void Node::set_rotation(Vec3D vec) {
+        Object::set_rotation(vec);
+    }
+    
+    void Node::set_scale(Vec3D vec) {
+        Object::set_scale(vec);
+    }
+
+    void Node::activate(const Identity& ident) {
+        GridsNetworkItem::activate(ident);
+    }
+
+    std::list<const Link*>& Node::links() {
+        return Object::links();
+    }
+
+	const std::list<const Link*>& Node::links() const {
+        return Object::links();
+    }
+
+    void Node::update_object(const Tete& tete) {
+        Object::update_object(tete);
+    }
+
 }

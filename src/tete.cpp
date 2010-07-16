@@ -81,18 +81,24 @@ namespace Atelier {
 	}
 
 	Vec3D Tete::position() const {
-		return Vec3D(value_["pos"][0u].asDouble(), value_["pos"][1u].asDouble(),
-			value_["pos"][2u].asDouble());
+		return Vec3D(
+            static_cast<float>(value_["pos"][0u].asDouble()), 
+            static_cast<float>(value_["pos"][1u].asDouble()),
+			static_cast<float>(value_["pos"][2u].asDouble()));
 	}
 
 	Vec3D Tete::rotation() const {
-		return Vec3D(value_["rot"][0u].asDouble(), value_["rot"][1u].asDouble(),
-			value_["rot"][2u].asDouble());
+		return Vec3D(
+            static_cast<float>(value_["rot"][0u].asDouble()), 
+            static_cast<float>(value_["rot"][1u].asDouble()),
+			static_cast<float>(value_["rot"][2u].asDouble()));
 	}
 
 	Vec3D Tete::scale() const {
-		return Vec3D(value_["scl"][0u].asDouble(), value_["scl"][1u].asDouble(),
-			value_["scl"][2u].asDouble());
+		return Vec3D(
+            static_cast<float>(value_["scl"][0u].asDouble()), 
+            static_cast<float>(value_["scl"][1u].asDouble()),
+			static_cast<float>(value_["scl"][2u].asDouble()));
 	}
 
 	const Value& Tete::attr() const {

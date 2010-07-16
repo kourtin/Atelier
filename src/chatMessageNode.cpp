@@ -67,8 +67,8 @@ namespace Atelier {
         if (text_texture_.get() == NULL)
             return Rect();
 
-        float text_width = text_texture_->getWidth();
-        float text_height = text_texture_->getHeight();
+        float text_width = static_cast<float>(text_texture_->getWidth());
+        float text_height = static_cast<float>(text_texture_->getHeight());
         float pos_x = position().x;
         float pos_y = position().y;
 
@@ -117,12 +117,8 @@ namespace Atelier {
             return;
         
         // For now limit drawing to 2 dimensions
-        if (dim == RenderDimension::TWO) {
+        if (dim == TWO) {
             init_matrix();
-            //glBegin(GL_LINES);
-            //glVertex2f(0.0f, 0.0f);
-            //glVertex2f(100.0f, 100.0f);
-            //glEnd();
             draw_text();
             restore_matrix();
         }
@@ -147,8 +143,8 @@ namespace Atelier {
     }
 
     void ChatMessageNode::draw_text_billboard() {
-        float w = text_texture_->getWidth();
-        float h = text_texture_->getHeight();
+        float w = static_cast<float>(text_texture_->getWidth());
+        float h = static_cast<float>(text_texture_->getHeight());
 
         Vec3D right;
         Vec3D up;
@@ -162,33 +158,16 @@ namespace Atelier {
 
         glBegin( GL_QUADS );
         glTexCoord2f( 0, 1 );
-        glVertex2f(0.0f, text_texture_->getHeight());
-        /*
-        glVertex3f(right.x * perLeft + up.x * perLeft, 
-            right.y * perLeft + up.y * perLeft, 
-            right.z * perLeft + up.z * perLeft);
-        */
+        glVertex2f(0.0f, h);
+
         glTexCoord2f( 1, 1 );
-        glVertex2f(text_texture_->getWidth(), text_texture_->getHeight());
-        /*
-        glVertex3f(right.x * perRight + up.x * perLeft, 
-            right.y * perRight + up.y * perLeft, 
-            right.z * perRight + up.z * perLeft);
-        */
+        glVertex2f(w, h);
+
         glTexCoord2f( 1, 0 );
-        glVertex2f(text_texture_->getWidth(), 0.0f);
-        /*
-        glVertex3f(right.x * perRight + up.x * perRight, 
-            right.y * perRight + up.y * perRight, 
-            right.z * perRight + up.z * perRight);
-        */
+        glVertex2f(w, 0.0f);
+
         glTexCoord2f( 0, 0 );
         glVertex2f(0.0f, 0.0f);
-        /*
-        glVertex3f(right.x * perLeft + up.x * perRight,	
-            right.y * perLeft + up.y * perRight, 
-            right.z * perLeft + up.z * perRight);
-        */
         glEnd();
         //glDisable( GL_TEXTURE_2D ); // called in draw_text();
     }

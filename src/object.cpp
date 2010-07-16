@@ -1,4 +1,6 @@
 
+#include <deque>
+
 #include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
 
@@ -34,6 +36,17 @@ namespace Atelier {
 
     const std::list<const Link*>& Object::links() const {
 		return links_;
+    }
+
+    std::deque<Link> Object::links_copy() const {
+        std::deque<Link> link_list;
+
+        for (std::list<const Link*>::const_iterator it = links_.begin();
+            it != links_.end(); ++it) {
+            link_list.push_back(*(*it));
+        }
+
+        return link_list;
     }
 
     Vec3D Object::position() const {
@@ -119,21 +132,24 @@ namespace Atelier {
 
     void Object::set_matrix_from_tete(const Tete& tete) {
         if (!tete.value()["pos"].empty()) {
-            position_ = Vec3D(tete.value()["pos"][0u].asDouble(),
-                tete.value()["pos"][1u].asDouble(), 
-                tete.value()["pos"][2u].asDouble());
+            position_ = Vec3D(
+                static_cast<float>(tete.value()["pos"][0u].asDouble()),
+                static_cast<float>(tete.value()["pos"][1u].asDouble()), 
+                static_cast<float>(tete.value()["pos"][2u].asDouble()));
         }
 
         if (!tete.value()["rot"].empty()) {
-            rotation_ = Vec3D(tete.value()["rot"][0u].asDouble(),
-                tete.value()["rot"][1u].asDouble(),
-                tete.value()["rot"][2u].asDouble());
+            rotation_ = Vec3D(
+                static_cast<float>(tete.value()["rot"][0u].asDouble()),
+                static_cast<float>(tete.value()["rot"][1u].asDouble()),
+                static_cast<float>(tete.value()["rot"][2u].asDouble()));
         }
 
         if (!tete.value()["scl"].empty()) {
-            scale_ = Vec3D(tete.value()["scl"][0u].asDouble(),
-                tete.value()["scl"][1u].asDouble(),
-                tete.value()["scl"][2u].asDouble());
+            scale_ = Vec3D(
+                static_cast<float>(tete.value()["scl"][0u].asDouble()),
+                static_cast<float>(tete.value()["scl"][1u].asDouble()),
+                static_cast<float>(tete.value()["scl"][2u].asDouble()));
         }
     }
 }

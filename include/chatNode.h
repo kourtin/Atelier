@@ -10,6 +10,8 @@
 namespace Atelier {
     class ChatMessageNode;
 
+    typedef std::tr1::shared_ptr<ChatMessageNode> ChatMessageNodePtr;
+
     class ChatNode : public Object, public GridsNetworkItem,
         public Cinder2DInteractItem {
         friend class ChatOrganizer;
@@ -38,7 +40,7 @@ namespace Atelier {
         void message_updated();
         void message_entered();
 
-        std::deque<ChatMessageNode*> chat_messages_;
+        std::deque<ChatMessageNodePtr> chat_messages_;
         std::tr1::shared_ptr<const InteractItem> container_; // The UserNode
         std::string text_buffer_;
         ChatMessageNode* active_node_; // the node you're typing into

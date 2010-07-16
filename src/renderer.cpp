@@ -75,7 +75,7 @@ namespace Atelier {
     }
 
     void Renderer::draw3d() {
-        draw_items(RenderDimension::THREE, GL_LINES);
+        draw_items(THREE, GL_LINES);
     }
 
     void Renderer::draw_items(RenderDimension dim, GLenum pass) {
@@ -95,7 +95,7 @@ namespace Atelier {
 
     void Renderer::draw2d() {
         //glBegin(GL_LINES);
-        draw_items(RenderDimension::TWO, GL_LINES);
+        draw_items(TWO, GL_LINES);
         //glEnd();
     }
 

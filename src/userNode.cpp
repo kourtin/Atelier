@@ -77,7 +77,7 @@ namespace Atelier {
 	}
 
 	void UserNode::render(RenderDimension dim, RenderPass) {
-        if (dim == RenderDimension::THREE) {
+        if (dim == THREE) {
             init_matrix();
             draw_box();
             draw_text();
@@ -130,8 +130,8 @@ namespace Atelier {
     }
 
     void UserNode::draw_text_billboard() {
-        float w = user_name_texture_->getWidth();
-        float h = user_name_texture_->getHeight();
+        float w = static_cast<float>(user_name_texture_->getWidth());
+        float h = static_cast<float>(user_name_texture_->getHeight());
 
         Vec3D right;
         Vec3D up;
