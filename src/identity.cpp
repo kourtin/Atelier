@@ -175,7 +175,7 @@ namespace Atelier {
         return IdentityManager::instance().id_identity_ptr_map_iterator_->second;
     }
 
-    Identity* Identity::create_identity(ID& in_id, ObjectPtr obj) {
+    Identity* Identity::create_identity(const ID& in_id, ObjectPtr obj) {
         if (in_id.empty())
             return NULL;
 

@@ -83,7 +83,7 @@ namespace Atelier {
         static const Identity* get_identity_from_value(const Value&);
         static const Identity* get_identity_from_id(const ID&);
         // Use this when you have an Object* for the Identity
-        static Identity* create_identity(ID&, ObjectPtr);
+        static Identity* create_identity(const ID&, ObjectPtr);
         // Use this when you only have the ID and/or name of the Object
         static Identity* create_identity(const Value&);
 

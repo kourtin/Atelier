@@ -29,4 +29,6 @@ namespace Atelier {
 
 		bool initializing_;
 	};
+
+    typedef std::tr1::shared_ptr<ClientNode> ClientNodePtr;
 }

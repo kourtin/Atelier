@@ -29,7 +29,7 @@ namespace Atelier {
 
 		tete_manager_ = new TeteManager();
 		// Note that I don't request this node from the network. All other nodes should be
-		client_node_ = new ClientNode(Utility::create_uuid());
+		client_node_ = ClientNodePtr(new ClientNode(Utility::create_uuid()));
 
 		(*tete_manager_) += client_node_; // Register the node to receive Tetes
 

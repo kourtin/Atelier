@@ -39,7 +39,7 @@ namespace Atelier {
         void message_entered();
 
         std::deque<ChatMessageNode*> chat_messages_;
-        const std::tr1::shared_ptr<InteractItem> container_; // The UserNode
+        std::tr1::shared_ptr<const InteractItem> container_; // The UserNode
         std::string text_buffer_;
         ChatMessageNode* active_node_; // the node you're typing into
         Identity* active_node_identity_;

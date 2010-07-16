@@ -14,6 +14,8 @@ namespace Atelier {
 	class TeteManager;
     class IdentityManager;
 
+    typedef std::tr1::shared_ptr<ClientNode> ClientNodePtr;
+
     class Client {
     public:
         Client(CinderApp*);
@@ -47,6 +49,6 @@ namespace Atelier {
         IdentityManager* identity_manager_;
 
 		TeteManager* tete_manager_;
-		ClientNode* client_node_;
+		ClientNodePtr client_node_;
     };
 }
