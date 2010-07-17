@@ -152,6 +152,4 @@ namespace Atelier {
     void ClientNode::activate(const Identity& ident) {
         GridsNetworkItem::activate(ident);
     }
-
-
 }

@@ -4,13 +4,13 @@
 #include <cinder/Text.h>
 #include <cinder/gl/Texture.h>
 
-#include <node.h>
+#include <node2D.h>
 #include <link.h>
 
 namespace Atelier {
     class Link;
 
-    class ChatMessageNode : public Node {
+    class ChatMessageNode : public Node2D {
     public:
         ChatMessageNode(const ID&);
         virtual ~ChatMessageNode();
@@ -36,6 +36,8 @@ namespace Atelier {
 
         virtual void render(RenderDimension, RenderPass);
 
+        const InteractItem& container() const;
+
     private:
         void init_matrix();
         void restore_matrix();
@@ -52,6 +54,10 @@ namespace Atelier {
         TexturePtr text_texture_;
         LayoutPtr layout_;
         float text_size_;
+        std::tr1::shared_ptr<const InteractItem> container_; // The UserNode
+        mutable boost::recursive_mutex text_texture_mutex_;
+
+        typedef boost::recursive_mutex::scoped_lock ScopedLock;
     };
 
     typedef std::tr1::shared_ptr<ChatMessageNode> ChatMessageNodePtr;

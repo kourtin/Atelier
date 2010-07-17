@@ -10,8 +10,7 @@
 #include <utility.h>
 
 namespace Atelier {
-    ChatMessageNode::ChatMessageNode(const ID& in_id) : Node(in_id) {
-        //ci::app::console() << "Creating ChatMessageNode" << std::endl;
+    ChatMessageNode::ChatMessageNode(const ID& in_id) : Node2D(in_id) {
         text_size_ = 48.0f;
         text_ = "";
 
@@ -64,6 +63,8 @@ namespace Atelier {
     }
 
     Rect ChatMessageNode::bounding_rect() const {
+        ScopedLock l(text_texture_mutex_);
+
         if (text_texture_.get() == NULL)
             return Rect();
 
@@ -87,7 +88,7 @@ namespace Atelier {
     }
 
     void ChatMessageNode::create_object(const Tete& tete) {
-        Node::create_object(tete);
+        Node2D::create_object(tete);
 
         text_ = tete.attr()["text"].asString();
 
@@ -96,7 +97,7 @@ namespace Atelier {
     }
 
     void ChatMessageNode::update_object(const Tete& tete) {
-        Object::update_object(tete);
+        Node2D::update_object(tete);
 
         if (!tete.attr()["text"].empty()) {
             text_ = tete.attr()["text"].asString();
@@ -113,6 +114,8 @@ namespace Atelier {
     }
 
     void ChatMessageNode::render(RenderDimension dim, RenderPass) {
+        ScopedLock l(text_texture_mutex_);
+
         if (text_texture_ == NULL)
             return;
         
@@ -135,6 +138,8 @@ namespace Atelier {
     }
 
     void ChatMessageNode::draw_text() {
+        ScopedLock l(text_texture_mutex_);
+
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		ci::gl::enableDepthWrite(false);
         text_texture_->enableAndBind();
@@ -143,6 +148,8 @@ namespace Atelier {
     }
 
     void ChatMessageNode::draw_text_billboard() {
+        ScopedLock l(text_texture_mutex_);
+
         float w = static_cast<float>(text_texture_->getWidth());
         float h = static_cast<float>(text_texture_->getHeight());
 
@@ -181,11 +188,17 @@ namespace Atelier {
     void ChatMessageNode::generate_texture() {
         generate_layout();
 
+        ScopedLock l(text_texture_mutex_);
+
         layout_->clear(ci::ColorA());
         layout_->addCenteredLine(text_);
         
         text_texture_ = TexturePtr(new ci::gl::Texture(layout_->render(true)));
         text_texture_->disable(); // Required for bug. TODO: remove
+    }
+
+    const InteractItem& ChatMessageNode::container() const {
+        return *(container_.get());
     }
 
     

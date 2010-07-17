@@ -56,5 +56,4 @@ namespace Atelier {
     void Node::create_object(const Tete& tete) {
         Object::create_object(tete);
     }
-
 }

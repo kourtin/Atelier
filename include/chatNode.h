@@ -59,5 +59,6 @@ namespace Atelier {
         ChatMessageNode* active_node_; // the node you're typing into
         Identity* active_node_identity_;
         bool unsent_chars_;
+        std::tr1::shared_ptr<ChatOrganizer> chat_organizer_;
     };
 }

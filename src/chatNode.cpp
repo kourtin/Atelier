@@ -7,6 +7,7 @@
 #include <teteManager.h>
 #include <utility.h>
 #include <chatMessageNode.h>
+#include <chatOrganizer.h>
 
 namespace Atelier {
     ChatNode::ChatNode(const ID& in_id) : Object(in_id) {
@@ -36,6 +37,9 @@ namespace Atelier {
 
     void ChatNode::create_object(const Tete& tete) {
         Object::create_object(tete);
+
+        chat_organizer_ = ChatOrganizerPtr(new ChatOrganizer());
+        chat_organizer_->init();
 
         const ObjectPtr obj = Client::user_identity().object();
 
@@ -162,6 +166,6 @@ namespace Atelier {
     }
 
     const InteractItem& ChatNode::container() const {
-        return *container_;
+        return *(container_.get());
     }
 }
