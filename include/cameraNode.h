@@ -20,16 +20,17 @@ namespace Atelier {
     class Link;
 
     typedef std::tr1::shared_ptr<UserNode> UserNodePtr;
+    typedef std::tr1::shared_ptr<const Link> LinkConstPtr;
 
     class CameraNode : public Object, public Cinder3DInteractItem,
         public CinderGraphicItem, public GridsNetworkItem {
     public:
         CameraNode(const ID&);
 
-        virtual const ID& id();
+        virtual const ID& id() const;
 
-        virtual std::list<const Link*>& links();
-		virtual const std::list<const Link*>& links() const;
+        virtual std::list<LinkConstPtr>& links();
+		virtual const std::list<LinkConstPtr>& links() const;
 
         void call_matrix();
 

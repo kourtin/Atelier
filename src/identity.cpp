@@ -44,7 +44,7 @@ namespace Atelier {
         return is_valid_ ? object_ : ObjectPtr();
     }
 
-    const ObjectPtr Identity::object() const {
+    ObjectConstPtr Identity::object() const {
         return is_valid_ ? object_ : ObjectPtr();
     }
 

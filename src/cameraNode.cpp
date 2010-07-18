@@ -25,15 +25,15 @@ namespace Atelier {
         create_camera();
     }
 
-    const ID& CameraNode::id() {
+    const ID& CameraNode::id() const {
         return Object::id();
     }
 
-    std::list<const Link*>& CameraNode::links() {
+    std::list<LinkConstPtr>& CameraNode::links() {
         return Object::links();
     }
 
-	const std::list<const Link*>& CameraNode::links() const {
+	const std::list<LinkConstPtr>& CameraNode::links() const {
         return Object::links();
     }
 

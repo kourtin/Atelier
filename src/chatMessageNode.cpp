@@ -8,11 +8,14 @@
 #include <client.h>
 #include <link.h>
 #include <utility.h>
+#include <chatOrganizer.h>
+#include <chatNode.h>
 
 namespace Atelier {
     ChatMessageNode::ChatMessageNode(const ID& in_id) : Node2D(in_id) {
-        text_size_ = 48.0f;
+        text_size_ = 22.0f;
         text_ = "";
+        velocity_ = Vec3D(0.0f, 0.0f, 0.0f);
 
         set_position(Vec3D(100.f, 100.f, 0.0f));
     }
@@ -29,6 +32,9 @@ namespace Atelier {
             request.links().push_back(*it);
         }
         LinkPtr chat_link(new Link(&chat_ident, LinkFlags(true, true)));
+        ci::app::console() << "Requesting create chat mess node" << std::endl;
+        ci::app::console() << "ID = " << chat_ident.id() << std::endl;
+
         request.links().push_back(chat_link);
         request.attr()["type"] = "ChatMessageNode";
         request.attr()["text"] = initial_text;
@@ -62,6 +68,7 @@ namespace Atelier {
         GridsNetworkItem::request_update_object(request);
     }
 
+    // Bounding rect is not translated to position
     Rect ChatMessageNode::bounding_rect() const {
         ScopedLock l(text_texture_mutex_);
 
@@ -70,13 +77,9 @@ namespace Atelier {
 
         float text_width = static_cast<float>(text_texture_->getWidth());
         float text_height = static_cast<float>(text_texture_->getHeight());
-        float pos_x = position().x;
-        float pos_y = position().y;
 
-        return Rect(pos_x - text_width / 2.0f,
-            pos_y - text_height / 2.0f,
-            pos_x + text_width / 2.0f,
-            pos_y + text_height / 2.0f);
+        return Rect(-text_width / 2.0f, -text_height / 2.0f,
+            text_width / 2.0f, text_height / 2.0f);
     }
 
     Prism ChatMessageNode::bounding_prism() const {
@@ -90,10 +93,44 @@ namespace Atelier {
     void ChatMessageNode::create_object(const Tete& tete) {
         Node2D::create_object(tete);
 
+        // Register this object with the chat
+        register_with_chat_node(tete);
+
         text_ = tete.attr()["text"].asString();
 
         generate_layout();
         generate_texture();
+    }
+
+    void ChatMessageNode::register_with_chat_node(const Tete& tete) {
+        std::tr1::shared_ptr<ChatNode> chat_node;
+        ci::app::console() << "Registering chat node" << std::endl;
+        // Find the chat this object is a part of
+        for (LinkList::const_iterator it = tete.links().begin(); it != tete.links().end();
+            ++it) {
+            ci::app::console() << (*it)->actor().id() << std::endl;
+
+            ObjectPtr obj = ObjectController::instance().get_object_from_id((*it)->actor().id());
+
+            //std::tr1::shared_ptr<ChatNode> chat_node = std::dynamic_pointer_cast<ChatNode>(obj);
+
+            //ci::app::console() << obj->type() << std::endl;
+
+            //if (chat_node.get() != NULL)
+            if (obj->type() == "ChatNode") {
+                chat_node = std::dynamic_pointer_cast<ChatNode>(obj);
+                break;
+            }
+        }
+
+        if (chat_node.get() == NULL) {
+            ci::app::console() << "[WRN] CRITICAL: message received with no ChatNode" << std::endl;
+            return;
+        }
+
+        ObjectPtr this_ptr = ObjectController::instance().get_object_from_id(id());
+        ChatMessageNodePtr msg_ptr = std::dynamic_pointer_cast<ChatMessageNode>(this_ptr);
+        chat_node->add_chat_message_node(msg_ptr);
     }
 
     void ChatMessageNode::update_object(const Tete& tete) {
@@ -111,6 +148,18 @@ namespace Atelier {
 
     void ChatMessageNode::receive_tete(const Tete& tete) {
 
+    }
+
+    Vec3D ChatMessageNode::velocity() const {
+        ScopedLock l(velocity_mutex_);
+
+        return velocity_;
+    }
+
+    void ChatMessageNode::set_velocity(Vec3D vel) {
+        ScopedLock l(velocity_mutex_);
+
+        velocity_ = vel;
     }
 
     void ChatMessageNode::render(RenderDimension dim, RenderPass) {
@@ -201,5 +250,14 @@ namespace Atelier {
         return *(container_.get());
     }
 
-    
+    void ChatMessageNode::update_velocity() {
+        //ci::app::console() << position().x << " : " << position().y <<
+        //    " : " << position().z << std::endl;
+        //velocity_.z = 0.0f;
+        lock_position();
+        if (ChatOrganizer::within_screen_bounds(position(), 
+            scale(), bounding_rect()))
+            set_position(position() + velocity_);
+        unlock_position();
+    }
 }

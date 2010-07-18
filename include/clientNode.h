@@ -14,10 +14,10 @@ namespace Atelier {
 
         virtual std::string type() { return "ClientNode"; }
 
-        virtual const ID& id();
+        virtual const ID& id() const;
 
-        virtual std::list<const Link*>& links();
-		virtual const std::list<const Link*>& links() const;
+        virtual std::list<LinkConstPtr>& links();
+		virtual const std::list<LinkConstPtr>& links() const;
 
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;

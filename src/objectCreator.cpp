@@ -52,8 +52,6 @@ namespace Atelier {
 			return NULL;
 		}
 
-		created_object->create_object(tete);
-
 		std::tr1::shared_ptr<GraphicItem> graphic_item = 
 			std::dynamic_pointer_cast<GraphicItem>(created_object);
 
@@ -62,6 +60,8 @@ namespace Atelier {
 
         ObjectController::instance() += created_object;
         Identity::create_identity(tete.id(), created_object);
+
+        created_object->create_object(tete);
 
 		return created_object;
 	}

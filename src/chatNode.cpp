@@ -1,4 +1,6 @@
 
+#include <algorithm>
+
 #include <cinder/app/KeyEvent.h>
 
 #include <chatNode.h>
@@ -8,6 +10,7 @@
 #include <utility.h>
 #include <chatMessageNode.h>
 #include <chatOrganizer.h>
+#include <objectController.h>
 
 namespace Atelier {
     ChatNode::ChatNode(const ID& in_id) : Object(in_id) {
@@ -20,7 +23,7 @@ namespace Atelier {
     ChatNode::~ChatNode() {
     }
 
-    const ID& ChatNode::id() {
+    const ID& ChatNode::id() const {
         return Object::id();
     }
 
@@ -28,7 +31,7 @@ namespace Atelier {
         Tete request;
 
         LinkPtr client_link(new Link(&(Client::user_identity()),
-			LinkFlags(true, true, true)));
+		    LinkFlags(true, true, true)));
 		request.links().push_back(client_link);
 		request.attr()["type"] = "ChatNode";
 
@@ -38,10 +41,14 @@ namespace Atelier {
     void ChatNode::create_object(const Tete& tete) {
         Object::create_object(tete);
 
-        chat_organizer_ = ChatOrganizerPtr(new ChatOrganizer());
+        // Register the object so update() gets called
+        Client::instance() += ObjectController::instance().get_object_from_id(id());
+
+        // Create a ChatOrganizer to move the Nodes around
+        chat_organizer_ = ChatOrganizerPtr(new ChatOrganizer(*this));
         chat_organizer_->init();
 
-        const ObjectPtr obj = Client::user_identity().object();
+        ObjectConstPtr obj = Client::user_identity().object();
 
         if (obj.get() == NULL) {
             ci::app::console() << "CRITICAL: unable to get UserNode for client" <<
@@ -49,8 +56,8 @@ namespace Atelier {
             return;
         }
         
-        const std::tr1::shared_ptr<InteractItem> item = 
-            std::dynamic_pointer_cast<InteractItem>(obj);
+        std::tr1::shared_ptr<const InteractItem> item = 
+            std::dynamic_pointer_cast<const InteractItem>(obj);
 
         if (item.get() == NULL) {
             ci::app::console() << "CRITICAL: unable to get UserNode for client" <<
@@ -61,11 +68,11 @@ namespace Atelier {
         container_ = item;
     }
 
-    std::list<const Link*>& ChatNode::links() {
+    std::list<LinkConstPtr>& ChatNode::links() {
         return Object::links();
     }
 
-	const std::list<const Link*>& ChatNode::links() const {
+	const std::list<LinkConstPtr>& ChatNode::links() const {
         return Object::links();
     }
 
@@ -167,5 +174,25 @@ namespace Atelier {
 
     const InteractItem& ChatNode::container() const {
         return *(container_.get());
+    }
+
+    void ChatNode::update() {
+        chat_organizer_->update();
+    }
+
+    void ChatNode::add_chat_message_node(ChatMessageNodePtr node) {
+        chat_messages_.push_back(node);
+
+        chat_organizer_->start();
+    }
+
+    void ChatNode::remove_chat_message_node(ChatMessageNodePtr node) {
+        ChatMessageNodeList::const_iterator it = find(chat_messages_.begin(),
+            chat_messages_.end(), node);
+
+        if (it == chat_messages_.end())
+            return;
+
+        chat_messages_.erase(it);
     }
 }

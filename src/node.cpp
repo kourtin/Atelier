@@ -9,7 +9,7 @@ namespace Atelier {
     Node::~Node() {
     }
 
-    const ID& Node::id() {
+    const ID& Node::id() const {
         return Object::id();
     }
 
@@ -41,11 +41,11 @@ namespace Atelier {
         GridsNetworkItem::activate(ident);
     }
 
-    std::list<const Link*>& Node::links() {
+    std::list<LinkConstPtr>& Node::links() {
         return Object::links();
     }
 
-	const std::list<const Link*>& Node::links() const {
+	const std::list<LinkConstPtr>& Node::links() const {
         return Object::links();
     }
 

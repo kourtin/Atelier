@@ -15,7 +15,7 @@ namespace Atelier {
         Node(const ID&);
         virtual ~Node();
 
-        const ID& id();
+        const ID& id() const;
 
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;
@@ -26,8 +26,8 @@ namespace Atelier {
         virtual void set_scale(Vec3D);
 
         virtual void activate(const Identity&);
-        virtual std::list<const Link*>& links();
-		virtual const std::list<const Link*>& links() const;
+        virtual std::list<LinkConstPtr>& links();
+		virtual const std::list<LinkConstPtr>& links() const;
 
         virtual void create_object(const Tete&);
 

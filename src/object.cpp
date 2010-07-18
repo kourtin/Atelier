@@ -26,18 +26,19 @@ namespace Atelier {
 		//ObjectController::instance() -= this;
     }
 
-    const ID& Object::id() {
+    const ID& Object::id() const {
         return id_;
     }
 
-	std::list<const Link*>& Object::links() {
+	std::list<LinkConstPtr>& Object::links() {
 		return links_;
 	}
 
-    const std::list<const Link*>& Object::links() const {
+    const std::list<LinkConstPtr>& Object::links() const {
 		return links_;
     }
 
+    /*
     std::deque<Link> Object::links_copy() const {
         std::deque<Link> link_list;
 
@@ -48,6 +49,7 @@ namespace Atelier {
 
         return link_list;
     }
+    */
 
     Vec3D Object::position() const {
         ScopedLock l(position_mutex_);
@@ -151,5 +153,9 @@ namespace Atelier {
                 static_cast<float>(tete.value()["scl"][1u].asDouble()),
                 static_cast<float>(tete.value()["scl"][2u].asDouble()));
         }
+    }
+
+    void Object::update() {
+        // Nothing here
     }
 }

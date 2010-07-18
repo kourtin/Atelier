@@ -13,9 +13,9 @@ namespace Atelier {
 		Node2D(const ID&);
 		virtual ~Node2D();
 
-		const ID& id();
-		std::list<const Link*>& links();
-		const std::list<const Link*>& links() const;
+		const ID& id() const;
+		virtual std::list<LinkConstPtr>& links();
+		virtual const std::list<LinkConstPtr>& links() const;
 
 		virtual const InteractItem& container();
 		void set_container(InteractItem&);

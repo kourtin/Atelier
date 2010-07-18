@@ -10,15 +10,15 @@ namespace Atelier {
 	Node2D::~Node2D() {
 	}
 
-	const ID& Node2D::id() {
+	const ID& Node2D::id() const {
 		return Object::id();
 	}
 
-	std::list<const Link*>& Node2D::links() {
+	std::list<LinkConstPtr>& Node2D::links() {
 		return Object::links();
 	}
 
-	const std::list<const Link*>& Node2D::links() const {
+	const std::list<LinkConstPtr>& Node2D::links() const {
 		return Object::links();
 	}
 

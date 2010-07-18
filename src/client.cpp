@@ -1,4 +1,7 @@
 
+#include <algorithm>
+#include <list>
+
 #include <boost/uuid/uuid_io.hpp>
 
 #include <client.h>
@@ -18,6 +21,7 @@ namespace Atelier {
         // WARNING: do not dereference app in the ctor!
         app_ = app;
         active_camera_ = NULL;
+        instance_ = this;
     }
 
     GenericNode* Client::node;
@@ -50,6 +54,11 @@ namespace Atelier {
 
 		TeteManager::instance().update();
 
+        for (std::list<ObjectPtr>::const_iterator it = update_objects_.begin();
+            it != update_objects_.end(); ++it) {
+            (*it)->update();
+        }
+
         renderer_.update();
         renderer_.call_camera_matrix();
     }
@@ -58,11 +67,16 @@ namespace Atelier {
         renderer_.render();
     }
 
+    Client& Client::instance() {
+        return *instance_;
+    }
+
     CinderApp* Client::app_;
     Renderer Client::renderer_;
     CameraNode* Client::active_camera_;
     Identity* Client::user_identity_;
     Grids::Interface Client::grids_interface_;
+    Client* Client::instance_;
 
     const Identity& Client::user_identity() {
         return *user_identity_;
@@ -98,4 +112,22 @@ namespace Atelier {
         ident->set_name("Patrick Tierney");
         return ident;
 	}
+
+    void Client::operator+=(ObjectPtr obj) {
+        update_objects_it_ = find(update_objects_.begin(),
+            update_objects_.end(), obj);
+
+        if (update_objects_it_ == update_objects_.end())
+            update_objects_.push_back(obj);
+    }
+
+    void Client::operator-=(ObjectPtr obj) {
+        update_objects_it_ = find(update_objects_.begin(),
+            update_objects_.end(), obj);
+
+        if (update_objects_it_ == update_objects_.end())
+            return;
+
+        update_objects_.erase(update_objects_it_);
+    }
 }

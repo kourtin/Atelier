@@ -29,8 +29,7 @@ namespace Atelier {
 			
 			if (registered_objects_.empty()) {
 				ci::app::console() << "WARNING: No objects registered, droping message:" 
-					<< std::endl << tete.value().toStyledString() << 
-					std::endl;
+					<< std::endl << tete.value().toStyledString() << std::endl;
 			}
             
             // The object being updated should always receive the update event

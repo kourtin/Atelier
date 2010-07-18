@@ -34,6 +34,7 @@
 namespace Atelier {
     class Object;
     typedef std::tr1::shared_ptr<Object> ObjectPtr;
+    typedef std::tr1::shared_ptr<const Object> ObjectConstPtr;
 
     class Identity {
         // Use create_identity to create an identity
@@ -46,7 +47,7 @@ namespace Atelier {
         ~Identity();
 
         ObjectPtr object();
-        const ObjectPtr object() const;
+        ObjectConstPtr object() const;
         void set_object(ObjectPtr);
         const ID& id() const;
         void set_id(const ID&);

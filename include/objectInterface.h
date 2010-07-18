@@ -15,12 +15,14 @@ namespace Atelier {
     class Tete;
     class Link;
 
+    typedef std::tr1::shared_ptr<const Link> LinkConstPtr;
+
     class ObjectInterface {
     public:
-        virtual const ID& id() = 0;
+        virtual const ID& id() const = 0;
 
-		virtual std::list<const Link*>& links() = 0;
-        virtual const std::list<const Link*>& links() const = 0;
+		virtual std::list<LinkConstPtr>& links() = 0;
+        virtual const std::list<LinkConstPtr>& links() const = 0;
 
 		virtual std::string type() = 0;
 

@@ -11,6 +11,7 @@ namespace Atelier {
     class ChatMessageNode;
 
     typedef std::tr1::shared_ptr<ChatMessageNode> ChatMessageNodePtr;
+    typedef std::deque<ChatMessageNodePtr> ChatMessageNodeList;
 
     class ChatNode : public Object, public GridsNetworkItem,
         public Cinder2DInteractItem {
@@ -19,10 +20,10 @@ namespace Atelier {
         ChatNode(const ID&);
         virtual ~ChatNode();
 
-        virtual const ID& id();
+        virtual const ID& id() const;
 
-        virtual std::list<const Link*>& links();
-		virtual const std::list<const Link*>& links() const;
+        virtual std::list<LinkConstPtr>& links();
+		virtual const std::list<LinkConstPtr>& links() const;
 
         virtual Vec3D position() const;
         virtual Vec3D rotation() const;
@@ -39,6 +40,8 @@ namespace Atelier {
         Rect bounding_rect() const;
         const InteractItem& container() const;
 
+        void update();
+
         void create_object(const Tete&);
         void update_object(const Tete&);
         void update_object_matrix(const Tete&);
@@ -48,12 +51,15 @@ namespace Atelier {
 
         bool keyDown(ci::app::KeyEvent);
 
+        void add_chat_message_node(ChatMessageNodePtr);
+        void remove_chat_message_node(ChatMessageNodePtr);
+
     private:
         void message_start();
         void message_updated();
         void message_entered();
 
-        std::deque<ChatMessageNodePtr> chat_messages_;
+        ChatMessageNodeList chat_messages_;
         std::tr1::shared_ptr<const InteractItem> container_; // The UserNode
         std::string text_buffer_;
         ChatMessageNode* active_node_; // the node you're typing into

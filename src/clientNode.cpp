@@ -40,15 +40,15 @@ namespace Atelier {
 		}
 	}
 
-    const ID& ClientNode::id() {
+    const ID& ClientNode::id() const {
         return Object::id();
     }
 
-    std::list<const Link*>& ClientNode::links() {
+    std::list<LinkConstPtr>& ClientNode::links() {
         return Object::links();
     }
 
-	const std::list<const Link*>& ClientNode::links() const {
+	const std::list<LinkConstPtr>& ClientNode::links() const {
         return Object::links();
     }
 
@@ -95,7 +95,6 @@ namespace Atelier {
 		// Create CameraNode
 		if (type == "UserNode") {
 			UserNodePtr node(new ClientUserNode(tete.id()));
-			node->create_object(tete);
 
             Client::user_identity_->set_object(node);
 
@@ -104,16 +103,19 @@ namespace Atelier {
             ObjectController::instance() += node;
             Identity::create_identity(id, node);
 
+            node->create_object(tete);
+
 			CameraNode::request_create(node);
 		} else if (type == "CameraNode") {
 			CameraNodePtr cam_node(new CameraNode(tete.id()));
-			cam_node->create_object(tete);
 
 			Client::renderer().set_camera(cam_node);
 			Client::set_active_camera(cam_node.get());
 
             ObjectController::instance() += cam_node;
             Identity::create_identity(tete.id(), cam_node);
+
+            cam_node->create_object(tete);
 
 			// Everything has been created, we don't need to listen for any more tetes
 			initializing_ = false;

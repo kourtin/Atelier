@@ -34,9 +34,14 @@ namespace Atelier {
 
         void receive_tete(const Tete&);
 
+        Vec3D velocity() const;
+        void set_velocity(Vec3D);
+
         virtual void render(RenderDimension, RenderPass);
 
         const InteractItem& container() const;
+
+        virtual void update_velocity();
 
     private:
         void init_matrix();
@@ -45,8 +50,10 @@ namespace Atelier {
         void draw_text_billboard();
         void generate_texture();
         void generate_layout();
+        void register_with_chat_node(const Tete&);
 
         std::string text_;
+        Vec3D velocity_;
 
         typedef std::tr1::shared_ptr<ci::gl::Texture> TexturePtr;
         typedef std::tr1::shared_ptr<ci::TextLayout> LayoutPtr;
@@ -56,6 +63,7 @@ namespace Atelier {
         float text_size_;
         std::tr1::shared_ptr<const InteractItem> container_; // The UserNode
         mutable boost::recursive_mutex text_texture_mutex_;
+        mutable boost::recursive_mutex velocity_mutex_;
 
         typedef boost::recursive_mutex::scoped_lock ScopedLock;
     };
