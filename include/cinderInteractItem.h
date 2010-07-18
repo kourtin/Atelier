@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "cinder/app/App.h"
+#include <cinder/app/App.h>
 
-#include "interactItem.h"
+#include <interactItem.h>
 
 namespace Atelier {
     class CinderInteractItem : public InteractItem,
@@ -12,7 +12,7 @@ namespace Atelier {
         CinderInteractItem();
         virtual ~CinderInteractItem();
 
-        virtual void detect_click_selection(ci::app::MouseEvent) = 0;
+        virtual bool detect_click_selection(ci::app::MouseEvent) = 0;
 
         // If a method returns true, event propegation stops. If it returns false,
         // the message propegates to other Listeners.
@@ -21,5 +21,9 @@ namespace Atelier {
         virtual bool mouseUp(ci::app::MouseEvent);
         virtual bool mouseDrag(ci::app::MouseEvent);
         virtual bool mouseWheel(ci::app::MouseEvent);
+
+        virtual void drag_start(ci::app::MouseEvent);
+        virtual void dragging(ci::app::MouseEvent);
+        virtual void drag_end(ci::app::MouseEvent);
     };
 }

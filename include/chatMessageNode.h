@@ -3,6 +3,7 @@
 
 #include <cinder/Text.h>
 #include <cinder/gl/Texture.h>
+#include <cinder/app/MouseEvent.h>
 
 #include <node2D.h>
 #include <link.h>
@@ -22,7 +23,7 @@ namespace Atelier {
         static void request_finish_update(const Identity& node_ident, 
             const std::string&);
 
-        std::string type() { return "ChatMessageNode"; }
+        std::string type() const { return "ChatMessageNode"; }
 
         Rect bounding_rect() const;
         Prism bounding_prism() const;
@@ -34,6 +35,8 @@ namespace Atelier {
 
         void receive_tete(const Tete&);
 
+        void activate(const Identity&);
+
         Vec3D velocity() const;
         void set_velocity(Vec3D);
 
@@ -43,11 +46,15 @@ namespace Atelier {
 
         virtual void update_velocity();
 
+        virtual void drag_start(ci::app::MouseEvent);
+        virtual void dragging(ci::app::MouseEvent);
+
     private:
         void init_matrix();
         void restore_matrix();
         void draw_text();
         void draw_text_billboard();
+        void draw_links();
         void generate_texture();
         void generate_layout();
         void register_with_chat_node(const Tete&);

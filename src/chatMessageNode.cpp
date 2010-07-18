@@ -13,6 +13,8 @@
 
 namespace Atelier {
     ChatMessageNode::ChatMessageNode(const ID& in_id) : Node2D(in_id) {
+        detect_selection_ = true;
+        draggable_ = true;
         text_size_ = 22.0f;
         text_ = "";
         velocity_ = Vec3D(0.0f, 0.0f, 0.0f);
@@ -173,6 +175,8 @@ namespace Atelier {
             init_matrix();
             draw_text();
             restore_matrix();
+
+            draw_links();
         }
 	}
 
@@ -201,6 +205,8 @@ namespace Atelier {
 
         float w = static_cast<float>(text_texture_->getWidth());
         float h = static_cast<float>(text_texture_->getHeight());
+        float w_2 = w / 2.0f;
+        float h_2 = h / 2.0f;
 
         Vec3D right;
         Vec3D up;
@@ -214,18 +220,36 @@ namespace Atelier {
 
         glBegin( GL_QUADS );
         glTexCoord2f( 0, 1 );
-        glVertex2f(0.0f, h);
+        glVertex2f(-w_2, h_2);
 
         glTexCoord2f( 1, 1 );
-        glVertex2f(w, h);
+        glVertex2f(w_2, h_2);
 
         glTexCoord2f( 1, 0 );
-        glVertex2f(w, 0.0f);
+        glVertex2f(w_2, -h_2);
 
         glTexCoord2f( 0, 0 );
-        glVertex2f(0.0f, 0.0f);
+        glVertex2f(-w_2, -h_2);
         glEnd();
         //glDisable( GL_TEXTURE_2D ); // called in draw_text();
+    }
+
+    void ChatMessageNode::draw_links() {
+        glLineWidth(0.1);
+        glColor4f(1.0f, 1.0f, 1.0f, 0.75f);
+        glBegin(GL_LINES);
+        Vec3D my_pos = position();
+        Vec3D pos;
+        for (std::list<LinkConstPtr>::const_iterator it = links().begin();
+            it != links().end(); ++it) {
+            if ((*it)->actor().object()->type() != type())
+                continue;
+
+            pos = (*it)->actor().object()->position();
+            glVertex2f(my_pos.x, my_pos.y);
+            glVertex2f(pos.x, pos.y);
+        }
+        glEnd();
     }
 
     void ChatMessageNode::generate_layout() {
@@ -259,5 +283,21 @@ namespace Atelier {
             scale(), bounding_rect()))
             set_position(position() + velocity_);
         unlock_position();
+    }
+
+    void ChatMessageNode::activate(const Identity& ident) {
+        //lock_position();
+        //set_position(position() + Vec3D(5.0f, 5.0f, 0.0f));
+        //unlock_position();
+    }
+
+    void ChatMessageNode::drag_start(ci::app::MouseEvent mouse_event) {
+        set_position(Vec3D(static_cast<float>(mouse_event.getPos().x), 
+            static_cast<float>(mouse_event.getPos().y), 0.0f));
+    }
+
+    void ChatMessageNode::dragging(ci::app::MouseEvent mouse_event) {
+        set_position(Vec3D(static_cast<float>(mouse_event.getPos().x), 
+            static_cast<float>(mouse_event.getPos().y), 0.0f));
     }
 }

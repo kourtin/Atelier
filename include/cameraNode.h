@@ -58,7 +58,7 @@ namespace Atelier {
 
         void create_camera();
 
-		virtual std::string type() { return "CameraNode"; }
+		virtual std::string type() const { return "CameraNode"; }
 
 		static void request_create(UserNodePtr);
 

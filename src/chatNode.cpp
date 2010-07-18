@@ -11,6 +11,7 @@
 #include <chatMessageNode.h>
 #include <chatOrganizer.h>
 #include <objectController.h>
+#include <identity.h>
 
 namespace Atelier {
     ChatNode::ChatNode(const ID& in_id) : Object(in_id) {
@@ -150,12 +151,19 @@ namespace Atelier {
 
                 LinkPtr user_link(new Link(&(Client::user_identity()),
                     LinkFlags(true, true, true)));
+                
                 std::deque<LinkPtr> temp_links;
                 temp_links.push_back(user_link);
 
+                if (!chat_messages_.empty()) {
+                    const Identity* last_ident = Identity::get_identity_from_id(
+                        chat_messages_.back()->id());
+                    LinkPtr last_msg_link(new Link(last_ident, LinkFlags(true, true)));
+                    temp_links.push_back(last_msg_link);
+                }
+
                 ChatMessageNode::request_create(create_id_,
                     *identity(), text_buffer_, temp_links);
-
             } else if (active_node_identity_ != NULL && 
                 active_node_identity_->object() != NULL) {
                 // Update the current node, and send an update request

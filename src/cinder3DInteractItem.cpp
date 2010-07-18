@@ -15,9 +15,10 @@ namespace Atelier {
     Cinder3DInteractItem::~Cinder3DInteractItem() {
     }
 
-    void Cinder3DInteractItem::detect_click_selection(ci::app::MouseEvent mouse_event) {
+    bool Cinder3DInteractItem::detect_click_selection(ci::app::MouseEvent mouse_event) {
         if(!detect_selection_)
-            return;
+            return false;
+
         float cam_x = static_cast<float>(mouse_event.getX()) / 
             static_cast<float>(Client::app().getWindowWidth());
         float cam_y = static_cast<float>(mouse_event.getY()) / 
@@ -32,8 +33,9 @@ namespace Atelier {
         // See if the ray intersects the bounding box
         if(bounding_aabox().intersect(ray, box_times) > 0) {
             activate(Client::user_identity());
+            return true;
         }
 
-        //set_position(ray.getOrigin() + ray.getDirection()* 1000.0f);
+        return false;
     }
 }

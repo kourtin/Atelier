@@ -33,7 +33,7 @@ namespace Atelier {
         virtual void set_rotation(Vec3D);
         virtual void set_scale(Vec3D);
 
-        std::string type() { return "ChatNode"; }
+        std::string type() const { return "ChatNode"; }
 
         static void request_create();
 

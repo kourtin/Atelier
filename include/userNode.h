@@ -15,7 +15,7 @@ namespace Atelier {
 		UserNode(const ID&);
 		virtual ~UserNode();
 
-		std::string type() { return "UserNode"; }
+		std::string type() const { return "UserNode"; }
 
 		static void request_create(const ID&);
 

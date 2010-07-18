@@ -18,9 +18,9 @@ namespace Atelier {
     //
     // ChatOrganizerWorker
     //
-    ChatOrganizerWorker::ChatOrganizerWorker(ChatOrganizer& organizer,
+    ChatOrganizerWorker::ChatOrganizerWorker(boost::mutex& running_mutex, ChatOrganizer& organizer,
         ChatMessageNodeList objects, int screen_width, int screen_height) : 
-        organizer_(organizer) {
+        organizer_(organizer), running_mutex_(running_mutex) {
         objects_ = objects;
         screen_width_ = screen_width;
         screen_height_ = screen_height;
@@ -30,6 +30,8 @@ namespace Atelier {
     }
 
     void ChatOrganizerWorker::operator()() {
+        boost::mutex::scoped_lock l(running_mutex_);
+
         organizer_.chat_energy_ = 0.0f;
 
         // Organize chats
@@ -40,6 +42,9 @@ namespace Atelier {
 
         if (organizer_.chat_energy_ <= organizer_.chat_energy_threshold_)
             organizer_.running_ = false;
+
+        ci::app::console() << "Thread exiting with energy = " << 
+            organizer_.chat_energy_ << std::endl;
     }
 
     // Calculate the forces on a chat node based in its links
@@ -136,14 +141,14 @@ namespace Atelier {
         running_ = false;
 
         chat_energy_ = 0.0f;
-        chat_energy_threshold_ = 0.6f;
+        chat_energy_threshold_ = 0.1;
         min_velocity_ = 0.1f;
         max_velocity_ = 10.f;
-        damping_ = 0.02f;
+        damping_ = 0.12f;
         // For attract_weight_, larger is larger, faster, stronger
-        attract_weight_ = 10.0;
+        attract_weight_ = 1.0;
         // For repulse_weight_, larger is larger, faster, stronger
-        repulse_weight_ = 55.0;
+        repulse_weight_ = 100.0;
         rest_distance_ = 50.0f;
     }
 
@@ -152,8 +157,9 @@ namespace Atelier {
     }
 
     void ChatOrganizer::update() {
-        if (running_ == false)
+        if (running_ == false) {
             return;
+        }
 
         if (chat_node_.chat_messages_.empty())
             return;
@@ -163,12 +169,13 @@ namespace Atelier {
             (*it)->update_velocity();
         }
 
-        if (worker_thread_.joinable())
+        if (running_mutex_.try_lock() == false) // If the thread is running, don't start a new one
             return;
+        else
+            running_mutex_.unlock();
 
-        ChatOrganizerWorker worker(*this, chat_node_.chat_messages_,
-            Client::app().getDisplay().getWidth(),
-            Client::app().getDisplay().getHeight());
+        ChatOrganizerWorker worker(running_mutex_, *this, chat_node_.chat_messages_, 
+            Client::app().getDisplay().getWidth(), Client::app().getDisplay().getHeight());
 
         worker_thread_ = boost::thread(worker);
     }
@@ -183,7 +190,7 @@ namespace Atelier {
         Rect bounds = in_bounds * scl.x;
         bounds += pos2d;
         
-        if (bounds.getX1() < min_x || bounds.getX1() > max_x || 
+        if (bounds.getX1() < min_x || bounds.getX1() > max_x ||
             bounds.getX2() < min_x || bounds.getX2() > max_x ||
             bounds.getY1() < min_y || bounds.getY1() > max_y ||
             bounds.getY2() < min_y || bounds.getY2() > max_y)

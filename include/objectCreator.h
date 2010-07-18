@@ -27,6 +27,8 @@ namespace Atelier {
 		void update_object(const Tete&);
 
 	private:
+        void add_links(ObjectPtr, const Tete&);
+
 		static ObjectCreator* instance_;
 	};
 }

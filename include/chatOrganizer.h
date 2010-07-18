@@ -23,7 +23,7 @@ namespace Atelier {
 
     class ChatOrganizerWorker {
     public:
-        ChatOrganizerWorker(ChatOrganizer&,
+        ChatOrganizerWorker(boost::mutex&, ChatOrganizer&,
             ChatMessageNodeList objects,
             int screen_width, int screen_height);
 
@@ -39,6 +39,7 @@ namespace Atelier {
         ChatMessageNodeList objects_;
         int screen_width_;
         int screen_height_;
+        boost::mutex& running_mutex_;
     };
 
     class ChatOrganizer {
@@ -69,6 +70,8 @@ namespace Atelier {
         float repulse_weight_;
         float rest_distance_;
         float attract_scale_;
+
+        boost::mutex running_mutex_;
     };
 
     typedef std::tr1::shared_ptr<ChatOrganizer> ChatOrganizerPtr;

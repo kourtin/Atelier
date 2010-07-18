@@ -63,10 +63,24 @@ namespace Atelier {
 
         created_object->create_object(tete);
 
+        add_links(created_object, tete);
+
+        if (created_object->links().empty())
+            ci::app::console() << "NO LINKS" << std::endl;
+
 		return created_object;
 	}
 
 	void ObjectCreator::update_object(const Tete& tete) {
 		// Nothing here
 	}
+
+    void ObjectCreator::add_links(ObjectPtr obj, const Tete& tete) {
+        for (LinkList::const_iterator it = tete.links().begin(); 
+            it != tete.links().end(); ++it) {
+
+            if (obj->id() != (*it)->actor().id()) // Don't link to self
+                obj->links().push_back(*it);
+        }
+    }
 }

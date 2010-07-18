@@ -24,7 +24,7 @@ namespace Atelier {
 		virtual std::list<LinkConstPtr>& links() = 0;
         virtual const std::list<LinkConstPtr>& links() const = 0;
 
-		virtual std::string type() = 0;
+		virtual std::string type() const = 0;
 
         virtual Vec3D position() const = 0;
         virtual Vec3D rotation() const = 0;

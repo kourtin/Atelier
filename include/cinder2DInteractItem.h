@@ -15,6 +15,8 @@ namespace Atelier {
 		Prism bounding_prism() const;
 		AABox bounding_aabox() const;
 
-        void detect_click_selection(ci::app::MouseEvent);
+        bool detect_click_selection(ci::app::MouseEvent);
+
+        
     };
 }

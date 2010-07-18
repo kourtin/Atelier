@@ -12,7 +12,7 @@ namespace Atelier {
 		ClientNode(const ID&);
 		virtual ~ClientNode();
 
-        virtual std::string type() { return "ClientNode"; }
+        virtual std::string type() const { return "ClientNode"; }
 
         virtual const ID& id() const;
 

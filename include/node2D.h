@@ -31,7 +31,7 @@ namespace Atelier {
         virtual void create_object(const Tete&);
         virtual void update_object(const Tete&);
 
-        void activate(const Identity&);
+        virtual void activate(const Identity&);
 
 	private:
 		InteractItem* container_;

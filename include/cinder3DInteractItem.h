@@ -9,6 +9,6 @@ namespace Atelier {
         Cinder3DInteractItem();
         virtual ~Cinder3DInteractItem();
 
-        void detect_click_selection(ci::app::MouseEvent);
+        bool detect_click_selection(ci::app::MouseEvent);
     };
 }
